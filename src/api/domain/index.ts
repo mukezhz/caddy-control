@@ -16,10 +16,10 @@ const router = express.Router();
 
 router.post("/add", validateData(addDomainSchema), async (req, res, next) => {
 	try {
-		const reqPayload = req.body;
+		const reqPayload = addDomainSchema.parse(req.body);
 		// run validations
 		const { currentConfig, hasExistingRoute } = await validateIncomingDomain(
-			reqPayload.incomingAddress!,
+			reqPayload.incomingAddress,
 		);
 
 		if (hasExistingRoute) {
@@ -27,8 +27,8 @@ router.post("/add", validateData(addDomainSchema), async (req, res, next) => {
 		}
 
 		const routeConfig = getRouteTemplate(
-			reqPayload.incomingAddress!,
-			reqPayload.destinationAddress!,
+			reqPayload.incomingAddress,
+			reqPayload.destinationAddress,
 		);
 		const newConfigPayload = { ...currentConfig };
 		newConfigPayload.apps.http.servers.main.routes.push(routeConfig);
@@ -42,8 +42,8 @@ router.post("/add", validateData(addDomainSchema), async (req, res, next) => {
 
 		await prismaClient.domains.create({
 			data: {
-				incomingAddress: reqPayload.incomingAddress!,
-				destinationAddress: reqPayload.destinationAddress!,
+				incomingAddress: reqPayload.incomingAddress,
+				destinationAddress: reqPayload.destinationAddress,
 			},
 		});
 		return res.json({ message: "Domain added!" });
@@ -81,7 +81,8 @@ router.get("/registered", async (_, res, next) => {
 
 router.delete("/", validateData(deleteDomainSchema), async (req, res, next) => {
 	try {
-		const reqPayload = req.body;
+		const reqPayload = deleteDomainSchema.parse(req.body);
+
 		if (
 			reqPayload.incomingAddress === appConfig.API_HOST ||
 			reqPayload.incomingAddress === appConfig.FE_HOST
@@ -89,7 +90,7 @@ router.delete("/", validateData(deleteDomainSchema), async (req, res, next) => {
 			throw new Error("Unauthorized domains.");
 		}
 		const { currentConfig, hasExistingRoute } = await validateIncomingDomain(
-			reqPayload.incomingAddress!,
+			reqPayload.incomingAddress,
 		);
 		if (!hasExistingRoute) {
 			throw new Error("Domain not registered.");
@@ -97,9 +98,7 @@ router.delete("/", validateData(deleteDomainSchema), async (req, res, next) => {
 		const newConfigPayload = { ...currentConfig };
 		const filteredRoutes =
 			newConfigPayload.apps.http.servers.main.routes.filter((route) =>
-				route.match.some(
-					(ma) => !ma.host.includes(reqPayload.incomingAddress!),
-				),
+				route.match.some((ma) => !ma.host.includes(reqPayload.incomingAddress)),
 			);
 		newConfigPayload.apps.http.servers.main.routes = filteredRoutes;
 
@@ -112,7 +111,7 @@ router.delete("/", validateData(deleteDomainSchema), async (req, res, next) => {
 
 		await prismaClient.domains.delete({
 			where: {
-				incomingAddress: reqPayload.incomingAddress!,
+				incomingAddress: reqPayload.incomingAddress,
 			},
 		});
 		return res.json({ message: "Domain deleted!" });

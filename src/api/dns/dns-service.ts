@@ -1,5 +1,5 @@
-import dns from "dns";
-import http from "http";
+import dns from "node:dns";
+import http from "node:http";
 import appConfig from "../../shared/appConfig";
 import type { DomainCheckResults } from "./dns-types";
 

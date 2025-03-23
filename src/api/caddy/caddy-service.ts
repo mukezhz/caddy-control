@@ -12,7 +12,10 @@ export const getCaddyConfig = async (timeout = 0): Promise<MainConfig> => {
 export const loadCaddyConfig = async (
 	payload: MainConfig,
 ): Promise<MainConfig> => {
-	const caddyConfig = await axios.post(`${appConfig.CADDY_ADMIN_URL}/load`, payload);
+	const caddyConfig = await axios.post(
+		`${appConfig.CADDY_ADMIN_URL}/load`,
+		payload,
+	);
 	return caddyConfig.data;
 };
 

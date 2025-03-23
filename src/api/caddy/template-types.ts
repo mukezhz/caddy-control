@@ -37,6 +37,7 @@ export type HandlerConfig = {
 	transport: {
 		protocol: string;
 		// tls is optional
-		tls?: Record<string, {}>;
+		// biome-ignore lint/suspicious/noExplicitAny: not defined
+		tls?: Record<string, any>;
 	};
 };

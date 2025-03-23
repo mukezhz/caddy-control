@@ -1,6 +1,6 @@
 import type { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
-import { ZodError, type z } from "zod";
+import { ZodError, type ZodObject, type ZodRawShape } from "zod";
 import type ErrorResponse from "../interfaces/ErrorResponse";
 
 export function notFound(req: Request, res: Response, next: NextFunction) {
@@ -25,7 +25,7 @@ export function errorHandler(
 	});
 }
 
-export function validateData(schema: z.ZodObject<any, any>) {
+export function validateData<T extends ZodRawShape>(schema: ZodObject<T>) {
 	return (req: Request, res: Response, next: NextFunction) => {
 		try {
 			schema.parse(req.body);
@@ -46,3 +46,25 @@ export function validateData(schema: z.ZodObject<any, any>) {
 		}
 	};
 }
+
+// export function validateData(schema: z.ZodObject<any, any>) {
+// 	return (req: Request, res: Response, next: NextFunction) => {
+// 		try {
+// 			schema.parse(req.body);
+// 			next();
+// 		} catch (error) {
+// 			if (error instanceof ZodError) {
+// 				const errorMessages = error.errors.map((issue) => ({
+// 					message: `${issue.path.join(".")} is ${issue.message}`,
+// 				}));
+// 				res
+// 					.status(StatusCodes.BAD_REQUEST)
+// 					.json({ error: "Invalid data", details: errorMessages });
+// 			} else {
+// 				res
+// 					.status(StatusCodes.INTERNAL_SERVER_ERROR)
+// 					.json({ error: "Internal Server Error" });
+// 			}
+// 		}
+// 	};
+// }
