@@ -1,0 +1,8 @@
+#initial configuration
+{
+    admin 0.0.0.0:2019
+}
+
+:80, :443 {
+    respond "Domain management service is running!" 200
+}
