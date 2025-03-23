@@ -8,7 +8,9 @@
 		"build": "tsc",
 		"start:dist": "node dist/src/index.js",
 		"lint": "biome check --fix",
-		"typecheck": "tsc --noEmit"
+		"typecheck": "tsc --noEmit",
+		"build:image": "docker build --platform linux/amd64 -t caddy-api .",
+		"push:image": "docker tag caddy-api:latest itbeeazy/easy-domain && docker push itbeeazy/easy-domain"
 	},
 	"keywords": [],
 	"author": "Avash Ghimire <avash700@gmail.com> (https://avashghimire.com.np)",

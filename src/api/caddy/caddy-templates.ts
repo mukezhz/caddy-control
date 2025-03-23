@@ -25,9 +25,10 @@ export const getCaddyConfigTemplate = (configuredRoutes: RouteConfig[]) => {
 export const getRouteTemplate = (
 	incomingAddress: string,
 	targetAddress: string,
+	upstreamPort = 443,
 	disableHttps = false,
 ): RouteConfig => {
-	const handler = getHandlerTemplate(targetAddress, disableHttps);
+	const handler = getHandlerTemplate(targetAddress, upstreamPort, disableHttps);
 	const routeConfig: RouteConfig = {
 		match: [
 			{
@@ -42,11 +43,12 @@ export const getRouteTemplate = (
 
 export const getHandlerTemplate = (
 	targetAddress: string,
+	upstreamPort = 443,
 	disableHttps = false,
 ): HandlerConfig => {
 	const handlerConfig: HandlerConfig = {
 		handler: "reverse_proxy",
-		upstreams: [{ dial: `${targetAddress}:443` }],
+		upstreams: [{ dial: `${targetAddress}:${upstreamPort}` }],
 		headers: {
 			request: {
 				set: {

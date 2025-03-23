@@ -8,9 +8,13 @@ import prismaClient from "./db";
 import appConfig from "./shared/appConfig";
 
 const constructInitialCaddyConfiguration = () => {
-	const frontendRoute = getRouteTemplate(appConfig.FE_HOST, "fe");
-	const backendRoute = getRouteTemplate(appConfig.API_HOST, "api");
-	const caddyConfig = getCaddyConfigTemplate([frontendRoute, backendRoute]);
+	const backendRoute = getRouteTemplate(
+		appConfig.API_HOST,
+		"api",
+		Number(appConfig.PORT),
+		true
+	);
+	const caddyConfig = getCaddyConfigTemplate([backendRoute]);
 	return caddyConfig;
 };
 

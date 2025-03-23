@@ -73,5 +73,6 @@ typings/
 .serverless
 
 dist
-
 db
+caddy_config
+caddy_data

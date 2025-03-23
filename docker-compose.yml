@@ -1,0 +1,38 @@
+services:
+  caddy-server:
+    image: caddy:2.9.1-alpine
+    container_name: caddy-server
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./caddy_data:/data
+      - ./caddy_config:/config
+    networks:
+      - proxy-network
+
+  api:
+    image: itbeeazy/easy-domain
+    container_name: api
+    restart: unless-stopped
+    volumes:
+      - ./db:/app/db
+    environment:
+      - NODE_ENV=production
+      - PORT=3030
+      - CADDY_SERVER_IP=192.123.45.12
+      - CADDY_ADMIN_URL=http://caddy-server:2019
+      - API_HOST=caddyapi.avashghimire.com.np
+    depends_on:
+      - caddy-server
+    networks:
+      - proxy-network
+
+networks:
+  proxy-network:
+    driver: bridge
+
+

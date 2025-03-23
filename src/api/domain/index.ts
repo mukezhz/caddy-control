@@ -84,8 +84,7 @@ router.delete("/", validateData(deleteDomainSchema), async (req, res, next) => {
 		const reqPayload = deleteDomainSchema.parse(req.body);
 
 		if (
-			reqPayload.incomingAddress === appConfig.API_HOST ||
-			reqPayload.incomingAddress === appConfig.FE_HOST
+			reqPayload.incomingAddress === appConfig.API_HOST
 		) {
 			throw new Error("Unauthorized domains.");
 		}

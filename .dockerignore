@@ -1,0 +1,11 @@
+node_modules/
+.env
+dist/
+build/
+db/
+.git/
+.gitignore
+.vscode/
+.idea/
+docker-compose.yml
+Dockerfile
