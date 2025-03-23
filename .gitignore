@@ -74,4 +74,4 @@ typings/
 
 dist
 
-./db/*
+db
