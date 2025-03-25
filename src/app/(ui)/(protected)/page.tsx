@@ -1,9 +1,13 @@
-import { Button } from "@/components/ui/button"
+import PageHeader from "@/components/page-header"
 
 export default async function Home() {
   return (
-    <div>
-      <Button>Click me</Button>
+    <div className="mt-4 px-4">
+      <PageHeader
+        title="Dashboard"
+        description="Manage your proxies from here!"
+        showBackButton={false}
+      />
     </div>
   )
 }

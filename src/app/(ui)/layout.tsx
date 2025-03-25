@@ -3,7 +3,8 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { useGetQueryClient } from "@/hooks/query/useGetQueryClient";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,13 +16,12 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const queryClient = new QueryClient()
-
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const queryClient = useGetQueryClient()
   return (
     <html lang="en">
       <body

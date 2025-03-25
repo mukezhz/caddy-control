@@ -18,9 +18,9 @@ export const parseError = (error: any): string => {
         })
         return messages.join(' ')
       }
-      return errorData.error?.message || 'An unknown error occurred'
+      return errorData.error?.message || errorData.error || 'An unknown error occurred'
     }
-    return error.message || 'An unknown error occurred'
+    return 'An unknown error occurred'
   } catch (err) {
     return 'An unknown error occurred'
   }

@@ -18,11 +18,11 @@ const generateToken = (payload: string | object | Buffer, expiresIn: number = 86
  * @param token The JWT token to verify
  * @returns The decoded payload if valid, or throws an error if invalid
  */
-const verifyToken = (token: string): JwtPayload | string => {
+const verifyToken = (token: string): JwtPayload | string | boolean => {
   try {
     return jwt.verify(token, secretKey);
   } catch (error) {
-    throw new Error('Invalid or expired token');
+    return false
   }
 };
 

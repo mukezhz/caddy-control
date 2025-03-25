@@ -6,6 +6,6 @@ export function handleServerError(error: unknown) {
   console.log(error)
 
   const errMsg = parseError(error)
-
+  
   toast(errMsg)
 }
