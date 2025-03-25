@@ -5,7 +5,7 @@ import {
   loadCaddyConfig,
   validateIncomingDomain,
 } from "../../_services/caddy/caddy-service";
-import prisma from "@/prisma";
+import prisma from "../../../../lib/prisma";
 
 export async function DELETE(request: NextRequest) {
   try {

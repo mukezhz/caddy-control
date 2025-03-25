@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { checkDomain } from '../../_services/dns/dns-service';
-import prisma from '@/prisma';
+import prisma from '../../../../lib/prisma';
 import { DomainWithCheckResults } from '../domain-types';
 
 export async function GET() {

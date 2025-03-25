@@ -6,7 +6,7 @@ import {
   validateIncomingDomain,
 } from "../../_services/caddy/caddy-service";
 import { getRouteTemplate } from "../../_services/caddy/caddy-templates";
-import prisma from "@/prisma";
+import prisma from "../../../../lib/prisma";
 
 export async function POST(request: NextRequest) {
   try {

@@ -1,7 +1,7 @@
 import axios from "axios";
 import type { MainConfig } from "./template-types";
 import { getCaddyConfigTemplate, getRouteTemplate } from "./caddy-templates";
-import prisma from "@/prisma";
+import prisma from "../../../../lib/prisma";
 
 const caddyAdminURL = process.env.CADDY_ADMIN_URL;
 const apiHost = process.env.API_HOST;
