@@ -1,0 +1,41 @@
+{
+  "name": "caddy-control",
+  "description": "A simple, open-source tool for programatically managing whitelabel custom domains for SaaS applications using Caddy.",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "keywords": [
+    "proxy",
+    "reverse-proxy",
+    "saas",
+    "custom-domains"
+  ],
+  "author": "Avash Ghimire <avash700@gmail.com> (https://avashghimire.com.np)",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/avashForReal/easy-domain"
+  },
+  "dependencies": {
+    "@prisma/client": "6.5.0",
+    "axios": "^1.8.4",
+    "next": "15.2.4",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "15.2.4",
+    "prisma": "6.5.0",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}
