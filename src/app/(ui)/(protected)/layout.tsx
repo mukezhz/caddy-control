@@ -6,11 +6,11 @@ import { useRouter } from "next/navigation";
 import TopHeader from "@/components/top-header";
 import { useGetProfile } from "@/hooks/user/user.hooks";
 import { BoxLoader } from "@/components/loader";
-
+import ChangePassword from "@/components/change-password";
 
 export default function ProtectedLayout({ children }: { children: React.ReactNode }) {
     const [checking, setChecking] = useState(true);
-    const { accessToken, setUser } = useAuthStore();
+    const { accessToken, user, setUser } = useAuthStore();
     const router = useRouter();
 
     useEffect(() => {
@@ -41,6 +41,13 @@ export default function ProtectedLayout({ children }: { children: React.ReactNod
         <div className="px-32">
             <TopHeader />
             {children}
+            <ChangePassword
+                title="Reset your password!"
+                description="Please create a new password for your account."
+                open={!!user?.forcePasswordChange}
+                hideCloseIcon={true}
+                onClose={() => { }}
+            />
         </div>
     );
 }
