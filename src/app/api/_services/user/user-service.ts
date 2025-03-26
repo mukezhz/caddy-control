@@ -1,5 +1,6 @@
 import prisma from "@/lib/prisma";
 import bcrypt from "bcryptjs";
+import { NextRequest, NextResponse } from "next/server";
 
 const username = "admin";
 const password = "admin";
@@ -16,7 +17,21 @@ export const seedFirstUser = async () => {
     data: {
       username,
       hashedPassword,
-      forcePasswordChange: true
+      forcePasswordChange: true,
     },
   });
+};
+
+export const getUserFromHeader = async (req: NextRequest) => {
+  const userId = req.headers.get("x-user-id");
+  if(!userId) return null;
+  const user = await prisma.user.findUnique({
+    where: {
+      id: userId,
+    },
+    omit: {
+      hashedPassword: true,
+    },
+  });
+  return user;
 };

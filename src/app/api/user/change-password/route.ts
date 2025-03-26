@@ -1,46 +1,36 @@
 import prisma from "@/lib/prisma";
-import { LoginFormSchema } from "@/schemas/user/auth.schema";
+import { PasswordChangeSchema } from "@/schemas/user/auth.schema";
 import bcrypt from "bcryptjs";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { generateToken } from "../../_services/token/token.service";
+import { getUserFromHeader } from "../../_services/user/user-service";
 
 export async function POST(request: NextRequest) {
   try {
-    const reqBody = await request.json();
-    const reqPayload = LoginFormSchema.parse(reqBody);
-    const { username, password } = reqPayload;
-    const user = await prisma.user.findUnique({
-      where: {
-        username,
-      },
-    });
+    const user = await getUserFromHeader(request);
     if (!user) {
-      return NextResponse.json(
-        {
-          error: "User not found!",
-        },
-        {
-          status: 404,
-        }
-      );
+      return NextResponse.json({ error: "Unauthorized!" }, { status: 401 });
     }
-    const pwMatch = await bcrypt.compare(password, user.hashedPassword);
-    if (!pwMatch) {
-      return NextResponse.json(
-        {
-          error: "Username or password is incorrect!",
-        },
-        {
-          status: 404,
-        }
-      );
-    }
-    const accessToken = generateToken({ id: user.id, username: user.username });
+    const reqBody = await request.json();
+    const reqPayload = PasswordChangeSchema.parse(reqBody);
+    const { confirmPassword } = reqPayload;
+
+    const hashedPassword = await bcrypt.hash(confirmPassword, 10);
+    await prisma.user.update({
+      where: {
+        id: user.id
+      },
+      data: {
+        hashedPassword,
+        forcePasswordChange: false
+      }
+    })
+
     return NextResponse.json(
       {
         data: {
-          accessToken,
+          message: "Password updated!"
         },
       },
       { status: 201 }

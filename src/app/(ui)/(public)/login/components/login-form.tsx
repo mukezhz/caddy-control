@@ -13,7 +13,7 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { PasswordInput } from '@/components/password-input'
-import { LoginFormData, LoginFormSchema } from '@/schemas/user/login.schema'
+import { LoginFormData, LoginFormSchema } from '@/schemas/user/auth.schema'
 import { useLogin } from '@/hooks/user/user.hooks'
 
 type LoginFormProps = HTMLAttributes<HTMLDivElement>
