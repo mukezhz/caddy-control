@@ -7,7 +7,7 @@ import ChangePassword from "./change-password"
 import { useState } from "react"
 
 const NAV_ITEMS = [
-    { name: "Dashboard", href: "/" },
+    { name: "Proxies", href: "/" },
     { name: "API Keys", href: "/api-keys" },
     { name: "Docs", href: "/docs" },
 ];
@@ -52,7 +52,6 @@ const TopHeader = () => {
                     <div className="flex items-center justify-end gap-2">
                         <ProfileDropdown
                             openPasswordDialog={openPasswordDialog}
-                            closePasswordDialog={closePasswordDialog}
                         />
                     </div>
                 </div>

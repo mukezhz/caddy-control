@@ -9,7 +9,6 @@ export async function GET(req: NextRequest) {
     }
     return NextResponse.json({ data: user });
   } catch (err) {
-    console.log("error", err);
     return NextResponse.json(
       { error: "Failed to retrieve user profile." },
       { status: 500 }

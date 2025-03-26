@@ -20,7 +20,6 @@ async function checkDNS(domain: string): Promise<boolean> {
  * Check if the request reaches the proxy (Proxy Reachability check).
  */
 async function checkProxyReachability(domain: string): Promise<boolean> {
-	console.log("check reachabilt", domain)
 	return new Promise((resolve) => {
 		const options = {
 			host: caddyServerIPAddress,

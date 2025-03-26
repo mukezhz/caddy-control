@@ -27,7 +27,7 @@ export default function ProtectedLayout({ children }: { children: React.ReactNod
         if (userData) {
             setUser(userData)
         }
-    }, [userData,setUser])
+    }, [userData, setUser])
 
     if (isLoadingProfile) {
         return (
@@ -38,9 +38,11 @@ export default function ProtectedLayout({ children }: { children: React.ReactNod
     if (checking) return null;
 
     return (
-        <div className="px-32">
+        <div className="h-screen flex flex-col px-48 overflow-hidden">
             <TopHeader />
-            {children}
+            <div className="flex-1 px-4 pb-10 max-h-[86vh]">
+                {children}
+            </div>
             <ChangePassword
                 title="Reset your password!"
                 description="Please create a new password for your account."

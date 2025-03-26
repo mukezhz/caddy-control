@@ -6,6 +6,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { useGetQueryClient } from "@/hooks/query/useGetQueryClient";
 import { useEffect } from "react";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -39,9 +40,11 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <QueryClientProvider client={queryClient}>
-          <main>
-            {children}
-          </main>
+          <TooltipProvider>
+            <main>
+              {children}
+            </main>
+          </TooltipProvider>
 
           <Toaster />
         </QueryClientProvider>
