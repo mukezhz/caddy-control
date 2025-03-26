@@ -1,4 +1,3 @@
-import prisma from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import { getUserFromHeader } from "../../_services/user/user-service";
 

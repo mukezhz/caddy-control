@@ -27,7 +27,7 @@ export default function ProtectedLayout({ children }: { children: React.ReactNod
         if (userData) {
             setUser(userData)
         }
-    }, [userData])
+    }, [userData,setUser])
 
     if (isLoadingProfile) {
         return (

@@ -21,7 +21,7 @@ const generateToken = (payload: string | object | Buffer, expiresIn: number = 86
 const verifyToken = (token: string): JwtPayload | string | boolean => {
   try {
     return jwt.verify(token, secretKey);
-  } catch (error) {
+  } catch {
     return false
   }
 };

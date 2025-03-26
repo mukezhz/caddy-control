@@ -1,6 +1,6 @@
 import prisma from "@/lib/prisma";
 import bcrypt from "bcryptjs";
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 
 const username = "admin";
 const password = "admin";

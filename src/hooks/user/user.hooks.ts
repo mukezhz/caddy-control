@@ -53,7 +53,7 @@ export const useChangePassword = () => {
     onError: (err: Error) => {
       handleServerError(err);
     },
-    onSuccess: async (data) => {
+    onSuccess: async () => {
       toast("Password changed!");
       await queryClient.invalidateQueries({
         queryKey: ["profile"],

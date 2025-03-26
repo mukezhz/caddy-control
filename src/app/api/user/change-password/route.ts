@@ -3,7 +3,6 @@ import { PasswordChangeSchema } from "@/schemas/user/auth.schema";
 import bcrypt from "bcryptjs";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
-import { generateToken } from "../../_services/token/token.service";
 import { getUserFromHeader } from "../../_services/user/user-service";
 
 export async function POST(request: NextRequest) {

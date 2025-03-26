@@ -1,4 +1,4 @@
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -16,12 +16,10 @@ import { IconPassword } from '@tabler/icons-react'
 
 type Props = {
   openPasswordDialog: () => void
-  closePasswordDialog: () => void
 }
 
 export function ProfileDropdown({
   openPasswordDialog,
-  closePasswordDialog
 }: Props) {
   const logOut = useLogout()
   const { user } = useAuthStore()
