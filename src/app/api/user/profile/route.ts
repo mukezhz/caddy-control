@@ -8,7 +8,7 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: "Unauthorized!" }, { status: 401 });
     }
     return NextResponse.json({ data: user });
-  } catch (err) {
+  } catch {
     return NextResponse.json(
       { error: "Failed to retrieve user profile." },
       { status: 500 }

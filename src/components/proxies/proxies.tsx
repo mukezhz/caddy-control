@@ -1,6 +1,6 @@
 import { DomainWithCheckResults } from "@/app/api/domain/domain-types";
 import { Check, X } from "lucide-react";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 
 type Props = {
   proxyData: {
