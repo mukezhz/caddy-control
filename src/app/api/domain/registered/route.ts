@@ -5,7 +5,11 @@ import { DomainWithCheckResults } from "../domain-types";
 
 export async function GET() {
   try {
-    const registeredDomains = await prisma.domains.findMany({});
+    const registeredDomains = await prisma.domains.findMany({
+      orderBy: {
+        createdAt: 'desc'
+      }
+    });
 
     const domainsWithCheckResults: DomainWithCheckResults[] = [];
 

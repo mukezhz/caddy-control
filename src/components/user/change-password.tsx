@@ -79,7 +79,7 @@ const ChangePassword = ({
                                         </FormItem>
                                     )}
                                 />
-                                <Button className='mt-2 cursor-pointer' disabled={false}>
+                                <Button loading={changePasswordMutation.isPending} type='submit' className='mt-2 cursor-pointer' disabled={false}>
                                     Change Password
                                 </Button>
                             </div>

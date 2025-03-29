@@ -1,6 +1,7 @@
 import { DomainWithCheckResults } from "@/app/api/domain/domain-types";
 import { Check, X } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
+import { Badge } from "../ui/badge";
 
 type Props = {
   proxyData: {
@@ -14,10 +15,16 @@ type ProxyRecordProps = {
 }
 
 const ProxyRecord = ({ record }: ProxyRecordProps) => {
+  console.log(record)
   return (
     <div className="flex flex-col items-start gap-1">
-      <div className="font-semibold">
+      <div className="font-semibold flex items-center justify-start gap-2">
         {record.incomingAddress}
+        {
+          record.enableHttps && (
+            <span><Badge variant={'outline'}>SSL Enabled</Badge></span>
+          )
+        }
       </div>
       <div className="text-sm text-gray-500">
         Routes to <span className="font-bold text-gray-700">{record.destinationAddress}</span> on port <span className="font-bold text-gray-700">{record.port}</span>
@@ -68,7 +75,7 @@ const Proxies = ({ proxyData }: Props) => {
       <div>
         Found <span className="font-bold">{proxyData?.total}</span> record{proxyData && proxyData?.total > 1 ? 's.' : '.'}
       </div>
-      <div>
+      <div className="space-y-4 pr-4">
         {proxyData?.data.map((record, index) => (
           <div key={index} className="border-l-4 border-gray-600 pl-4 pr-2 py-1 flex items-center justify-between">
             <ProxyRecord record={record} />

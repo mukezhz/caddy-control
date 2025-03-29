@@ -26,9 +26,9 @@ export const getRouteTemplate = (
 	incomingAddress: string,
 	targetAddress: string,
 	upstreamPort = 443,
-	disableHttps = false,
+	enableHttps = true,
 ): RouteConfig => {
-	const handler = getHandlerTemplate(targetAddress, upstreamPort, disableHttps);
+	const handler = getHandlerTemplate(targetAddress, upstreamPort, enableHttps);
 	const routeConfig: RouteConfig = {
 		match: [
 			{
@@ -44,7 +44,7 @@ export const getRouteTemplate = (
 export const getHandlerTemplate = (
 	targetAddress: string,
 	upstreamPort = 443,
-	disableHttps = false,
+	enableHttps = true,
 ): HandlerConfig => {
 	const handlerConfig: HandlerConfig = {
 		handler: "reverse_proxy",
@@ -64,7 +64,7 @@ export const getHandlerTemplate = (
 		},
 	};
 
-	if (disableHttps) {
+	if (!enableHttps) {
 		delete handlerConfig?.transport?.tls;
 	}
 

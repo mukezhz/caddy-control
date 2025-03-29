@@ -24,16 +24,18 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const parsedPort = Number(reqPayload.port);
+
     const routeConfig = getRouteTemplate(
       reqPayload.incomingAddress,
       reqPayload.destinationAddress,
-      reqPayload.port
+      parsedPort,
+      reqPayload.enableHttps
     );
 
     const newConfigPayload = { ...currentConfig };
     newConfigPayload.apps.http.servers.main.routes.push(routeConfig);
 
-    await loadCaddyConfig(newConfigPayload);
 
     await prisma.$transaction(async (tx) => {
       await tx.caddyConfiguration.create({
@@ -45,10 +47,13 @@ export async function POST(request: NextRequest) {
         data: {
           incomingAddress: reqPayload.incomingAddress,
           destinationAddress: reqPayload.destinationAddress,
-          port: reqPayload.port,
+          port: parsedPort,
+          enableHttps: reqPayload.enableHttps
         },
       });
     });
+
+    await loadCaddyConfig(newConfigPayload);
 
     return NextResponse.json(
       {

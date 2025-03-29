@@ -17,8 +17,10 @@ export const addDomainSchema = z.object({
       message:
         "Invalid domain format (must be a plain domain, e.g., example.com)",
     }),
-  port: z.number().min(1, "Port is required"),
+  port: z.string().min(1, "Port is required"),
+  enableHttps: z.boolean().default(true)
 });
+export type AddDomainValues = z.infer<typeof addDomainSchema>
 
 export const deleteDomainSchema = z.object({
   incomingAddress: z
@@ -31,3 +33,4 @@ export const deleteDomainSchema = z.object({
       { message: "Invalid domain format" }
     ),
 });
+export type DeleteDomainValues = z.infer<typeof deleteDomainSchema>

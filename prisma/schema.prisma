@@ -20,6 +20,7 @@ model Domains {
   destinationAddress String
   port               Int
   isLocked           Boolean  @default(false)
+  enableHttps        Boolean  @default(true)
   createdAt          DateTime @default(now())
 }
 

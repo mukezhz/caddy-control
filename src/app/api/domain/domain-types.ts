@@ -6,5 +6,7 @@ export type DomainWithCheckResults = {
 	destinationAddress: string;
 	port: number;
 	createdAt: Date;
+	isLocked: boolean;
+	enableHttps: boolean;
 	checkResults: DomainCheckResults;
 };

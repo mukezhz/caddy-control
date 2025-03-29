@@ -44,7 +44,7 @@ const constructInitialCaddyConfiguration = () => {
 		apiHost,
 		apiService,
 		Number(apiPort),
-		true
+		false
 	);
 	const caddyConfig = getCaddyConfigTemplate([backendRoute]);
 	return caddyConfig;

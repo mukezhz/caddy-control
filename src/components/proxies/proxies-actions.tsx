@@ -1,9 +1,14 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Button } from '../ui/button'
 import { IconPlus, IconRefresh } from '@tabler/icons-react'
 import { useQueryClient, useIsFetching } from '@tanstack/react-query'
+import { AddProxyDialog } from './add-proxy-dialog'
+import { Eye } from 'lucide-react'
+import { ViewRawDialog } from './view-raw-dialog'
 
 const ProxiesActions = () => {
+    const [addDialogOpen, setAddDialogOpen] = useState(false);
+    const [rawDialogOpen, setRawDialogOpen] = useState(false);
     const queryClient = useQueryClient();
     const isFetchingDomains = useIsFetching({ queryKey: ["registered-domains"] });
 
@@ -14,24 +19,44 @@ const ProxiesActions = () => {
     }
 
     const handleAddProxy = () => {
+        setAddDialogOpen(true)
+    }
 
+    const handlViewRaw = () => {
+        setRawDialogOpen(true)
     }
 
     return (
-        <div className='flex items-center justify-end gap-4'>
-            <Button onClick={refreshProxies} className='cursor-pointer' variant={'outline'}>
-                <span>
-                    <IconRefresh className={isFetchingDomains ? 'animate-spin' : ''} />
-                </span>
-                Refresh
-            </Button>
-            <Button onClick={refreshProxies} className='cursor-pointer' variant={'default'}>
-                <span>
-                    <IconPlus className={isFetchingDomains ? 'animate-spin' : ''} />
-                </span>
-                Add Proxy
-            </Button>
-        </div>
+        <>
+            <div className='flex items-center justify-end gap-4'>
+                <Button onClick={refreshProxies} className='cursor-pointer' variant={'outline'}>
+                    <span>
+                        <IconRefresh className={isFetchingDomains ? 'animate-spin' : ''} />
+                    </span>
+                    Refresh
+                </Button>
+                <Button onClick={handlViewRaw} className='cursor-pointer' variant={'outline'}>
+                    <span>
+                        <Eye />
+                    </span>
+                    View Raw JSON
+                </Button>
+                <Button onClick={handleAddProxy} className='cursor-pointer' variant={'default'}>
+                    <span>
+                        <IconPlus />
+                    </span>
+                    Add Proxy
+                </Button>
+            </div>
+            <AddProxyDialog
+                open={addDialogOpen}
+                onClose={() => setAddDialogOpen(false)}
+            />
+            <ViewRawDialog
+                open={rawDialogOpen}
+                onClose={() => setRawDialogOpen(false)}
+            />
+        </>
     )
 }
 
