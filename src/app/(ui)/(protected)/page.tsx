@@ -3,6 +3,7 @@
 import { BoxLoader } from "@/components/loader";
 import PageHeader from "@/components/page-header";
 import Proxies from "@/components/proxies/proxies";
+import ProxiesActions from "@/components/proxies/proxies-actions";
 import { Separator } from "@/components/ui/separator";
 import { useGetRegisteredDomains } from "@/hooks/domains/domain.hooks";
 
@@ -15,6 +16,7 @@ export default function Home() {
         title="Proxies"
         description="Manage your proxies from here!"
         showBackButton={false}
+        actions={<ProxiesActions />}
       />
       <Separator />
       {isLoading ? (

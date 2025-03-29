@@ -3,7 +3,7 @@ import { Header } from "./header"
 import { usePathname } from "next/navigation"
 import Link from "next/link"
 import { ProfileDropdown } from "./profile-dropdown"
-import ChangePassword from "./change-password"
+import ChangePassword from "./user/change-password"
 import { useState } from "react"
 
 const NAV_ITEMS = [

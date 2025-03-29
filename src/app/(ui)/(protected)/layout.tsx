@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import TopHeader from "@/components/top-header";
 import { useGetProfile } from "@/hooks/user/user.hooks";
 import { BoxLoader } from "@/components/loader";
-import ChangePassword from "@/components/change-password";
+import ChangePassword from "@/components/user/change-password";
 
 export default function ProtectedLayout({ children }: { children: React.ReactNode }) {
     const [checking, setChecking] = useState(true);
