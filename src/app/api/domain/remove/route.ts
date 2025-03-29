@@ -14,8 +14,26 @@ export async function DELETE(request: NextRequest) {
 
     if (reqPayload.incomingAddress === process.env.API_HOST) {
       return NextResponse.json(
-        { error: "Unauthorized domain deletion" },
+        { error: "Unauthorized domain deletion!" },
         { status: 403 }
+      );
+    }
+    const domainDetails = await prisma.domains.findFirst({
+      where: {
+        incomingAddress: reqPayload.incomingAddress,
+      },
+    });
+
+    if (!domainDetails) {
+      return NextResponse.json(
+        { error: "Domain not registered!" },
+        { status: 404 }
+      );
+    }
+    if (domainDetails.isLocked) {
+      return NextResponse.json(
+        { error: "Unauthorized domain deletion!" },
+        { status: 404 }
       );
     }
 
@@ -25,7 +43,7 @@ export async function DELETE(request: NextRequest) {
 
     if (!hasExistingRoute) {
       return NextResponse.json(
-        { error: "Domain not registered" },
+        { error: "Domain not registered in caddy!" },
         { status: 404 }
       );
     }
@@ -36,8 +54,6 @@ export async function DELETE(request: NextRequest) {
         route.match.every((ma) => !ma.host.includes(reqPayload.incomingAddress))
       );
     newConfigPayload.apps.http.servers.main.routes = filteredRoutes;
-    
-    await loadCaddyConfig(newConfigPayload);
 
     await prisma.$transaction(async (tx) => {
       await tx.caddyConfiguration.create({
@@ -52,6 +68,8 @@ export async function DELETE(request: NextRequest) {
         },
       });
     });
+
+    await loadCaddyConfig(newConfigPayload);
 
     return NextResponse.json(
       {

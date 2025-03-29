@@ -1,5 +1,5 @@
 import { MainConfig } from "@/app/api/_services/caddy/template-types";
-import { AddDomainValues } from "@/app/api/domain/domain-schema";
+import { AddDomainValues, DeleteDomainValues } from "@/app/api/domain/domain-schema";
 import { DomainWithCheckResults } from "@/app/api/domain/domain-types";
 import apiClient from "@/lib/api-client";
 import { handleServerError } from "@/lib/handle-server-error";
@@ -23,9 +23,19 @@ export const addDomain = async (
   payload: AddDomainValues
 ): Promise<{
   data: DomainWithCheckResults;
-  total: number;
 }> => {
   const response = await apiClient.post("/api/domain/add", payload);
+  return response?.data;
+};
+
+export const deleteDomain = async (
+  payload: DeleteDomainValues
+): Promise<{
+  data: DomainWithCheckResults;
+}> => {
+  const response = await apiClient.delete("/api/domain/remove", {
+    data: payload
+  });
   return response?.data;
 };
 
@@ -59,6 +69,28 @@ export const useAddDomain = () => {
     },
     onSuccess: async () => {
       toast("Proxy added!");
+      await queryClient.invalidateQueries({
+        queryKey: ["registered-domains"],
+        exact: false,
+      });
+      await queryClient.invalidateQueries({
+        queryKey: ["raw-config"],
+        exact: false,
+      });
+    },
+  });
+};
+
+export const useDeleteDomain = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (payload: DeleteDomainValues) => deleteDomain(payload),
+    throwOnError: false,
+    onError: (err: Error) => {
+      handleServerError(err);
+    },
+    onSuccess: async () => {
+      toast("Proxy deleted!");
       await queryClient.invalidateQueries({
         queryKey: ["registered-domains"],
         exact: false,

@@ -93,30 +93,18 @@ export function AddProxyDialog({ open, onClose }: Props) {
                                         </FormItem>
                                     )}
                                 />
-                                {/* <FormField
-                                    control={form.control}
-                                    name='enableHttps'
-                                    render={({ field: {
-                                        value,
-                                        onChange
-                                        ...restFieldValues
-                                    } }) => (
-                                        <FormItem className='space-y-1 flex items-center justify-start'>
-                                            <FormLabel>Enable HTTPS</FormLabel>
-                                            <FormControl>
-                                                <Checkbox checked={value} {...restFieldValues} />
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                /> */}<FormField
+                                <FormField
                                     control={form.control}
                                     name="enableHttps"
-                                    render={({ field }) => (
+                                    render={({ field: {
+                                        value,
+                                        onChange,
+                                        ...restField
+                                    } }) => (
                                         <FormItem className="space-y-1 flex items-center justify-start">
                                             <FormLabel>Enable HTTPS</FormLabel>
                                             <FormControl>
-                                                <Checkbox checked={field.value} onCheckedChange={field.onChange} />
+                                                <Checkbox checked={value} onCheckedChange={onChange} {...restField} />
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>

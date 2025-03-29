@@ -35,7 +35,7 @@ export function ViewRawDialog({ open, onClose }: Props) {
                 <DialogHeader className='text-left'>
                     <DialogTitle>{'Raw Configuration'}</DialogTitle>
                     <DialogDescription>
-                        {'Enter the details below. '} Click save when you&apos;re done.
+                        Snippet below shows the raw caddy configuration in JSON format.
                     </DialogDescription>
                 </DialogHeader>
                 <div className='relative h-[560px] bg-gray-900 p-4 rounded-lg overflow-auto'>
