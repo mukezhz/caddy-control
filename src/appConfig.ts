@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 const envSchema = z.object({
-  API_HOST: z.string(),
+  APP_HOST: z.string(),
   CADDY_SERVER_IP: z.string(),
   CADDY_ADMIN_URL: z.string(),
   JWT_SECRET: z.string()

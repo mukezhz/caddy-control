@@ -1,12 +1,15 @@
 {
   "name": "caddy-control",
   "description": "A simple, open-source tool for programatically managing whitelabel custom domains for SaaS applications using Caddy.",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "dev:caddy": "docker compose -f docker-compose.dev.yml up -d",
+    "image:build": "docker build --platform linux/amd64 -t caddy-control .",
+		"image:push": "docker tag caddy-api:latest itbeeazy/easy-domain && docker push itbeeazy/easy-domain"
   },
   "keywords": [
     "proxy",

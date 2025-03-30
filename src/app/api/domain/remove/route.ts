@@ -6,6 +6,7 @@ import {
   validateIncomingDomain,
 } from "../../_services/caddy/caddy-service";
 import prisma from "../../../../lib/prisma";
+import { Prisma } from "@prisma/client";
 
 export async function DELETE(request: NextRequest) {
   try {
@@ -55,7 +56,7 @@ export async function DELETE(request: NextRequest) {
       );
     newConfigPayload.apps.http.servers.main.routes = filteredRoutes;
 
-    await prisma.$transaction(async (tx) => {
+    await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
       await tx.caddyConfiguration.create({
         data: {
           config: JSON.parse(JSON.stringify(newConfigPayload)),

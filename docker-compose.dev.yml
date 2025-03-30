@@ -1,0 +1,33 @@
+services:
+  caddy-server:
+    image: caddy:2.9.1-alpine
+    container_name: caddy-server
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+      # development only
+      - "2019:2019"
+    volumes:
+      - caddy_data:/data
+      - caddy_config:/config
+    command: >
+      sh -c "echo '
+      {
+        admin 0.0.0.0:2019
+      }
+      :80, :443 {
+        respond \"Domain management service is running!\" 200
+      }
+      ' > /etc/caddy/Caddyfile && caddy run --config /etc/caddy/Caddyfile"
+    networks:
+      - proxy-network
+
+networks:
+  proxy-network:
+    driver: bridge
+
+volumes:
+  caddy_data:
+  caddy_config:

@@ -4,9 +4,9 @@ import { getCaddyConfigTemplate, getRouteTemplate } from "./caddy-templates";
 import prisma from "../../../../lib/prisma";
 
 const caddyAdminURL = process.env.CADDY_ADMIN_URL;
-const apiHost = process.env.API_HOST;
-const apiPort = process.env.PORT;
-const apiService = "api"
+const appHost = process.env.APP_HOST;
+const appPort = process.env.PORT;
+const appService = "caddycontrol"
 
 
 export const getCaddyConfig = async (timeout = 0): Promise<MainConfig> => {
@@ -41,9 +41,9 @@ export const validateIncomingDomain = async (incomingAddress: string) => {
 
 const constructInitialCaddyConfiguration = () => {
 	const backendRoute = getRouteTemplate(
-		apiHost,
-		apiService,
-		Number(apiPort),
+		appHost,
+		appService,
+		Number(appPort),
 		false
 	);
 	const caddyConfig = getCaddyConfigTemplate([backendRoute]);
@@ -82,9 +82,9 @@ export const initializeCaddyConfiguration = async () => {
 	});
 	await prisma.domains.create({
 		data: {
-			incomingAddress: apiHost,
-			destinationAddress: apiService,
-			port: Number(apiPort),
+			incomingAddress: appHost,
+			destinationAddress: appService,
+			port: Number(appPort),
 			isLocked: true
 		}
 	})

@@ -7,6 +7,7 @@ import {
 } from "../../_services/caddy/caddy-service";
 import { getRouteTemplate } from "../../_services/caddy/caddy-templates";
 import prisma from "../../../../lib/prisma";
+import { Prisma } from "@prisma/client";
 
 export async function POST(request: NextRequest) {
   try {
@@ -37,7 +38,7 @@ export async function POST(request: NextRequest) {
     newConfigPayload.apps.http.servers.main.routes.push(routeConfig);
 
 
-    await prisma.$transaction(async (tx) => {
+    await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
       await tx.caddyConfiguration.create({
         data: {
           config: JSON.parse(JSON.stringify(newConfigPayload)),

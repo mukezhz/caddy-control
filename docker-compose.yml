@@ -1,0 +1,45 @@
+services:
+  caddy-server:
+    image: caddy:2.9.1-alpine
+    container_name: caddy-server
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./caddy_data:/data
+      - ./caddy_config:/config
+    command: >
+      sh -c "echo '
+      {
+        admin 0.0.0.0:2019
+      }
+      :80, :443 {
+        respond \"Domain management service is running!\" 200
+      }
+      ' > /etc/caddy/Caddyfile && caddy run --config /etc/caddy/Caddyfile"
+    networks:
+      - proxy-network
+
+  caddycontrol:
+    image: caddy-control-new
+    container_name: caddycontrol
+    restart: unless-stopped
+    volumes:
+      - ./db:/app/db
+    environment:
+      - NODE_ENV=production
+      - APP_HOST=demo.example.com
+      - CADDY_SERVER_IP=127.0.0.1
+      - CADDY_ADMIN_URL=http://caddy-server:2019
+      - JWT_SECRET=alksdlaksdjasd
+    depends_on:
+      - caddy-server
+    networks:
+      - proxy-network
+
+networks:
+  proxy-network:
+    driver: bridge
+
