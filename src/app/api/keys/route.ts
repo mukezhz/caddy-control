@@ -49,7 +49,7 @@ export async function GET() {
       data: keys,
       total: keys.length,
     });
-  } catch (err) {
+  } catch {
     return NextResponse.json(
       { error: "Failed to fetch keys!" },
       { status: 500 }

@@ -1,4 +1,3 @@
-import { DeleteDomainValues } from '@/app/api/domain/domain-schema';
 import { useDeleteDomain } from '@/hooks/domains/domain.hooks';
 import { IconAlertTriangle } from '@tabler/icons-react';
 import { FC } from 'react'
@@ -16,9 +15,9 @@ const ProxyDeleteConfirm: FC<Props> = ({
     onCancel,
     proxy,
 }) => {
+    const deleteDomainMutation = useDeleteDomain()
     if(!proxy) return null;
     
-    const deleteDomainMutation = useDeleteDomain()
     const handleConfirmDelete = async () => {
         await deleteDomainMutation.mutateAsync({
             incomingAddress: proxy.incomingAddress

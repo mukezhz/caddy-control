@@ -1,4 +1,3 @@
-import { useDeleteDomain } from '@/hooks/domains/domain.hooks';
 import { IconAlertTriangle } from '@tabler/icons-react';
 import { FC } from 'react'
 import { ConfirmDialog } from '../confirm-dialog';
@@ -16,9 +15,9 @@ const KeyDeleteConfirm: FC<Props> = ({
     onCancel,
     selectedKey,
 }) => {
+    const deleteKeyMutation = useDeleteKey()
     if (!selectedKey) return null;
 
-    const deleteKeyMutation = useDeleteKey()
     const handleConfirmDelete = async () => {
         await deleteKeyMutation.mutateAsync({
             key: selectedKey.key

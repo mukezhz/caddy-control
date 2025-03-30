@@ -25,7 +25,7 @@ export async function GET() {
       data: domainsWithCheckResults,
       total: domainsWithCheckResults.length,
     });
-  } catch (err) {
+  } catch {
     return NextResponse.json(
       { error: "Failed to retrieve registered domains" },
       { status: 500 }

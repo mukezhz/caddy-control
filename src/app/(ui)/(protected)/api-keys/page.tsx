@@ -10,8 +10,6 @@ import { useGetKeys } from "@/hooks/keys/keys.hooks";
 export default function APIKeys() {
   const { data, isLoading } = useGetKeys();
 
-  console.log(data)
-
   return (
     <div className="mt-4 px-4 mb-24 flex flex-col h-full">
       <PageHeader

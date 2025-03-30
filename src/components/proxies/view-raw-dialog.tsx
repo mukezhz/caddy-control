@@ -9,7 +9,6 @@ import {
 } from '@/components/ui/dialog'
 import { useGetRawConfig } from '@/hooks/domains/domain.hooks'
 import { BoxLoader } from '../loader'
-import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Clipboard } from 'lucide-react'
 import { toast } from 'sonner'
