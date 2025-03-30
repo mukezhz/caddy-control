@@ -31,3 +31,9 @@ model User {
   forcePasswordChange Boolean  @default(false)
   createdAt           DateTime @default(now())
 }
+
+model ApiKeys {
+  key       String   @id @default(cuid())
+  name      String   
+  createdAt DateTime @default(now())
+}

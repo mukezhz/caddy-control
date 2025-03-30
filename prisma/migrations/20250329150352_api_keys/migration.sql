@@ -1,0 +1,6 @@
+-- CreateTable
+CREATE TABLE "ApiKeys" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "key" TEXT NOT NULL,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
