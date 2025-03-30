@@ -23,7 +23,7 @@ services:
       - proxy-network
 
   caddycontrol:
-    image: itbeeazy/caddy-control
+    image: itbeeazy/caddy-control:1.0.0
     container_name: caddycontrol
     restart: unless-stopped
     volumes:

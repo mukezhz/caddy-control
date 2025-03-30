@@ -9,7 +9,7 @@
     "lint": "next lint",
     "dev:caddy": "docker compose -f docker-compose.dev.yml up -d",
     "image:build": "docker build --platform linux/amd64 -t caddy-control .",
-		"image:push": "docker tag caddy-control:latest itbeeazy/caddy-control && docker push itbeeazy/caddy-control"
+		"image:push": "docker tag caddy-control:latest itbeeazy/caddy-control:1.0.0 && docker push itbeeazy/caddy-control:1.0.0"
   },
   "keywords": [
     "proxy",
