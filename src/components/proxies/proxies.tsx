@@ -22,7 +22,6 @@ interface ProxyCheckResults extends ProxyRecordProps {
 }
 
 const ProxyRecord = ({ record }: ProxyRecordProps) => {
-  console.log(record)
   return (
     <div className="flex flex-col items-start gap-1">
       <div className="font-semibold flex items-center justify-start gap-2">

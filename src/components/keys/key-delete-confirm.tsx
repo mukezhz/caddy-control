@@ -1,27 +1,27 @@
-import { DeleteDomainValues } from '@/app/api/domain/domain-schema';
 import { useDeleteDomain } from '@/hooks/domains/domain.hooks';
 import { IconAlertTriangle } from '@tabler/icons-react';
 import { FC } from 'react'
 import { ConfirmDialog } from '../confirm-dialog';
-import { DomainWithCheckResults } from '@/app/api/domain/domain-types';
+import { GetKeysResponse } from '@/app/api/keys/keys-schema';
+import { useDeleteKey } from '@/hooks/keys/keys.hooks';
 
 type Props = {
     open: boolean;
     onCancel: VoidFunction;
-    proxy: DomainWithCheckResults | null;
+    selectedKey: GetKeysResponse | null;
 }
 
-const ProxyDeleteConfirm: FC<Props> = ({
+const KeyDeleteConfirm: FC<Props> = ({
     open,
     onCancel,
-    proxy,
+    selectedKey,
 }) => {
-    if(!proxy) return null;
-    
-    const deleteDomainMutation = useDeleteDomain()
+    if (!selectedKey) return null;
+
+    const deleteKeyMutation = useDeleteKey()
     const handleConfirmDelete = async () => {
-        await deleteDomainMutation.mutateAsync({
-            incomingAddress: proxy.incomingAddress
+        await deleteKeyMutation.mutateAsync({
+            key: selectedKey.key
         })
         onCancel()
     }
@@ -31,21 +31,21 @@ const ProxyDeleteConfirm: FC<Props> = ({
             open={open}
             onOpenChange={onCancel}
             handleConfirm={handleConfirmDelete}
-            isLoading={deleteDomainMutation.isPending}
+            isLoading={deleteKeyMutation.isPending}
             title={
                 <span className='text-destructive'>
                     <IconAlertTriangle
                         className='mr-1 inline-block stroke-destructive'
                         size={18}
                     />{' '}
-                    Delete Proxy
+                    Delete Key
                 </span>
             }
             desc={
                 <div className='space-y-4'>
                     <p className='mb-2'>
                         Are you sure you want to delete{' '}
-                        <span className='font-bold'>{proxy.incomingAddress}</span>?
+                        <span className='font-bold'>{selectedKey.name}</span>?
                         <br />
                         This cannot be undone.
                     </p>
@@ -57,4 +57,4 @@ const ProxyDeleteConfirm: FC<Props> = ({
     )
 }
 
-export default ProxyDeleteConfirm
+export default KeyDeleteConfirm

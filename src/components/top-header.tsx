@@ -1,4 +1,4 @@
-import { IconDrone } from "@tabler/icons-react"
+import { IconDrone, IconExternalLink } from "@tabler/icons-react"
 import { Header } from "./header"
 import { usePathname } from "next/navigation"
 import Link from "next/link"
@@ -9,7 +9,12 @@ import { useState } from "react"
 const NAV_ITEMS = [
     { name: "Proxies", href: "/" },
     { name: "API Keys", href: "/api-keys" },
-    { name: "Docs", href: "/docs" },
+    {
+        name: "Docs",
+        href: "https://github.com/avashForReal/caddy-control",
+        newTab: true,
+        icon: <IconExternalLink stroke={1.5} width={16} height={16} />
+    },
 ];
 
 const TopHeader = () => {
@@ -34,16 +39,20 @@ const TopHeader = () => {
 
                     {/* Navigation */}
                     <nav className="flex items-center gap-6">
-                        {NAV_ITEMS.map(({ name, href }) => (
+                        {NAV_ITEMS.map(({ name, href, icon, newTab }) => (
                             <Link
                                 key={href}
                                 href={href}
+                                target={newTab ? "_blank" : "_self"}
                                 className={`relative px-3 py-1 text-gray-800 transition-all ${pathname === href
                                     ? "font-semibold border-b border-black"
                                     : "hover:text-black"
                                     }`}
                             >
-                                {name}
+                                <span className="flex items-center justify-start gap-1">
+                                    {name}
+                                    {icon}
+                                </span>
                             </Link>
                         ))}
                     </nav>

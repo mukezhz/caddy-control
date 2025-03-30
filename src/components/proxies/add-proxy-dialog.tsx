@@ -111,7 +111,7 @@ export function AddProxyDialog({ open, onClose }: Props) {
                                     )}
                                 />
 
-                                <Button loading={false} type='submit' className='mt-2 cursor-pointer' disabled={false}>
+                                <Button loading={addDomainMutation.isPending} type='submit' className='mt-2 cursor-pointer' disabled={false}>
                                     Save
                                 </Button>
                             </div>
