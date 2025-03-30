@@ -10,6 +10,20 @@ export async function middleware(req: NextRequest) {
     return NextResponse.next();
   }
   const authHeader = req.headers.get("Authorization");
+  const apiKey = req.headers.get("x-api-key");
+
+  if (apiKey) {
+    const validApiKey = await prisma.apiKeys.findUnique({
+      where: { key: apiKey },
+    });
+
+    if (validApiKey) {
+      const res = NextResponse.next();
+      res.headers.set("x-auth-method", "api-key");
+      return res;
+    }
+  }
+
   if (!authHeader) {
     return NextResponse.json(
       {

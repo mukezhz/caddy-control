@@ -64,7 +64,7 @@ export function LoginForm({ className, ...props }: LoginFormProps) {
                 </FormItem>
               )}
             />
-            <Button className='mt-2 cursor-pointer' disabled={loginMutation.isPending}>
+            <Button className='mt-8 cursor-pointer' disabled={loginMutation.isPending}>
               Login
             </Button>
           </div>
