@@ -7,6 +7,8 @@ YELLOW='\033[1;33m'
 RED='\033[0;31m'
 NC='\033[0m' 
 
+DOCKER_COMPOSE_URL="https://raw.githubusercontent.com/avashForReal/caddy-control/refs/heads/main/docker-compose.yml"
+
 echo -e "${BLUE}=========================================${NC}"
 echo -e "${GREEN}Caddy Control Setup${NC}"
 echo -e "${BLUE}=========================================${NC}"
@@ -35,7 +37,18 @@ if [[ -z "$JWT_SECRET" ]]; then
     exit 1
 fi
 
-echo "Creating docker-compose.yml file with your configuration..."
+if [[ ! -f "docker-compose.yml" ]]; then
+    echo -e "${YELLOW}Fetching docker compose...${NC}"
+    curl -sSL -o docker-compose.yml "$DOCKER_COMPOSE_URL"
+
+    if [[ ! -f "docker-compose.yml" ]]; then
+        echo -e "${RED}Error: Failed to fetch docker compose. Exiting.${NC}"
+        exit 1
+    fi
+    echo -e "${GREEN}docker-compose.yml downloaded successfully.${NC}"
+fi
+
+echo "Updating docker-compose.yml with your configuration..."
 
 # replace values in the docker-compose.yml file
 if [[ "$OSTYPE" == "darwin"* ]]; then
