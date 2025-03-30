@@ -32,7 +32,7 @@ export const deleteDomainSchema = z.object({
     .min(1, "Incoming address is required")
     .refine(
       (value) => {
-        return domainRegex.test(value);
+        return domainOrIpOrDockerRegex.test(value);
       },
       { message: "Invalid domain format" }
     ),
