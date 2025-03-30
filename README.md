@@ -18,6 +18,12 @@ This project was born out of the need to build a custom domain service with auto
 - [ ] Domain redirection option
 - [ ] Multi user support
 
+## Screenshots
+
+<img style="margin: auto;" src="public/scr-1.png" alt="scr1">
+<img style="margin: auto;" src="public/scr-2.png" alt="scr2">
+
+
 ## Tech Stack
 
 - [Next.js](https://nextjs.org/) - Framework
@@ -93,7 +99,7 @@ Run the following script to get up and running using docker.
 bash -c "$(curl -sSL https://raw.githubusercontent.com/avashForReal/caddy-control/refs/heads/main/deploy.sh)"
 ```
 
-<img style="margin: auto;" src="public/setup.png" alt="Caddy Control Logo">
+<img style="margin: auto;" src="public/setup.png" alt="Setup">
 
 **Server IP**: Public IP address of the server where the deploy command is being executed. <br>
 **App  Host domain**: Domain which will be used to access caddy control. This domain must have an A record pointing to the server IP. <br>
