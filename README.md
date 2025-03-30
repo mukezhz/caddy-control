@@ -11,6 +11,7 @@
 This project was born out of the need to build a custom domain service with automated SSL management tailored for white-label SaaS platforms. There are managed services like Approximated, SaaS Custom Domains, etc., but limited open-source, self-hosted alternatives that provide a reliable experience. Leveraging Caddy, this project provides a way to programmatically integrate 'bring your own domain' features into SaaS products, as well as manage proxies for regular routing needs.
 
 ## Features
+
 - [x] Rest API Access
 - [x] Proxy management dashboard
 - [x] API Keys management dashboard
@@ -18,6 +19,7 @@ This project was born out of the need to build a custom domain service with auto
 - [ ] Multi user support
 
 ## Tech Stack
+
 - [Next.js](https://nextjs.org/) - Framework
 - [Caddy](https://caddyserver.com/) - Proxy Server
 - [Prisma](https://www.prisma.io/) - ORM
@@ -25,11 +27,14 @@ This project was born out of the need to build a custom domain service with auto
 - [shadcn/ui](https://ui.shadcn.com/) - Component Library
 
 ## Local Development
+
 To run caddy control locally, you will need to setup the following:
-- [Caddy](https://caddyserver.com/docs/install) - Recommended to run using the included development docker compose file. 
+
+- [Caddy](https://caddyserver.com/docs/install) - Recommended to run using the included development docker compose file.
 - [Docker](https://docs.docker.com/engine/install/) - Recommended but not mandatory.
 
 **Recommended**: Run the caddy server docker image locally using the following command: <br>
+
 > pnpm dev:caddy
 
 It uses the `docker-compose.dev.yml` compose file to start a local instance of caddy server.
@@ -37,17 +42,20 @@ It uses the `docker-compose.dev.yml` compose file to start a local instance of c
 Once the required setup is done, run the following commands to start caddy control locally.
 
 1. Clone the repository
+
 ```bash
 git clone https://github.com/avashForReal/caddy-control.git
 ```
 
 2. Create a .env file with the following content.
+
 ```bash
 APP_HOST=<YOUR-APP_DOMAIN>
 CADDY_SERVER_IP=localhost
 CADDY_ADMIN_URL=http://localhost:2019
 JWT_SECRET="awesomesecret"
 ```
+
 **Description:** <br>
 <strong>APP_HOST</strong>: Not relevant for local development. <br>
 <strong>CADDY_SERVER_IP</strong>: IP of the caddy server. If you are using a remote server then put the public IP of the server.<br>
@@ -55,29 +63,39 @@ JWT_SECRET="awesomesecret"
 <strong>JWT_SECRET</strong>: JWT token secret.<br>
 
 3. Install Dependencies
+
 ```bash
 pnpm install
 ```
 
 4. Start development server
+
 ```bash
 pnpm dev
 ```
 
 The first user will me seeded with `admin` username and `admin` password and will be prompted to change password after first login.
 
-
 ## Self Hosting Using Docker
+
 End-to-end guide on how to self-host caddy control.
 
 ### Prerequisites
-To self host you will need a server with public a IP. Make sure to expose the ports `80` and `443` for incoming traffic. 
+
+To self host you will need:
+
+- A server with public a IP. Make sure to expose the ports `80` and `443` for incoming traffic.
+- [Docker](https://docs.docker.com/engine/install/) installed in your server.
 
 Run the following script to get up and running using docker.
 
 ```bash
-docker compose up -d
+bash -c "$(curl -sSL https://raw.githubusercontent.com/avashForReal/caddy-control/refs/heads/main/deploy.sh)"
 ```
+
+<img style="margin: auto;" src="public/setup.png" alt="Caddy Control Logo">
+
+Make sure to create an `A record` for the provided `App Host Domain` pointing to `Caddy Server IP`. Caddy control will be available at the provided `App Host Domain`.
 
 After the setup is complete, first user with following credentials will be created:
 

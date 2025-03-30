@@ -13,11 +13,11 @@ echo -e "${BLUE}=========================================${NC}"
 echo -e "${GREEN}Caddy Control Setup${NC}"
 echo -e "${BLUE}=========================================${NC}"
 
-echo -e "${YELLOW}Enter Caddy Server IP (required):${NC}"
+echo -e "${YELLOW}Enter Server IP (required):${NC}"
 read -p "> " CADDY_SERVER_IP
 
 if [[ -z "$CADDY_SERVER_IP" ]]; then
-    echo -e "${RED}Error: Caddy Server IP is required. Exiting.${NC}"
+    echo -e "${RED}Error: Server IP is required. Exiting.${NC}"
     exit 1
 fi
 
@@ -66,7 +66,13 @@ echo -e "${GREEN}Configuration complete!${NC}"
 echo -e "${BLUE}----------------------------------------${NC}"
 echo -e "${GREEN}Settings:${NC}"
 echo -e "  App Host: ${APP_HOST}"
-echo -e "  Caddy Server IP: ${CADDY_SERVER_IP}"
+echo -e "  Server IP: ${CADDY_SERVER_IP}"
 echo -e "  JWT Secret: ${JWT_SECRET}"
 echo -e "${BLUE}----------------------------------------${NC}"
-echo -e "${GREEN}You can now run 'docker-compose up -d' to start your services${NC}"
+
+echo -e "${GREEN}Starting services...${NC}"
+
+sudo docker compose up -d
+
+echo -e "${GREEN}Create an A record for ${APP_HOST} pointing ${CADDY_SERVER_IP}:${NC}"
+echo -e "${GREEN}Caddy control will be available at ${APP_HOST}:${NC}"
