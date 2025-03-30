@@ -99,7 +99,9 @@ bash -c "$(curl -sSL https://raw.githubusercontent.com/avashForReal/caddy-contro
 **App  Host domain**: Domain which will be used to access caddy control. This domain must have an A record pointing to the server IP. <br>
 **JWT Secret**: Use tool like [JWTSecret](https://jwtsecret.com/generate) to generate one or enter your own secret string.
 
-> Make sure to create an `A record` for the provided `App Host Domain` pointing to `Caddy Server IP`. Caddy control will be available at the provided `App Host Domain`.
+> Make sure to create an `A record` for the provided `App Host Domain` pointing to `Server IP`. Caddy control will be available at the provided `App Host Domain`.
+
+> All created hosts will have to create an `A record` pointing to `Server IP` to access the configured upstream.
 
 After the setup is complete, first user with following credentials will be created:
 
