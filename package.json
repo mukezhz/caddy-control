@@ -9,7 +9,7 @@
     "lint": "next lint",
     "dev:caddy": "docker compose -f docker-compose.dev.yml up -d",
     "image:build": "docker build --platform linux/amd64 -t caddy-control .",
-		"image:push": "docker tag caddy-control:latest itbeeazy/caddy-control:1.0.0 && docker push itbeeazy/caddy-control:1.0.0"
+    "image:push": "docker tag caddy-control:latest itbeeazy/caddy-control:1.0.0 && docker push itbeeazy/caddy-control:1.0.0"
   },
   "keywords": [
     "proxy",
@@ -20,7 +20,7 @@
   "author": "Avash Ghimire <avash700@gmail.com> (https://avashghimire.com.np)",
   "repository": {
     "type": "git",
-    "url": "https://github.com/avashForReal/easy-domain"
+    "url": "https://github.com/avashForReal/caddy-control"
   },
   "dependencies": {
     "@hookform/resolvers": "^4.1.3",
