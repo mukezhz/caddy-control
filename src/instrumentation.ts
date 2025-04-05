@@ -1,6 +1,6 @@
 import { ZodIssue } from "zod";
 import { validateEnv } from "./appConfig";
-import { initializeCaddyConfiguration } from "./app/api/_services/caddy/caddy-service";
+import { getCaddyConfig, initializeCaddyConfiguration } from "./app/api/_services/caddy/caddy-service";
 import { seedFirstUser } from "./app/api/_services/user/user-service";
 
 const constructEnvErrorMessages = (errors: ZodIssue[]): string[] => {
@@ -24,8 +24,20 @@ export async function register() {
       );
     }
     console.info("✅ Environment variables loaded successfully!");
-
-    await initializeCaddyConfiguration();
-    await seedFirstUser()
+    try {
+      const res = await getCaddyConfig()
+      if (res) {
+        await initializeCaddyConfiguration();
+        await seedFirstUser()
+      }
+    } catch (error) {
+      console.error("❌⚠️ Caddy server not reachable. Initializing configuration.");
+      console.error("========================================");
+      console.error("⚠️ Please ensure the Caddy server is running.");
+      console.error("========================================");
+      throw new Error(
+        "❌⚠️ Caddy server not reachable. Initializing configuration."
+      );
+    }
   }
 }
