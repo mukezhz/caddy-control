@@ -3,7 +3,7 @@
   "description": "An open-source alternative to approximated, SaaS custom domains etc. Proxy any incoming domain to upstream host, IP, internal service etc",
   "version": "0.1.0",
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
