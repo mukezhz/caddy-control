@@ -25,11 +25,18 @@ export async function register() {
     }
     console.info("✅ Environment variables loaded successfully!");
     try {
-      const res = await getCaddyConfig()
-      if (res) {
-        await initializeCaddyConfiguration();
-        await seedFirstUser()
-      }
+      await getCaddyConfig()
+      console.log("========================================");
+      console.log("✅ Caddy server is reachable. Proceeding with initialization.");
+      await initializeCaddyConfiguration();
+      console.log("✅ Caddy server initialized successfully.");
+
+      console.log("========================================");
+      console.log("✅ Seeding initial configuration.");
+
+      console.log("✅ seeding first user");
+      await seedFirstUser()
+      console.log("✅ first user seeded successfully.");
     } catch (error) {
       console.error("❌⚠️ Caddy server not reachable. Initializing configuration.");
       console.error("========================================");
