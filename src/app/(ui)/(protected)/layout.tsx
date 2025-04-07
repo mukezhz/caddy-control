@@ -11,17 +11,17 @@ import ChangePassword from "@/components/user/change-password";
 export default function ProtectedLayout({ children }: { children: React.ReactNode }) {
     const [checking, setChecking] = useState(true);
     const { accessToken, user, setUser } = useAuthStore();
+    const { data: userData, isLoading: isLoadingProfile } = useGetProfile(!!accessToken)
     const router = useRouter();
 
     useEffect(() => {
-        if (!accessToken) {
+        if (!accessToken && !checking) {
             router.replace("/login");
         } else {
             setChecking(false);
         }
-    }, [accessToken, router]);
+    }, [accessToken, router, checking]);
 
-    const { data: userData, isLoading: isLoadingProfile } = useGetProfile(!!accessToken)
 
     useEffect(() => {
         if (userData) {
