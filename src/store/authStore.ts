@@ -1,4 +1,4 @@
-import { User } from '@/schemas/user/user.schema';
+import { Permission, User } from '@/schemas/user/user.schema';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 
@@ -11,6 +11,7 @@ type AuthActions = {
   setUser: (user: User | null) => void;
   setAccessToken: (accessToken: string | null) => void;
   resetAuthStore: () => void;
+  hasPermission: (permissionName: string) => boolean;
 };
 
 type AuthStore = AuthState & AuthActions;
@@ -22,11 +23,24 @@ const initAuthState: AuthState = {
 
 export const useAuthStore = create<AuthStore>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       ...initAuthState,
       setUser: (user) => set({ user }),
       setAccessToken: (accessToken) => set({ accessToken }),
-      resetAuthStore: () => set({ ...initAuthState })
+      resetAuthStore: () => set({ ...initAuthState }),
+      hasPermission: (permissionName) => {
+        const { user } = get();
+        
+        // Admin users have all permissions
+        if (user?.isAdmin) return true;
+        
+        if (!user?.role?.permissions || user.role.permissions.length === 0) return false;
+
+        // Check if user has the specified permission
+        return !!user.role.permissions.some(
+          (permission) => permission.name === permissionName
+        );
+      }
     }),
     {
       name: 'auth-store',
@@ -38,3 +52,4 @@ export const useAuthStore = create<AuthStore>()(
 // for use outside tsx components, e.g. api client
 export const getAccessToken = () => useAuthStore.getState().accessToken;
 export const resetAuth = () => useAuthStore.getState().resetAuthStore();
+export const hasPermission = (permissionName: string) => useAuthStore.getState().hasPermission(permissionName);

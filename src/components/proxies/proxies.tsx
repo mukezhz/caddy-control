@@ -5,6 +5,7 @@ import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import ProxyDeleteConfirm from "./proxy-delete-confirm";
 import { useState } from "react";
+import { hasPermission } from "@/store/authStore";
 
 type Props = {
   proxyData: {
@@ -40,6 +41,9 @@ const ProxyRecord = ({ record }: ProxyRecordProps) => {
 }
 
 const ProxyRecordCheckResults = ({ record, handleDeleteClick }: ProxyCheckResults) => {
+  // Check if user has permission to delete proxies
+  const canDeleteProxy = hasPermission('proxies:manage') || hasPermission('proxies:modify');
+  
   return (
     <div className="flex items-center justify-start gap-6">
       <div className="flex items-center justify-start gap-1 text-md text-gray-500">
@@ -71,15 +75,17 @@ const ProxyRecordCheckResults = ({ record, handleDeleteClick }: ProxyCheckResult
           </TooltipContent>
         </Tooltip>
       </div>
-      <Button
-        size='icon'
-        variant='ghost'
-        disabled={record.isLocked}
-        onClick={() => handleDeleteClick(record)}
-        className="cursor-pointer hover:bg-red-100 text-red-400 hover:text-red-500"
-      >
-        <Trash />
-      </Button>
+      {canDeleteProxy && (
+        <Button
+          size='icon'
+          variant='ghost'
+          disabled={record.isLocked}
+          onClick={() => handleDeleteClick(record)}
+          className="cursor-pointer hover:bg-red-100 text-red-400 hover:text-red-500"
+        >
+          <Trash />
+        </Button>
+      )}
     </div>
   )
 }

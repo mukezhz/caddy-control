@@ -4,6 +4,7 @@ import { Button } from "../ui/button";
 import { Trash, Clipboard, Eye, EyeOff } from "lucide-react";
 import KeyDeleteConfirm from "./key-delete-confirm";
 import { toast } from "sonner";
+import { hasPermission } from "@/store/authStore";
 
 type Props = {
   keysData: {
@@ -16,6 +17,9 @@ const Keys = ({ keysData }: Props) => {
   const [openDelete, setOpenDelete] = useState(false);
   const [selectedKey, setSelectedKey] = useState<GetKeysResponse | null>(null);
   const [visibleKeys, setVisibleKeys] = useState<{ [key: number]: boolean }>({});
+  
+  // Check if user has permission to delete API keys
+  const canDeleteKey = hasPermission('api_keys:manage') || hasPermission('api_keys:modify');
 
   const handleDeleteCancel = () => {
     setOpenDelete(false);
@@ -71,14 +75,16 @@ const Keys = ({ keysData }: Props) => {
                 >
                   <Clipboard size={16} />
                 </Button>
-                <Button
-                  size="icon"
-                  variant="ghost"
-                  onClick={() => handleDeleteClick(record)}
-                  className="cursor-pointer hover:bg-red-100 text-red-400 hover:text-red-500"
-                >
-                  <Trash size={16} />
-                </Button>
+                {canDeleteKey && (
+                  <Button
+                    size="icon"
+                    variant="ghost"
+                    onClick={() => handleDeleteClick(record)}
+                    className="cursor-pointer hover:bg-red-100 text-red-400 hover:text-red-500"
+                  >
+                    <Trash size={16} />
+                  </Button>
+                )}
               </div>
             </div>
           ))}

@@ -60,7 +60,6 @@ export const getHandlerTemplate = (
 		},
 		transport: {
 			protocol: "http",
-			tls: {},
 		},
 	};
 

@@ -5,12 +5,16 @@ import { useQueryClient, useIsFetching } from '@tanstack/react-query'
 import { AddProxyDialog } from './add-proxy-dialog'
 import { Eye } from 'lucide-react'
 import { ViewRawDialog } from './view-raw-dialog'
+import { hasPermission } from '@/store/authStore'
 
 const ProxiesActions = () => {
     const [addDialogOpen, setAddDialogOpen] = useState(false);
     const [rawDialogOpen, setRawDialogOpen] = useState(false);
     const queryClient = useQueryClient();
     const isFetchingDomains = useIsFetching({ queryKey: ["registered-domains"] });
+    
+    // Check if user has permissions to add proxies
+    const canModifyProxies = hasPermission('proxies:manage') || hasPermission('proxies:modify');
 
     const refreshProxies = async () => {
         queryClient.invalidateQueries({
@@ -41,12 +45,14 @@ const ProxiesActions = () => {
                     </span>
                     View Raw JSON
                 </Button>
-                <Button onClick={handleAddProxy} className='cursor-pointer' variant={'default'}>
-                    <span>
-                        <IconPlus />
-                    </span>
-                    Add Proxy
-                </Button>
+                {canModifyProxies && (
+                    <Button onClick={handleAddProxy} className='cursor-pointer' variant={'default'}>
+                        <span>
+                            <IconPlus />
+                        </span>
+                        Add Proxy
+                    </Button>
+                )}
             </div>
             <AddProxyDialog
                 open={addDialogOpen}

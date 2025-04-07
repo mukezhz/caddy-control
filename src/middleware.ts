@@ -60,6 +60,17 @@ export async function middleware(req: NextRequest) {
     where: {
       id: (tokenPayload as JwtPayload).id!,
     },
+    include: {
+      role: {
+        include: {
+          permissions: {
+            include: {
+              permission: true
+            }
+          }
+        }
+      }
+    }
   });
   if (!user) {
     return NextResponse.json(
