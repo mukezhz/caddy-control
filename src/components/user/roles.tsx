@@ -16,14 +16,20 @@ import { useState } from "react";
 import { CreateRoleDialog } from "@/components/user/create-role-dialog";
 import { EditRoleDialog } from "@/components/user/edit-role-dialog";
 import { Spinner } from "../ui/spinner";
+import { useAuthStore, hasPermission } from "@/store/authStore";
 
 export default function RolesManagement() {
   const { data: rolesData, isLoading } = useGetRoles();
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [selectedRole, setSelectedRole] = useState<Role | null>(null);
+  const { user } = useAuthStore();
+  
+  // Check if user can modify settings
+  const canModify = user?.isAdmin || hasPermission('system:manage');
 
   const handleEditRole = (role: Role) => {
+    if (!canModify) return;
     setSelectedRole(role);
     setIsEditDialogOpen(true);
   };
@@ -32,7 +38,9 @@ export default function RolesManagement() {
     <div className="flex flex-col w-full">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold">Role Management</h2>
-        <Button onClick={() => setIsCreateDialogOpen(true)}>Create Role</Button>
+        {canModify && (
+          <Button onClick={() => setIsCreateDialogOpen(true)}>Create Role</Button>
+        )}
       </div>
 
       {isLoading ? (
@@ -47,7 +55,7 @@ export default function RolesManagement() {
                 <TableHead>Role Name</TableHead>
                 <TableHead>Description</TableHead>
                 <TableHead>Permissions</TableHead>
-                <TableHead className="w-[100px]">Actions</TableHead>
+                {canModify && <TableHead className="w-[100px]">Actions</TableHead>}
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -67,20 +75,22 @@ export default function RolesManagement() {
                       )}
                     </div>
                   </TableCell>
-                  <TableCell>
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      onClick={() => handleEditRole(role)}
-                    >
-                      Edit
-                    </Button>
-                  </TableCell>
+                  {canModify && (
+                    <TableCell>
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        onClick={() => handleEditRole(role)}
+                      >
+                        Edit
+                      </Button>
+                    </TableCell>
+                  )}
                 </TableRow>
               ))}
               {!rolesData?.data?.length && (
                 <TableRow>
-                  <TableCell colSpan={4} className="text-center py-4">
+                  <TableCell colSpan={canModify ? 4 : 3} className="text-center py-4">
                     No roles found
                   </TableCell>
                 </TableRow>
@@ -90,16 +100,20 @@ export default function RolesManagement() {
         </div>
       )}
 
-      <CreateRoleDialog
-        open={isCreateDialogOpen}
-        onOpenChange={setIsCreateDialogOpen}
-      />
-      
-      <EditRoleDialog
-        open={isEditDialogOpen}
-        onOpenChange={setIsEditDialogOpen}
-        role={selectedRole}
-      />
+      {canModify && (
+        <>
+          <CreateRoleDialog
+            open={isCreateDialogOpen}
+            onOpenChange={setIsCreateDialogOpen}
+          />
+          
+          <EditRoleDialog
+            open={isEditDialogOpen}
+            onOpenChange={setIsEditDialogOpen}
+            role={selectedRole}
+          />
+        </>
+      )}
     </div>
   );
 }

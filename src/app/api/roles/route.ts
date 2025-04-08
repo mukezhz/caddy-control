@@ -17,7 +17,7 @@ export async function GET(request: NextRequest) {
     }
     
     // Check if user has permission to view roles (requires admin or system:manage)
-    if (!user.isAdmin && !hasPermission(user, "system:manage")) {
+    if (!user.isAdmin && !hasPermission(user, "system:manage") && !hasPermission(user, "system:view")) {
       return NextResponse.json(
         { error: "Forbidden - Insufficient permissions" },
         { status: 403 }

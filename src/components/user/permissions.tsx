@@ -31,11 +31,16 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { useAuthStore, hasPermission } from "@/store/authStore";
 
 export default function PermissionsManagement() {
   const { data: permissionsData, isLoading } = useGetPermissions();
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [selectedPermissions, setSelectedPermissions] = useState<string[]>([]);
+  const { user } = useAuthStore();
+  
+  // Check if user can modify settings
+  const canModify = user?.isAdmin || hasPermission('system:manage');
   
   const { mutate: createPermission, isPending } = useCreatePermission();
 
@@ -143,7 +148,9 @@ export default function PermissionsManagement() {
     <div className="flex flex-col w-full">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold">Permission Management</h2>
-        <Button onClick={() => setIsCreateDialogOpen(true)}>Create Permissions</Button>
+        {canModify && (
+          <Button onClick={() => setIsCreateDialogOpen(true)}>Create Permissions</Button>
+        )}
       </div>
 
       {isLoading ? (
@@ -157,7 +164,7 @@ export default function PermissionsManagement() {
               <TableRow>
                 <TableHead>Permission Name</TableHead>
                 <TableHead>Description</TableHead>
-                <TableHead className="w-[100px]">Actions</TableHead>
+                {canModify && <TableHead className="w-[100px]">Actions</TableHead>}
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -165,16 +172,18 @@ export default function PermissionsManagement() {
                 <TableRow key={permission.id}>
                   <TableCell className="font-medium">{permission.name}</TableCell>
                   <TableCell>{permission.description || "-"}</TableCell>
-                  <TableCell>
-                    <Button variant="outline" size="sm">
-                      Delete
-                    </Button>
-                  </TableCell>
+                  {canModify && (
+                    <TableCell>
+                      <Button variant="outline" size="sm">
+                        Delete
+                      </Button>
+                    </TableCell>
+                  )}
                 </TableRow>
               ))}
               {!permissionsData?.data?.length && (
                 <TableRow>
-                  <TableCell colSpan={3} className="text-center py-4">
+                  <TableCell colSpan={canModify ? 3 : 2} className="text-center py-4">
                     No permissions found
                   </TableCell>
                 </TableRow>
@@ -184,88 +193,90 @@ export default function PermissionsManagement() {
         </div>
       )}
 
-      <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
-        <DialogContent className="sm:max-w-[600px] max-h-[80vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle>Create Permissions</DialogTitle>
-            <DialogDescription>
-              Select resources and actions to create permissions for. Each combination will create a separate permission.
-            </DialogDescription>
-          </DialogHeader>
-          
-          <Accordion type="multiple" className="w-full">
-            {RESOURCES.map((resource) => {
-              const allPermissionsSelected = resource.availableActions.every(action => 
-                selectedPermissions.includes(generatePermissionName(resource.id, action))
-              );
-              
-              return (
-                <AccordionItem key={resource.id} value={resource.id}>
-                  <div className="flex items-center">
-                    <div className="flex items-center space-x-2 mr-3 ml-2">
-                      <Checkbox 
-                        id={`resource-${resource.id}`}
-                        checked={allPermissionsSelected}
-                        onCheckedChange={(checked) => handleToggleManage(resource.id, !!checked)}
-                      />
-                    </div>
-                    <AccordionTrigger className="flex-1 pl-1">
-                      <Label htmlFor={`resource-${resource.id}`} className="text-base font-medium cursor-pointer">
-                        {resource.name}
-                      </Label>
-                    </AccordionTrigger>
-                  </div>
-                  <AccordionContent>
-                    <div className="pl-6 space-y-3">
-                      <div className="text-sm text-muted-foreground">{resource.description}</div>
-                      <div className="space-y-2">
-                        {resource.availableActions.map((action) => {
-                          const permId = generatePermissionName(resource.id, action);
-                          const permDescription = getPermissionDescription(resource.id, action);
-                          const alreadyExists = existingPermissionNames.has(permId);
-                          
-                          return (
-                            <div key={permId} className="flex items-center space-x-2">
-                              <Checkbox 
-                                id={permId}
-                                checked={selectedPermissions.includes(permId)}
-                                onCheckedChange={() => togglePermission(permId)}
-                                disabled={alreadyExists}
-                              />
-                              <div className="flex items-center gap-2">
-                                <Label htmlFor={permId} className={alreadyExists ? "text-muted-foreground" : ""}>
-                                  {permDescription}
-                                </Label>
-                                {alreadyExists && <Badge variant="outline">Exists</Badge>}
-                              </div>
-                            </div>
-                          );
-                        })}
+      {canModify && (
+        <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
+          <DialogContent className="sm:max-w-[600px] max-h-[80vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle>Create Permissions</DialogTitle>
+              <DialogDescription>
+                Select resources and actions to create permissions for. Each combination will create a separate permission.
+              </DialogDescription>
+            </DialogHeader>
+            
+            <Accordion type="multiple" className="w-full">
+              {RESOURCES.map((resource) => {
+                const allPermissionsSelected = resource.availableActions.every(action => 
+                  selectedPermissions.includes(generatePermissionName(resource.id, action))
+                );
+                
+                return (
+                  <AccordionItem key={resource.id} value={resource.id}>
+                    <div className="flex items-center">
+                      <div className="flex items-center space-x-2 mr-3 ml-2">
+                        <Checkbox 
+                          id={`resource-${resource.id}`}
+                          checked={allPermissionsSelected}
+                          onCheckedChange={(checked) => handleToggleManage(resource.id, !!checked)}
+                        />
                       </div>
+                      <AccordionTrigger className="flex-1 pl-1">
+                        <Label htmlFor={`resource-${resource.id}`} className="text-base font-medium cursor-pointer">
+                          {resource.name}
+                        </Label>
+                      </AccordionTrigger>
                     </div>
-                  </AccordionContent>
-                </AccordionItem>
-              );
-            })}
-          </Accordion>
-          
-          <DialogFooter>
-            <div className="flex justify-between w-full items-center">
-              <div className="text-sm text-muted-foreground">
-                Selected: {selectedPermissions.length} permissions
+                    <AccordionContent>
+                      <div className="pl-6 space-y-3">
+                        <div className="text-sm text-muted-foreground">{resource.description}</div>
+                        <div className="space-y-2">
+                          {resource.availableActions.map((action) => {
+                            const permId = generatePermissionName(resource.id, action);
+                            const permDescription = getPermissionDescription(resource.id, action);
+                            const alreadyExists = existingPermissionNames.has(permId);
+                            
+                            return (
+                              <div key={permId} className="flex items-center space-x-2">
+                                <Checkbox 
+                                  id={permId}
+                                  checked={selectedPermissions.includes(permId)}
+                                  onCheckedChange={() => togglePermission(permId)}
+                                  disabled={alreadyExists}
+                                />
+                                <div className="flex items-center gap-2">
+                                  <Label htmlFor={permId} className={alreadyExists ? "text-muted-foreground" : ""}>
+                                    {permDescription}
+                                  </Label>
+                                  {alreadyExists && <Badge variant="outline">Exists</Badge>}
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    </AccordionContent>
+                  </AccordionItem>
+                );
+              })}
+            </Accordion>
+            
+            <DialogFooter>
+              <div className="flex justify-between w-full items-center">
+                <div className="text-sm text-muted-foreground">
+                  Selected: {selectedPermissions.length} permissions
+                </div>
+                <Button
+                  type="submit"
+                  onClick={handleCreatePermission}
+                  disabled={selectedPermissions.length === 0 || isPending}
+                >
+                  {isPending ? <Spinner className="mr-2 h-4 w-4" /> : null}
+                  Create Permissions
+                </Button>
               </div>
-              <Button
-                type="submit"
-                onClick={handleCreatePermission}
-                disabled={selectedPermissions.length === 0 || isPending}
-              >
-                {isPending ? <Spinner className="mr-2 h-4 w-4" /> : null}
-                Create Permissions
-              </Button>
-            </div>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      )}
     </div>
   );
 }

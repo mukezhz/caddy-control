@@ -1,41 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { useAuthStore } from "@/store/authStore";
-import { useRouter } from "next/navigation";
 import TopHeader from "@/components/top-header";
-import { useGetProfile } from "@/hooks/user/user.hooks";
-import { BoxLoader } from "@/components/loader";
 import ChangePassword from "@/components/user/change-password";
 
 export default function ProtectedLayout({ children }: { children: React.ReactNode }) {
-    const [checking, setChecking] = useState(true);
-    const { accessToken, user, setUser } = useAuthStore();
-    const { data: userData, isLoading: isLoadingProfile } = useGetProfile(!!accessToken)
-    const router = useRouter();
-
-    useEffect(() => {
-        if (!accessToken && !checking) {
-            router.replace("/login");
-        } else {
-            setChecking(false);
-        }
-    }, [accessToken, router, checking]);
-
-
-    useEffect(() => {
-        if (userData) {
-            setUser(userData)
-        }
-    }, [userData, setUser])
-
-    if (isLoadingProfile) {
-        return (
-            <BoxLoader />
-        )
-    }
-
-    if (checking) return null;
+    const { user } = useAuthStore();
 
     return (
         <div className="h-screen flex flex-col px-48 overflow-hidden">

@@ -56,7 +56,7 @@ export async function POST(request: NextRequest) {
       );
     }
     return NextResponse.json(
-      { error: "Failed to create user." },
+      { error: "Failed to authenticate user." },
       { status: 500 }
     );
   }

@@ -8,16 +8,16 @@ import { getUserFromHeader, hasPermission } from "../_services/user/user-service
 export async function GET(request: NextRequest) {
   try {
     const user = await getUserFromHeader(request);
-    
+
     if (!user) {
       return NextResponse.json(
         { error: "Unauthorized" },
         { status: 401 }
       );
     }
-    
+
     // Allow both admins and users with system:manage permission
-    if (!user.isAdmin && !hasPermission(user, "system:manage")) {
+    if (!user.isAdmin && !(hasPermission(user, "system:manage") || hasPermission(user, "system:view"))) {
       return NextResponse.json(
         { error: "Forbidden - Insufficient permissions" },
         { status: 403 }
@@ -47,14 +47,14 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const user = await getUserFromHeader(request);
-    
+
     if (!user) {
       return NextResponse.json(
         { error: "Unauthorized" },
         { status: 401 }
       );
     }
-    
+
     // Allow both admins and users with system:manage permission
     if (!user.isAdmin && !hasPermission(user, "system:manage")) {
       return NextResponse.json(

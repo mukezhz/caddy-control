@@ -36,7 +36,6 @@ const createApiClient = (): AxiosInstance => {
       if (error.response && [401, 403].includes(error.response.status)) {
         // Log auth failure - could be expanded with more detailed info
         console.log(`Authentication error (${error.response.status}): ${error.response.statusText}`);
-        
         // Reset auth state
         resetAuth();
         

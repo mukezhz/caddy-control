@@ -74,23 +74,47 @@ export const userService = {
 
 // React Query hooks
 export const useGetUsers = (enabled = true) => {
-  return useQuery({
-    queryKey: [QUERY_KEYS.USERS],
-    queryFn: userService.getUsers,
-    staleTime: 0,
-    refetchOnMount: true,
-    enabled,
-  });
+  try {
+    return useQuery({
+      queryKey: [QUERY_KEYS.USERS],
+      queryFn: userService.getUsers,
+      staleTime: 0,
+      refetchOnMount: true,
+      enabled,
+    });
+  } catch (error) {
+    // Return a default state when used outside QueryClientProvider
+    console.warn("useGetUsers called outside of QueryClientProvider");
+    return {
+      data: undefined,
+      isLoading: false,
+      isError: false,
+      error: null,
+      refetch: async () => ({} as any),
+    };
+  }
 };
 
 export const useGetProfile = (enabled = true) => {
-  return useQuery({
-    queryKey: [QUERY_KEYS.PROFILE],
-    queryFn: userService.getProfile,
-    staleTime: 0,
-    refetchOnMount: true,
-    enabled,
-  });
+  try {
+    return useQuery({
+      queryKey: [QUERY_KEYS.PROFILE],
+      queryFn: userService.getProfile,
+      staleTime: 0,
+      refetchOnMount: true,
+      enabled,
+    });
+  } catch (error) {
+    // Return a default state when used outside QueryClientProvider
+    console.warn("useGetProfile called outside of QueryClientProvider");
+    return {
+      data: undefined,
+      isLoading: false,
+      isError: false,
+      error: null,
+      refetch: async () => ({} as any),
+    };
+  }
 };
 
 export const useChangePassword = () => {

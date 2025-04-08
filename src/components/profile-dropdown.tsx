@@ -27,7 +27,7 @@ export function ProfileDropdown({
   const nameInitials = getInitialsForAvatar(user?.username || 'xo')
 
   // Check if user has access to settings (admin or has system:manage permission)
-  const hasSettingsAccess = user?.isAdmin || hasPermission('system:manage')
+  const hasSettingsAccess = user?.isAdmin || hasPermission('system:manage') || hasPermission('system:view')
 
   return (
     <DropdownMenu modal={false}>

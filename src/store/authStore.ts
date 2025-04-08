@@ -36,10 +36,8 @@ export const useAuthStore = create<AuthStore>()(
 
         if (!user?.role?.permissions || user.role.permissions.length === 0) return false;
         // Check if user has the specified permission
-        console.log('User permissions: for', permissionName, !!user.role.permissions.some(
-          (permission) => permission.name === permissionName
-        ));
-
+        console.log("checking permission", permissionName);
+        console.log("user permissions", user.role.permissions);
         return !!user.role.permissions.some(
           (permission) => permission.name === permissionName
         );
