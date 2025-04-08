@@ -10,7 +10,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "../ui/button";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Spinner } from "../ui/spinner";
 import {
   Dialog,
@@ -39,15 +39,35 @@ export default function PermissionsManagement() {
   
   const { mutate: createPermission, isPending } = useCreatePermission();
 
+  // Initialize selectedPermissions with existing permissions when dialog opens
+  useEffect(() => {
+    if (isCreateDialogOpen && permissionsData?.data) {
+      // Add existing permission names to selectedPermissions
+      const existingNames = permissionsData.data.map(p => p.name);
+      setSelectedPermissions(prev => {
+        const newSelection = [...prev];
+        existingNames.forEach(name => {
+          if (!newSelection.includes(name)) {
+            newSelection.push(name);
+          }
+        });
+        return newSelection;
+      });
+    }
+  }, [isCreateDialogOpen, permissionsData?.data]);
+
   const handleCreatePermission = () => {
-    // Create all selected permissions
-    const permissionsToCreate = selectedPermissions.map(permId => {
-      const [resourceId, action] = permId.split(':');
-      return {
-        name: permId,
-        description: getPermissionDescription(resourceId, action as ResourceAction)
-      };
-    });
+    // Create all selected permissions that don't already exist
+    const existingPermissionNames = new Set(permissionsData?.data?.map(p => p.name) || []);
+    const permissionsToCreate = selectedPermissions
+      .filter(name => !existingPermissionNames.has(name))
+      .map(permId => {
+        const [resourceId, action] = permId.split(':');
+        return {
+          name: permId,
+          description: getPermissionDescription(resourceId, action as ResourceAction)
+        };
+      });
 
     // Create each permission one by one
     let successCount = 0;

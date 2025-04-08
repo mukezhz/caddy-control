@@ -30,13 +30,16 @@ export const useAuthStore = create<AuthStore>()(
       resetAuthStore: () => set({ ...initAuthState }),
       hasPermission: (permissionName) => {
         const { user } = get();
-        
+
         // Admin users have all permissions
         if (user?.isAdmin) return true;
-        
-        if (!user?.role?.permissions || user.role.permissions.length === 0) return false;
 
+        if (!user?.role?.permissions || user.role.permissions.length === 0) return false;
         // Check if user has the specified permission
+        console.log('User permissions: for', permissionName, !!user.role.permissions.some(
+          (permission) => permission.name === permissionName
+        ));
+
         return !!user.role.permissions.some(
           (permission) => permission.name === permissionName
         );

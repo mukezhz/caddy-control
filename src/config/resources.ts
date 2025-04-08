@@ -46,6 +46,12 @@ export const RESOURCES: Resource[] = [
     description: 'Access and control system settings',
     availableActions: ['view', 'manage'],
   },
+  {
+    id: 'dashboard',
+    name: 'Dashboard',
+    description: 'Access the system dashboard',
+    availableActions: ['view'],
+  },
 ];
 
 // Helper function to generate permission name from resource and action

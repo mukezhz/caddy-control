@@ -2,6 +2,7 @@ import { ZodIssue } from "zod";
 import { validateEnv } from "./appConfig";
 import { initializeCaddyConfiguration } from "./app/api/_services/caddy/caddy-service";
 import { seedFirstUser } from "./app/api/_services/user/user-service";
+import { seedPermissions } from "./app/api/_services/user/permission-service";
 
 const constructEnvErrorMessages = (errors: ZodIssue[]): string[] => {
   return errors.map((error, idx) => {
@@ -26,6 +27,7 @@ export async function register() {
     console.info("✅ Environment variables loaded successfully!");
 
     await initializeCaddyConfiguration();
-    await seedFirstUser()
+    await seedFirstUser();
+    await seedPermissions();
   }
 }

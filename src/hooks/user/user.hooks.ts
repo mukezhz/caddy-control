@@ -7,54 +7,76 @@ import { useRouter } from "next/navigation";
 import { User } from "@/schemas/user/user.schema";
 import { toast } from "sonner";
 
-const changePassword = async (
-  payload: PasswordChangeData
-): Promise<{
-  data: {
-    accessToken: string;
-  };
-}> => {
-  const res = await apiClient.post("/api/user/change-password", payload);
-  return res.data;
-};
+// Define query keys as constants
+const QUERY_KEYS = {
+  USERS: "users",
+  PROFILE: "profile",
+} as const;
 
-const login = async (
-  payload: LoginFormData
-): Promise<{
-  data: {
-    accessToken: string;
-  };
-}> => {
-  const res = await apiClient.post("/api/user/login", payload);
-  return res.data;
-};
-
-const createUser = async (
-  payload: CreateUserData
-): Promise<{
-  data: User;
-}> => {
-  const res = await apiClient.post("/api/user/create", payload);
-  return res.data;
-};
-
-export const getProfile = async (): Promise<User> => {
-  const response = await apiClient.get("/api/user/profile");
-  return response?.data?.data;
-};
-
-export const getUsers = async (): Promise<{
+type UsersResponse = {
   data: User[];
   total: number;
-}> => {
-  const response = await apiClient.get("/api/user/list");
-  return response?.data;
 };
 
+type UserResponse = {
+  data: User;
+};
+
+type AuthResponse = {
+  data: {
+    accessToken: string;
+  };
+};
+
+type MessageResponse = {
+  data: {
+    message: string;
+  };
+};
+
+// API service functions
+export const userService = {
+  getProfile: async (): Promise<User> => {
+    const response = await apiClient.get("/api/user/profile");
+    return response?.data?.data;
+  },
+
+  getUsers: async (): Promise<UsersResponse> => {
+    const response = await apiClient.get("/api/user/list");
+    return response?.data;
+  },
+
+  login: async (payload: LoginFormData): Promise<AuthResponse> => {
+    const res = await apiClient.post("/api/user/login", payload);
+    return res.data;
+  },
+
+  changePassword: async (payload: PasswordChangeData): Promise<AuthResponse> => {
+    const res = await apiClient.post("/api/user/change-password", payload);
+    return res.data;
+  },
+
+  createUser: async (payload: CreateUserData): Promise<UserResponse> => {
+    const res = await apiClient.post("/api/user/create", payload);
+    return res.data;
+  },
+
+  adminResetPassword: async (payload: AdminPasswordResetData): Promise<MessageResponse> => {
+    const res = await apiClient.post(`/api/user/admin-reset-password`, payload);
+    return res.data;
+  },
+
+  deleteUser: async (userId: string): Promise<MessageResponse> => {
+    const res = await apiClient.delete(`/api/user/${userId}`);
+    return res.data;
+  }
+};
+
+// React Query hooks
 export const useGetUsers = (enabled = true) => {
   return useQuery({
-    queryKey: ["users"],
-    queryFn: getUsers,
+    queryKey: [QUERY_KEYS.USERS],
+    queryFn: userService.getUsers,
     staleTime: 0,
     refetchOnMount: true,
     enabled,
@@ -63,44 +85,42 @@ export const useGetUsers = (enabled = true) => {
 
 export const useGetProfile = (enabled = true) => {
   return useQuery({
-    queryKey: ["profile"],
-    queryFn: getProfile,
+    queryKey: [QUERY_KEYS.PROFILE],
+    queryFn: userService.getProfile,
     staleTime: 0,
     refetchOnMount: true,
     enabled,
-  })
-}
+  });
+};
 
 export const useChangePassword = () => {
-  const queryClient = useQueryClient()
+  const queryClient = useQueryClient();
+  
   return useMutation({
-    mutationFn: (payload: PasswordChangeData) => changePassword(payload),
+    mutationFn: userService.changePassword,
     throwOnError: false,
-    onError: (err: Error) => {
-      handleServerError(err);
-    },
+    onError: handleServerError,
     onSuccess: async () => {
       toast("Password changed!");
       await queryClient.invalidateQueries({
-        queryKey: ["profile"],
+        queryKey: [QUERY_KEYS.PROFILE],
         exact: false
-      })
+      });
     },
   });
 };
 
 export const useCreateUser = () => {
   const queryClient = useQueryClient();
+  
   return useMutation({
-    mutationFn: (payload: CreateUserData) => createUser(payload),
+    mutationFn: userService.createUser,
     throwOnError: false,
-    onError: (err: Error) => {
-      handleServerError(err);
-    },
+    onError: handleServerError,
     onSuccess: async () => {
       toast("User created successfully!");
       await queryClient.invalidateQueries({
-        queryKey: ["users"],
+        queryKey: [QUERY_KEYS.USERS],
         exact: false,
       });
     },
@@ -112,11 +132,9 @@ export const useLogin = () => {
   const router = useRouter();
 
   return useMutation({
-    mutationFn: (payload: LoginFormData) => login(payload),
+    mutationFn: userService.login,
     throwOnError: false,
-    onError: (err: Error) => {
-      handleServerError(err);
-    },
+    onError: handleServerError,
     onSuccess: (data) => {
       const { accessToken } = data.data;
       if (accessToken) {
@@ -132,39 +150,18 @@ export const useLogin = () => {
 export const useLogout = () => {
   const { resetAuthStore } = useAuthStore();
   const router = useRouter();
+  
   return () => {
     resetAuthStore();
     router.replace("/login");
   };
 };
 
-const adminResetPassword = async (
-  payload: AdminPasswordResetData
-): Promise<{
-  data: {
-    message: string;
-  }
-}> => {
-  const res = await apiClient.post(`/api/user/admin-reset-password`, payload);
-  return res.data;
-};
-
-const deleteUser = async (userId: string): Promise<{
-  data: {
-    message: string;
-  }
-}> => {
-  const res = await apiClient.delete(`/api/user/${userId}`);
-  return res.data;
-};
-
 export const useAdminResetPassword = () => {
   return useMutation({
-    mutationFn: (payload: AdminPasswordResetData) => adminResetPassword(payload),
+    mutationFn: userService.adminResetPassword,
     throwOnError: false,
-    onError: (err: Error) => {
-      handleServerError(err);
-    },
+    onError: handleServerError,
     onSuccess: () => {
       toast("Password has been reset successfully!");
     },
@@ -173,16 +170,15 @@ export const useAdminResetPassword = () => {
 
 export const useDeleteUser = () => {
   const queryClient = useQueryClient();
+  
   return useMutation({
-    mutationFn: (userId: string) => deleteUser(userId),
+    mutationFn: userService.deleteUser,
     throwOnError: false,
-    onError: (err: Error) => {
-      handleServerError(err);
-    },
+    onError: handleServerError,
     onSuccess: async () => {
       toast("User deleted successfully!");
       await queryClient.invalidateQueries({
-        queryKey: ["users"],
+        queryKey: [QUERY_KEYS.USERS],
         exact: false,
       });
     },

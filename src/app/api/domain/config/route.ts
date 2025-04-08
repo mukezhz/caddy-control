@@ -16,9 +16,24 @@ export async function GET(request: NextRequest) {
     
     // Check if user has permission to view domain configuration
     // This is a more sensitive operation, so require at least proxies:manage or system:manage
-    if (!hasPermission(user, "proxies:manage") && 
-        !hasPermission(user, "system:manage") && 
-        !user.isAdmin) {
+    console.log("User permissions:", JSON.stringify(user, null, 2));
+    
+    const path = request.nextUrl.pathname;
+    let requiredPermission;
+    if (path.includes('/')) {
+      requiredPermission = 'dashboard:view';
+    }else if (path.includes('/proxies')) {
+      requiredPermission = 'proxies:manage';
+    } else if (path.includes('/system')) {
+      requiredPermission = 'system:manage';
+    } else {
+      return NextResponse.json(
+        { error: "Forbidden - Unknown path" },
+        { status: 403 }
+      );
+    }
+
+    if (!hasPermission(user, requiredPermission) && !user.isAdmin) {
       return NextResponse.json(
         { error: "Forbidden - Insufficient permissions" },
         { status: 403 }

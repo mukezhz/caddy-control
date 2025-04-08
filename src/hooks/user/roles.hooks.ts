@@ -5,46 +5,87 @@ import { Permission, Role } from "@/schemas/user/user.schema";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-// Permission hooks
-export const getPermissions = async (): Promise<{
+// Define query keys as constants
+const QUERY_KEYS = {
+  PERMISSIONS: "permissions",
+  ROLES: "roles",
+  USERS: "users",
+} as const;
+
+type PermissionsResponse = {
   data: Permission[];
   total: number;
-}> => {
-  const response = await apiClient.get("/api/permissions");
-  return response?.data;
 };
 
+type PermissionResponse = {
+  data: Permission;
+};
+
+type RolesResponse = {
+  data: Role[];
+  total: number;
+};
+
+type RoleResponse = {
+  data: Role;
+};
+
+// API service functions
+export const roleService = {
+  // Permission functions
+  getPermissions: async (): Promise<PermissionsResponse> => {
+    const response = await apiClient.get("/api/permissions");
+    return response?.data;
+  },
+  
+  createPermission: async (payload: CreatePermissionData): Promise<PermissionResponse> => {
+    const response = await apiClient.post("/api/permissions", payload);
+    return response?.data;
+  },
+  
+  // Role functions
+  getRoles: async (): Promise<RolesResponse> => {
+    const response = await apiClient.get("/api/roles");
+    return response?.data;
+  },
+  
+  createRole: async (payload: CreateRoleData): Promise<RoleResponse> => {
+    const response = await apiClient.post("/api/roles", payload);
+    return response?.data;
+  },
+  
+  updateRole: async (payload: UpdateRoleData): Promise<RoleResponse> => {
+    const response = await apiClient.put(`/api/roles/${payload.id}`, payload);
+    return response?.data;
+  },
+  
+  assignRole: async (payload: AssignRoleData): Promise<void> => {
+    await apiClient.post("/api/user/assign-role", payload);
+  }
+};
+
+// Permission hooks
 export const useGetPermissions = (enabled = true) => {
   return useQuery({
-    queryKey: ["permissions"],
-    queryFn: getPermissions,
+    queryKey: [QUERY_KEYS.PERMISSIONS],
+    queryFn: roleService.getPermissions,
     staleTime: 0,
     refetchOnMount: true,
     enabled,
   });
 };
 
-export const createPermission = async (
-  payload: CreatePermissionData
-): Promise<{
-  data: Permission;
-}> => {
-  const response = await apiClient.post("/api/permissions", payload);
-  return response?.data;
-};
-
 export const useCreatePermission = () => {
   const queryClient = useQueryClient();
+  
   return useMutation({
-    mutationFn: (payload: CreatePermissionData) => createPermission(payload),
+    mutationFn: roleService.createPermission,
     throwOnError: false,
-    onError: (err: Error) => {
-      handleServerError(err);
-    },
+    onError: handleServerError,
     onSuccess: async () => {
       toast("Permission created successfully!");
       await queryClient.invalidateQueries({
-        queryKey: ["permissions"],
+        queryKey: [QUERY_KEYS.PERMISSIONS],
         exact: false,
       });
     },
@@ -52,96 +93,61 @@ export const useCreatePermission = () => {
 };
 
 // Role hooks
-export const getRoles = async (): Promise<{
-  data: Role[];
-  total: number;
-}> => {
-  const response = await apiClient.get("/api/roles");
-  return response?.data;
-};
-
 export const useGetRoles = (enabled = true) => {
   return useQuery({
-    queryKey: ["roles"],
-    queryFn: getRoles,
+    queryKey: [QUERY_KEYS.ROLES],
+    queryFn: roleService.getRoles,
     staleTime: 0,
     refetchOnMount: true,
     enabled,
   });
 };
 
-export const createRole = async (
-  payload: CreateRoleData
-): Promise<{
-  data: Role;
-}> => {
-  const response = await apiClient.post("/api/roles", payload);
-  return response?.data;
-};
-
 export const useCreateRole = () => {
   const queryClient = useQueryClient();
+  
   return useMutation({
-    mutationFn: (payload: CreateRoleData) => createRole(payload),
+    mutationFn: roleService.createRole,
     throwOnError: false,
-    onError: (err: Error) => {
-      handleServerError(err);
-    },
+    onError: handleServerError,
     onSuccess: async () => {
       toast("Role created successfully!");
       await queryClient.invalidateQueries({
-        queryKey: ["roles"],
+        queryKey: [QUERY_KEYS.ROLES],
         exact: false,
       });
     },
   });
-};
-
-export const updateRole = async (
-  payload: UpdateRoleData
-): Promise<{
-  data: Role;
-}> => {
-  const response = await apiClient.put(`/api/roles/${payload.id}`, payload);
-  return response?.data;
 };
 
 export const useUpdateRole = () => {
   const queryClient = useQueryClient();
+  
   return useMutation({
-    mutationFn: (payload: UpdateRoleData) => updateRole(payload),
+    mutationFn: roleService.updateRole,
     throwOnError: false,
-    onError: (err: Error) => {
-      handleServerError(err);
-    },
+    onError: handleServerError,
     onSuccess: async () => {
       toast("Role updated successfully!");
       await queryClient.invalidateQueries({
-        queryKey: ["roles"],
+        queryKey: [QUERY_KEYS.ROLES],
         exact: false,
       });
     },
   });
 };
 
-export const assignRole = async (
-  payload: AssignRoleData
-): Promise<void> => {
-  await apiClient.post("/api/user/assign-role", payload);
-};
-
 export const useAssignRole = () => {
   const queryClient = useQueryClient();
+  
   return useMutation({
-    mutationFn: (payload: AssignRoleData) => assignRole(payload),
+    mutationFn: roleService.assignRole,
     throwOnError: false,
-    onError: (err: Error) => {
-      handleServerError(err);
-    },
+    onError: handleServerError,
     onSuccess: async () => {
       toast("Role assigned successfully!");
       await queryClient.invalidateQueries({
-        queryKey: ["users"],
+        queryKey: [QUERY_KEYS.USERS],
         exact: false,
       });
     },

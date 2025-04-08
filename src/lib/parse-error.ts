@@ -1,32 +1,67 @@
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const parseError = (error: any): string => {
+import { AxiosError } from 'axios';
+
+/**
+ * Types of API error responses we might encounter
+ */
+interface ApiErrorResponse {
+  error?: {
+    message?: string;
+    details?: {
+      errors?: Record<string, string[]> | Array<{ message?: string } | string[]>;
+    };
+  };
+}
+
+/**
+ * Parses various error formats into a readable string message
+ */
+export const parseError = (error: unknown): string => {
   try {
-    if (error.response?.data) {
-      const errorData = error.response.data;
+    // Handle Axios errors
+    if (error instanceof AxiosError && error.response?.data) {
+      const errorData = error.response.data as ApiErrorResponse;
+      
+      // Handle detailed validation errors
       if (errorData.error?.details?.errors) {
         const errors = errorData.error.details.errors;
+        
+        // Handle array of error objects
         if (Array.isArray(errors)) {
-          const messages = errors.map((single) => {
-            if (single.message) {
-              return `${single?.message}`;
+          return errors.map(err => {
+            if (typeof err === 'object' && err !== null && 'message' in err) {
+              return err.message;
             }
-            return `${single.join(" ")}`;
-          });
-          return messages.join(" ");
+            if (Array.isArray(err)) {
+              return err.join(' ');
+            }
+            return String(err);
+          }).filter(Boolean).join(' ');
         }
-        const messages = Object.keys(errors).map((key) => {
-          return `${errors[key].join(" ")}`;
-        });
-        return messages.join(" ");
+        
+        // Handle object with error fields
+        return Object.values(errors)
+          .flat()
+          .join(' ');
       }
-      return (
-        errorData.error?.message ||
-        errorData.error ||
-        "An unknown error occurred"
-      );
+      
+      // Handle simple error message
+      return errorData.error?.message || 
+             (typeof errorData.error === 'string' ? errorData.error : '') || 
+             'An unknown error occurred';
     }
-    return "An unknown error occurred";
+    
+    // Handle standard Error objects
+    if (error instanceof Error) {
+      return error.message || 'An error occurred';
+    }
+    
+    // Handle string errors
+    if (typeof error === 'string') {
+      return error;
+    }
+    
+    return 'An unknown error occurred';
   } catch {
-    return "An unknown error occurred";
+    return 'An unexpected error occurred';
   }
 };
