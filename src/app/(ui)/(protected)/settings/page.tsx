@@ -4,7 +4,7 @@ import PageHeader from "@/components/page-header";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useGetProfile } from "@/hooks/user/user.hooks";
 import { hasPermission, useAuthStore } from "@/store/authStore";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import RolesManagement from "@/components/user/roles";
 import PermissionsManagement from "@/components/user/permissions";
@@ -13,10 +13,10 @@ import { Spinner } from "@/components/ui/spinner";
 import { BoxLoader } from "@/components/loader";
 
 export default function SettingsPage() {
-  const { accessToken, user, setUser } = useAuthStore();
-  const { data: profileData, isLoading } = useGetProfile(!!accessToken);
-  const { data: userData, isLoading: isLoadingProfile } = useGetProfile(!!accessToken)
   const router = useRouter();
+  const { accessToken, user, setUser } = useAuthStore();
+  const { isLoading } = useGetProfile(!!accessToken);
+  const { data: userData, isLoading: isLoadingProfile } = useGetProfile(!!accessToken)
 
   const hasSettingsAccess = user?.isAdmin || hasPermission('system:manage') || hasPermission('system:view');
 
@@ -26,17 +26,17 @@ export default function SettingsPage() {
     }
   }, [userData, setUser])
 
-  if (isLoadingProfile) {
-    return (
-      <BoxLoader />
-    )
-  }
-
   useEffect(() => {
     if (!isLoading && user !== undefined && !hasSettingsAccess) {
       router.push("/");
     }
   }, [isLoading, user, router, hasSettingsAccess]);
+
+  if (isLoadingProfile) {
+    return (
+      <BoxLoader />
+    )
+  }
 
   if (isLoading) {
     return (

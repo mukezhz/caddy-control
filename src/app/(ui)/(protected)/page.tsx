@@ -32,6 +32,7 @@ export default function Home() {
     }
   }, [accessToken, router, checking, mounted]);
 
+
   useEffect(() => {
     if (userData) {
       setUser(userData);

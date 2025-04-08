@@ -1,6 +1,6 @@
 import { ArrowLeft } from "lucide-react";
 import { FC, JSX } from "react";
-import { Button } from "./ui/button";
+import { Button } from "@/components/ui/button";
 
 type PageHeaderProps = {
     title: string;

@@ -17,7 +17,6 @@ export async function seedPermissions() {
 
     // Create an array of all possible permissions from resources
     const allPermissions = RESOURCES.flatMap(resource => {
-      console.log("Generating permission name:", resource.id, resource.availableActions)
       return resource.availableActions.map(action => ({
         name: generatePermissionName(resource.id, action),
         description: getPermissionDescription(resource.id, action as ResourceAction)
