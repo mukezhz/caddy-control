@@ -18,6 +18,8 @@ This project was born out of the need to build a custom domain service with auto
 - [x] Domain redirection option
 - [x] Multi user support
 - [ ] Multi tenant support
+- [ ] Health check
+- [ ] Nofify user on health fail
 
 ## Screenshots
 
