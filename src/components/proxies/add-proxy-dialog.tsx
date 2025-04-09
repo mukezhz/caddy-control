@@ -45,7 +45,7 @@ export function AddProxyDialog({ open, onClose }: Props) {
             };
             if (values.enableRedirection) {
                 processedValues.destinationAddress = '';
-                processedValues.port = '';
+                processedValues.port = null;
             }
             
             await addDomainMutation.mutateAsync(processedValues);
