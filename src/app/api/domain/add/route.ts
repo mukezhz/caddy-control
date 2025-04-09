@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const parsedPort = Number(reqPayload.port);
+    const parsedPort = reqPayload.port === "" ? null : Number(reqPayload.port);
     const newConfigPayload = { ...currentConfig };
     
     await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
