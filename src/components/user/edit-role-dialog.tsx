@@ -90,7 +90,7 @@ export function EditRoleDialog({ open, onOpenChange, role }: EditRoleDialogProps
     }
     
     return groups;
-  }, [permissionsData?.data]);
+  }, [permissionsData?.data, expandedGroups]);
 
   const handleSubmit = () => {
     if (!role?.id) return;

@@ -1,4 +1,5 @@
 import prisma from "@/lib/prisma";
+import { User } from "@/schemas/user/user.schema";
 import bcrypt from "bcryptjs";
 import { NextRequest } from "next/server";
 
@@ -87,7 +88,7 @@ export const getUserFromHeader = async (req: NextRequest) => {
  * @param permissionName The permission name to check for
  * @returns boolean indicating if the user has the permission
  */
-export const hasPermission = (user: any, permissionName: string): boolean => {
+export const hasPermission = (user: User, permissionName: string): boolean => {
   // Admin users have all permissions
   if (user?.isAdmin) return true;
   
@@ -96,6 +97,6 @@ export const hasPermission = (user: any, permissionName: string): boolean => {
   
   // Check if user has the specified permission
   return user.role.permissions.some(
-    (permission: any) => permission.name === permissionName
+    (permission) => permission.name === permissionName
   );
 };

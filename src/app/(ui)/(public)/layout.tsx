@@ -16,7 +16,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
         } else {
             setChecking(false);
         }
-    }, [accessToken, router]);
+    }, [accessToken, router, checking]);
 
     if (checking) return null;
 

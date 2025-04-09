@@ -1,4 +1,4 @@
-import { Spinner } from "./ui/spinner";
+import { Spinner } from "@/components/ui/spinner";
 
 export const BoxLoader = ({ height = "h-screen" }: { height?: string }) => {
   return (

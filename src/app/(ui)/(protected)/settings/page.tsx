@@ -17,7 +17,6 @@ export default function SettingsPage() {
   const { accessToken, user, setUser } = useAuthStore();
   const { isLoading } = useGetProfile(!!accessToken);
   const { data: userData, isLoading: isLoadingProfile } = useGetProfile(!!accessToken)
-
   const hasSettingsAccess = user?.isAdmin || hasPermission('system:manage') || hasPermission('system:view');
 
   useEffect(() => {
@@ -33,14 +32,12 @@ export default function SettingsPage() {
   }, [isLoading, user, router, hasSettingsAccess]);
 
   if (isLoadingProfile) {
-    return (
-      <BoxLoader />
-    )
+    return <div className="w-full flex justify-center items-center"><BoxLoader /></div>;
   }
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center h-screen">
+      <div className="w-full flex justify-center items-center">
         <Spinner className="w-8 h-8" />
       </div>
     );
@@ -49,7 +46,7 @@ export default function SettingsPage() {
   // Don't render the settings page content if user doesn't have access
   if (!hasSettingsAccess) {
     return (
-      <div className="flex justify-center items-center h-screen">
+      <div className="w-full flex justify-center items-center">
         <Spinner className="w-8 h-8" />
       </div>
     );

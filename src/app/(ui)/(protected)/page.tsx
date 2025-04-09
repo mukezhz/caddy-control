@@ -12,25 +12,19 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function Home() {
-  const { accessToken, user, setUser } = useAuthStore();
+  const { accessToken, setUser } = useAuthStore();
   const { data, isLoading } = useGetRegisteredDomains();
   const [checking, setChecking] = useState(true);
   const { data: userData, isLoading: isLoadingProfile } = useGetProfile(!!accessToken);
-  const [mounted, setMounted] = useState(false);
   const router = useRouter();
 
-  // Mark component as mounted
   useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  useEffect(() => {
-    if (mounted && !accessToken && !checking) {
+    if (!accessToken && !checking) {
       router.push("/login");
     } else {
       setChecking(false);
     }
-  }, [accessToken, router, checking, mounted]);
+  }, [accessToken, router, checking]);
 
 
   useEffect(() => {

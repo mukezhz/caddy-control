@@ -80,7 +80,7 @@ export function CreateRoleDialog({ open, onOpenChange }: CreateRoleDialogProps) 
     }
     
     return groups;
-  }, [permissionsData?.data]);
+  }, [permissionsData?.data, expandedGroups]);
 
   const handleSubmit = () => {
     createRole(

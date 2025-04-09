@@ -23,6 +23,7 @@ interface DeleteUserConfirmProps {
 
 export function DeleteUserConfirm({ open, onOpenChange, user }: DeleteUserConfirmProps) {
   const { mutate: deleteUser, isPending } = useDeleteUser();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isDeleting, setIsDeleting] = useState(false);
 
   const handleDelete = () => {
