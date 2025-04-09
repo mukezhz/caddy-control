@@ -1,5 +1,5 @@
 import prisma from "@/lib/prisma";
-import { User } from "@/schemas/user/user.schema";
+import { Permission, User } from "@/schemas/user/user.schema";
 import bcrypt from "bcryptjs";
 import { NextRequest } from "next/server";
 
@@ -13,7 +13,7 @@ export const seedFirstUser = async () => {
     },
   });
   if (user) return;
-  
+
   // Create admin role with all permissions
   const adminRole = await prisma.role.create({
     data: {
@@ -36,8 +36,8 @@ export const seedFirstUser = async () => {
 
 export const getUserFromHeader = async (req: NextRequest) => {
   const userId = req.headers.get("x-user-id");
-  if(!userId) return null;
-  
+  if (!userId) return null;
+
   try {
     const user = await prisma.user.findUnique({
       where: {
@@ -67,14 +67,22 @@ export const getUserFromHeader = async (req: NextRequest) => {
     if (!user) return null;
 
     // Transform role permissions data to match the schema
-    const transformedUser = {
+    const transformedUser: User = {
       ...user,
-      role: user.role ? {
-        ...user.role,
-        permissions: user.role.permissions.map(rp => rp.permission)
+      role: user?.role ? {
+        id: user.role.id,
+        name: user.role.name,
+        description: user.role.description,
+        permissions: user.role.permissions.map((rp): Permission => {
+          return {
+            id: rp.permission.id,
+            name: rp.permission.name,
+            description: rp.permission.description,
+          }
+        })
       } : undefined
     };
-    
+
     return transformedUser;
   } catch (error) {
     console.error("Error fetching user:", error);
@@ -91,10 +99,10 @@ export const getUserFromHeader = async (req: NextRequest) => {
 export const hasPermission = (user: User, permissionName: string): boolean => {
   // Admin users have all permissions
   if (user?.isAdmin) return true;
-  
+
   // If no role or permissions, deny access
   if (!user?.role?.permissions || user.role.permissions.length === 0) return false;
-  
+
   // Check if user has the specified permission
   return user.role.permissions.some(
     (permission) => permission.name === permissionName

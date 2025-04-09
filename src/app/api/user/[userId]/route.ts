@@ -4,18 +4,18 @@ import { getUserFromHeader, hasPermission } from "../../_services/user/user-serv
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { userId: string } }
+  { params }: { params: Promise<{ userId: string }> }
 ) {
   try {
     const currentUser = await getUserFromHeader(request);
-    
+
     if (!currentUser) {
       return NextResponse.json(
         { error: "Unauthorized" },
         { status: 401 }
       );
     }
-    
+
     // Check if user has permission to delete users (requires admin or system:manage)
     if (!currentUser.isAdmin && !hasPermission(currentUser, "system:manage")) {
       return NextResponse.json(
@@ -24,7 +24,7 @@ export async function DELETE(
       );
     }
 
-    const userId = params.userId;
+    const { userId } = await params;
 
     const targetUser = await prisma.user.findUnique({
       where: { id: userId }

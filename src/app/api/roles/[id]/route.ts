@@ -6,21 +6,20 @@ import { getUserFromHeader, hasPermission } from "../../_services/user/user-serv
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+  { params }: { params: Promise<{ id: string }> }) {
   try {
-    const roleId = params.id;
-    
+    const { id: roleId } = await params;
+
     // Check user authorization
     const user = await getUserFromHeader(request);
-    
+
     if (!user) {
       return NextResponse.json(
         { error: "Unauthorized" },
         { status: 401 }
       );
     }
-    
+
     // Check if user has permission to update roles (requires admin or system:manage)
     if (!user.isAdmin && !hasPermission(user, "system:manage")) {
       return NextResponse.json(
@@ -99,21 +98,21 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const roleId = params.id;
-    
+    const { id: roleId } = await params;
+
     // Check user authorization
     const user = await getUserFromHeader(request);
-    
+
     if (!user) {
       return NextResponse.json(
         { error: "Unauthorized" },
         { status: 401 }
       );
     }
-    
+
     // Check if user has permission to delete roles (requires admin or system:manage)
     if (!user.isAdmin && !hasPermission(user, "system:manage")) {
       return NextResponse.json(

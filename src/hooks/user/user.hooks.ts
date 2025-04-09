@@ -84,13 +84,13 @@ export const useGetUsers = (enabled = true) => {
     });
   } catch (error) {
     // Return a default state when used outside QueryClientProvider
-    console.warn("useGetUsers called outside of QueryClientProvider");
+    console.warn("useGetUsers called outside of QueryClientProvider", error);
     return {
       data: undefined,
       isLoading: false,
       isError: false,
       error: null,
-      refetch: async () => ({} as any),
+      refetch: async () => ({}),
     };
   }
 };
@@ -106,13 +106,13 @@ export const useGetProfile = (enabled = true) => {
     });
   } catch (error) {
     // Return a default state when used outside QueryClientProvider
-    console.warn("useGetProfile called outside of QueryClientProvider");
+    console.warn("useGetProfile called outside of QueryClientProvider", error);
     return {
       data: undefined,
       isLoading: false,
       isError: false,
       error: null,
-      refetch: async () => ({} as any),
+      refetch: async () => ({}),
     };
   }
 };

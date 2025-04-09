@@ -44,7 +44,7 @@ export async function register() {
       await seedPermissions();
       console.log("✅ Permissions seeded successfully.");
     } catch (error) {
-      console.error("❌⚠️ Caddy server not reachable. Initializing configuration.");
+      console.error("❌⚠️ Caddy server not reachable. Initializing configuration.", error);
       console.error("========================================");
       console.error("⚠️ Please ensure the Caddy server is running.");
       console.error("========================================");

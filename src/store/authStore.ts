@@ -1,4 +1,4 @@
-import { Permission, User } from '@/schemas/user/user.schema';
+import {  User } from '@/schemas/user/user.schema';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 
