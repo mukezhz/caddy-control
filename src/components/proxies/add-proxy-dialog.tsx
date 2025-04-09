@@ -27,14 +27,33 @@ export function AddProxyDialog({ open, onClose }: Props) {
     const form = useForm<AddDomainValues>({
         resolver: zodResolver(addDomainSchema),
         defaultValues: {
+            domain: '',
+            enableRedirection: false,
+            redirectTo: '',
+            destinationAddress: '',
+            port: '',
             enableHttps: true
-        }
+        },
     })
 
     const onSubmit = async (values: AddDomainValues) => {
-        await addDomainMutation.mutateAsync(values);
-        form.reset()
-        onClose()
+        try {
+            const processedValues = {
+                ...values,
+                port: values.port || '80',
+                redirectTo: values.enableRedirection ? values.redirectTo?.trim() || undefined : undefined
+            };
+            if (values.enableRedirection) {
+                processedValues.destinationAddress = '';
+                processedValues.port = '';
+            }
+            
+            await addDomainMutation.mutateAsync(processedValues);
+            form.reset();
+            onClose();
+        } catch (error) {
+            console.error("Error submitting form:", error);
+        }
     }
 
     return (
@@ -56,43 +75,79 @@ export function AddProxyDialog({ open, onClose }: Props) {
                             <div className='grid gap-6'>
                                 <FormField
                                     control={form.control}
-                                    name='incomingAddress'
+                                    name='domain'
                                     render={({ field }) => (
                                         <FormItem className='space-y-1'>
-                                            <FormLabel>Incoming Address</FormLabel>
+                                            <FormLabel>Domain</FormLabel>
                                             <FormControl>
-                                                <Input placeholder="Enter incoming address." {...field} />
+                                                <Input placeholder="Enter domain (e.g. example.com)" {...field} />
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>
                                     )}
                                 />
+                                
                                 <FormField
                                     control={form.control}
-                                    name='destinationAddress'
-                                    render={({ field }) => (
-                                        <FormItem className='space-y-1'>
-                                            <FormLabel>Destination Address</FormLabel>
+                                    name='enableRedirection'
+                                    render={({ field: { value, onChange, ...restField } }) => (
+                                        <FormItem className="space-y-1 flex items-center gap-2">
+                                            <FormLabel>Enable Redirection</FormLabel>
                                             <FormControl>
-                                                <Input placeholder="Enter destination address" {...field} />
+                                                <Checkbox checked={value} onCheckedChange={onChange} {...restField} />
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>
                                     )}
                                 />
-                                <FormField
-                                    control={form.control}
-                                    name='port'
-                                    render={({ field }) => (
-                                        <FormItem className='space-y-1'>
-                                            <FormLabel>Desination Port</FormLabel>
-                                            <FormControl>
-                                                <Input type='number' placeholder="Enter destination port" {...field} />
-                                            </FormControl>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
+                                
+                                {form.watch('enableRedirection') && (
+                                    <FormField
+                                        control={form.control}
+                                        name='redirectTo'
+                                        render={({ field }) => (
+                                            <FormItem className='space-y-1'>
+                                                <FormLabel>Redirect To</FormLabel>
+                                                <FormControl>
+                                                    <Input placeholder="Enter redirect domain (e.g. example.com)" {...field} />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                )}
+
+                                {!form.watch('enableRedirection') && (
+                                    <>
+                                        <FormField
+                                            control={form.control}
+                                            name='destinationAddress'
+                                            render={({ field }) => (
+                                                <FormItem className='space-y-1'>
+                                                    <FormLabel>Destination Address</FormLabel>
+                                                    <FormControl>
+                                                        <Input placeholder="Enter destination address" {...field} />
+                                                    </FormControl>
+                                                    <FormMessage />
+                                                </FormItem>
+                                            )}
+                                        />
+                                        <FormField
+                                            control={form.control}
+                                            name='port'
+                                            render={({ field }) => (
+                                                <FormItem className='space-y-1'>
+                                                    <FormLabel>Destination Port</FormLabel>
+                                                    <FormControl>
+                                                        <Input type='number' placeholder="Enter destination port" {...field} />
+                                                    </FormControl>
+                                                    <FormMessage />
+                                                </FormItem>
+                                            )}
+                                        />
+                                    </>
+                                )}
+                                
                                 <FormField
                                     control={form.control}
                                     name="enableHttps"
@@ -101,7 +156,7 @@ export function AddProxyDialog({ open, onClose }: Props) {
                                         onChange,
                                         ...restField
                                     } }) => (
-                                        <FormItem className="space-y-1 flex items-center justify-start">
+                                        <FormItem className="space-y-1 flex items-center justify-start gap-2">
                                             <FormLabel>Enable HTTPS</FormLabel>
                                             <FormControl>
                                                 <Checkbox checked={value} onCheckedChange={onChange} {...restField} />
@@ -111,8 +166,12 @@ export function AddProxyDialog({ open, onClose }: Props) {
                                     )}
                                 />
 
-                                <Button loading={addDomainMutation.isPending} type='submit' className='mt-2 cursor-pointer' disabled={false}>
-                                    Save
+                                <Button 
+                                    type='submit' 
+                                    className='mt-2 cursor-pointer' 
+                                    disabled={addDomainMutation.isPending}
+                                >
+                                    {addDomainMutation.isPending ? 'Saving...' : 'Save'}
                                 </Button>
                             </div>
                         </form>

@@ -8,5 +8,6 @@ export type DomainWithCheckResults = {
 	createdAt: Date;
 	isLocked: boolean;
 	enableHttps: boolean;
+	redirectUrl?: string;
 	checkResults: DomainCheckResults;
 };

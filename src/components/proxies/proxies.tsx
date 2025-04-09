@@ -32,9 +32,16 @@ const ProxyRecord = ({ record }: ProxyRecordProps) => {
             <span><Badge variant={'outline'}>SSL Enabled</Badge></span>
           )
         }
+        {
+          record.redirectUrl && (
+            <span><Badge variant={'outline'} className="bg-blue-50">Redirects to {record.redirectUrl}</Badge></span>
+          )
+        }
       </div>
       <div className="text-sm text-gray-500">
-        Routes to <span className="font-bold text-gray-700">{record.destinationAddress}</span> on port <span className="font-bold text-gray-700">{record.port}</span>
+        {!record.redirectUrl && (
+          <>Routes to <span className="font-bold text-gray-700">{record.destinationAddress}</span> on port <span className="font-bold text-gray-700">{record.port}</span></>
+        )}
       </div>
     </div>
   )

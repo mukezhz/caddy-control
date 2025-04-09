@@ -28,18 +28,20 @@ export type RouteHandlerConfig = {
 }
 
 export type HandlerConfig = {
-	handler: "reverse_proxy";
-	upstreams: { dial: string }[];
+	handler: "reverse_proxy" | "static_response";
+	upstreams?: { dial: string }[];
 	headers: {
-		request: {
+		request?: {
 			set: {
 				Host: string[];
 				"X-Origin-Host": string[];
 				"X-Origin-IP": string[];
 			};
 		};
+		Location?: string[];
 	};
-	transport: {
+	status_code?: number
+	transport?: {
 		protocol: string;
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		tls?: Record<string, any>;

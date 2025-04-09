@@ -105,3 +105,38 @@ export const getRouteHandlerTemplate = (
 		]
 	};
 };
+
+export const getRedirectTemplate = (
+	fromDomain: string,
+	toDomain: string,
+	enableHttps = true,
+): RouteConfig => {
+	const protocol = enableHttps ? "https" : "http";
+	const routeConfig: RouteConfig = {
+		match: [
+			{
+				host: [fromDomain],
+			},
+		],
+		handle: [
+			{
+				handler: "subroute",
+				routes: [
+					{
+						handle: [
+							{
+								handler: "static_response",
+								headers: {
+									Location: [`${protocol}://${toDomain}{http.request.uri}`],
+								},
+								status_code: 301,
+							},
+						],
+					},
+				],
+			},
+		],
+	};
+
+	return routeConfig;
+};

@@ -21,6 +21,7 @@ model Domains {
   port               Int
   isLocked           Boolean  @default(false)
   enableHttps        Boolean  @default(true)
+  redirectUrl        String?
   createdAt          DateTime @default(now())
 }
 
