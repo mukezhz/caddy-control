@@ -19,8 +19,13 @@ export type MainConfig = {
 
 export type RouteConfig = {
 	match: { host: string[] }[];
-	handle: HandlerConfig[];
+	handle: HandlerConfig[] | RouteHandlerConfig[];
 };
+
+export type RouteHandlerConfig = {
+	handler: "subroute";
+	routes: [{ handle: HandlerConfig[] }]
+}
 
 export type HandlerConfig = {
 	handler: "reverse_proxy";
