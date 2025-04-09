@@ -76,7 +76,7 @@ export async function POST(request: NextRequest) {
           data: {
             destinationAddress: reqPayload.enableRedirection && reqPayload.redirectTo ? 
               reqPayload.redirectTo.trim() : reqPayload.destinationAddress,
-            port: parsedPort,
+            port: parsedPort ?? undefined,
             enableHttps: reqPayload.enableHttps,
             redirectUrl: reqPayload.enableRedirection && reqPayload.redirectTo ? 
               reqPayload.redirectTo.trim() : null,
@@ -97,7 +97,7 @@ export async function POST(request: NextRequest) {
             data: {
               incomingAddress: reqPayload.domain,
               destinationAddress: reqPayload.redirectTo.trim(),
-              port: parsedPort,
+              port: parsedPort || 0,
               enableHttps: reqPayload.enableHttps,
               redirectUrl: reqPayload.redirectTo.trim() // Store redirection info
             }
@@ -107,7 +107,7 @@ export async function POST(request: NextRequest) {
           const routeConfig = getRouteTemplate(
             reqPayload.domain,
             reqPayload.destinationAddress,
-            parsedPort,
+            parsedPort ?? 80,
             reqPayload.enableHttps
           );
           newConfigPayload.apps.http.servers.main.routes.push(routeConfig);
@@ -117,7 +117,7 @@ export async function POST(request: NextRequest) {
             data: {
               incomingAddress: reqPayload.domain,
               destinationAddress: reqPayload.destinationAddress,
-              port: parsedPort,
+              port: parsedPort || 0,
               enableHttps: reqPayload.enableHttps,
               redirectUrl: null // No redirection
             }
