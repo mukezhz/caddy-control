@@ -39,6 +39,7 @@ export async function GET(request: NextRequest) {
       const domainCheckResults = await checkDomain(domain.incomingAddress);
       domainsWithCheckResults.push({
         ...domain,
+        redirectUrl: domain?.redirectUrl || undefined,
         checkResults: domainCheckResults,
       });
     }
