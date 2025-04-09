@@ -24,7 +24,7 @@ export const addDomainSchema = z.object({
   const issues = [];
   
   if (data.enableRedirection && data.redirectTo) {
-    if (!domainRegex.test(data.redirectTo)) {
+    if (!domainRegex.test(data.redirectTo.trim())) {
       ctx.addIssue({
         path: ["redirectTo"],
         message: "Invalid redirect domain format",
