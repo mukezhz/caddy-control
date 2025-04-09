@@ -14,10 +14,6 @@ export async function GET(request: NextRequest) {
       );
     }
     
-    // Check if user has permission to view domain configuration
-    // This is a more sensitive operation, so require at least proxies:manage or system:manage
-    console.log("User permissions:", JSON.stringify(user, null, 2));
-    
     const path = request.nextUrl.pathname;
     let requiredPermission;
     if (path.includes('/')) {
