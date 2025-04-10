@@ -7,4 +7,9 @@ export type DomainCheckResults = {
 		result: boolean;
 		description: string;
 	};
+	healthCheck: {
+		result: boolean;
+		description: string;
+		lastChecked: string;
+	};
 };

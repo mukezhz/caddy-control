@@ -19,7 +19,7 @@ export type MainConfig = {
 
 export type RouteConfig = {
 	match: { host: string[] }[];
-	handle: HandlerConfig[] | RouteHandlerConfig[];
+	handle: RouteHandlerConfig[];
 };
 
 export type RouteHandlerConfig = {
@@ -28,9 +28,23 @@ export type RouteHandlerConfig = {
 }
 
 export type HandlerConfig = {
-	handler: "reverse_proxy" | "static_response";
+	handler: "reverse_proxy" | "static_response" | "authentication";
+	providers?: {
+		http_basic: {
+			accounts: [
+				{
+					password: string;
+					username: string;
+				}
+			],
+			hash: {
+				algorithm: "bcrypt"
+			},
+			hash_cache: {}
+		},
+	},
 	upstreams?: { dial: string }[];
-	headers: {
+	headers?: {
 		request?: {
 			set: {
 				Host: string[];

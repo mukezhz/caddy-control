@@ -28,6 +28,7 @@ export const loadCaddyConfig = async (
 
 export const validateIncomingDomain = async (incomingAddress: string) => {
 	const currentConfig = await getCaddyConfig();
+	console.log("Current Caddy Configuration: ", JSON.stringify(currentConfig));
 	const hasExistingRoute = currentConfig.apps.http.servers.main.routes.find(
 		(route) => {
 			return route.match.some((ma) => ma.host.includes(incomingAddress));

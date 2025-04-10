@@ -9,19 +9,21 @@ import { getRouteTemplate, getRedirectTemplate } from "../../_services/caddy/cad
 import prisma from "../../../../lib/prisma";
 import { Prisma } from "@prisma/client";
 import { getUserFromHeader, hasPermission } from "../../_services/user/user-service";
+import { HandlerConfig } from "../../_services/caddy/template-types";
+import bcrypt from "bcryptjs";
 
 export async function POST(request: NextRequest) {
   try {
     // Get user from request headers
     const user = await getUserFromHeader(request);
-    
+
     if (!user) {
       return NextResponse.json(
         { error: "Unauthorized" },
         { status: 401 }
       );
     }
-    
+
     if (!hasPermission(user, "proxies:manage") && !hasPermission(user, "proxies:modify")) {
       return NextResponse.json(
         { error: "Forbidden - Insufficient permissions" },
@@ -30,13 +32,30 @@ export async function POST(request: NextRequest) {
     }
 
     const reqBody = await request.json();
-    const reqPayload = addDomainSchema.parse(reqBody);
+
+    // Replace schema extension with manual merging
+    const extendedAddDomainSchema = z.object({
+      domain: z.string(),
+      enableRedirection: z.boolean().default(false),
+      redirectTo: z.string().optional(),
+      destinationAddress: z.string(),
+      port: z.string(),
+      enableHttps: z.boolean().default(true),
+      enableAdvancedSettings: z.boolean().optional(),
+      basicAuthUsername: z.string().optional(),
+      basicAuthPassword: z.string().optional(),
+      healthCheckUrl: z.string().optional(),
+      healthCheckMethod: z.enum(["GET", "HEAD", "POST", "PUT"]).optional(),
+      healthCheckInterval: z.string().optional(),
+    });
+
+    const reqPayload = extendedAddDomainSchema.parse(reqBody);
 
     // Check if the domain is already registered
     const { currentConfig, hasExistingRoute } = await validateIncomingDomain(
       reqPayload.domain
     );
-    
+
     if (hasExistingRoute) {
       return NextResponse.json(
         { error: `Domain ${reqPayload.domain} is already registered` },
@@ -53,7 +72,7 @@ export async function POST(request: NextRequest) {
 
     const parsedPort = reqPayload.port === "" ? null : Number(reqPayload.port);
     const newConfigPayload = { ...currentConfig };
-    
+
     await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
       // Create a new Caddy configuration
       await tx.caddyConfiguration.create({
@@ -61,24 +80,24 @@ export async function POST(request: NextRequest) {
           config: JSON.parse(JSON.stringify(newConfigPayload)),
         },
       });
-      
+
       // Check if domain already exists in database
       const existingDomain = await tx.domains.findUnique({
         where: { incomingAddress: reqPayload.domain }
       });
-      
+
       if (existingDomain) {
         console.log(`Domain ${reqPayload.domain} already exists in database, updating...`);
-        
+
         // Update the existing domain
         await tx.domains.update({
           where: { incomingAddress: reqPayload.domain },
           data: {
-            destinationAddress: reqPayload.enableRedirection && reqPayload.redirectTo ? 
+            destinationAddress: reqPayload.enableRedirection && reqPayload.redirectTo ?
               reqPayload.redirectTo.trim() : reqPayload.destinationAddress,
             port: parsedPort ?? undefined,
             enableHttps: reqPayload.enableHttps,
-            redirectUrl: reqPayload.enableRedirection && reqPayload.redirectTo ? 
+            redirectUrl: reqPayload.enableRedirection && reqPayload.redirectTo ?
               reqPayload.redirectTo.trim() : null,
           }
         });
@@ -91,7 +110,7 @@ export async function POST(request: NextRequest) {
             reqPayload.enableHttps
           );
           newConfigPayload.apps.http.servers.main.routes.push(redirectConfig);
-          
+
           // Save domain in database with redirection info
           await tx.domains.create({
             data: {
@@ -111,7 +130,7 @@ export async function POST(request: NextRequest) {
             reqPayload.enableHttps
           );
           newConfigPayload.apps.http.servers.main.routes.push(routeConfig);
-          
+
           // Save domain in database without redirection info
           await tx.domains.create({
             data: {
@@ -124,7 +143,47 @@ export async function POST(request: NextRequest) {
           });
         }
       }
+
+      // Store health check configuration in the database when creating/updating domains
+      const healthCheckData = reqPayload.healthCheckUrl ? {
+        healthCheckUrl: reqPayload.healthCheckUrl,
+        healthCheckMethod: reqPayload.healthCheckMethod || 'GET',
+        healthCheckInterval: reqPayload.healthCheckInterval ? parseInt(reqPayload.healthCheckInterval) : 30,
+      } : {};
+
+      await tx.domains.update({
+        where: { incomingAddress: reqPayload.domain },
+        data: healthCheckData,
+      });
     });
+
+    // Update route configurations to include required properties
+    if (reqPayload.enableAdvancedSettings) {
+      if (reqPayload.basicAuthUsername && reqPayload.basicAuthPassword) {
+        // Add basic auth configuration properly structured according to Caddy templates
+        const hashedPassword = bcrypt.hashSync(reqPayload.basicAuthPassword, 14);
+
+        const basicAuthConfig: HandlerConfig = {
+          handler: "authentication",
+          providers: {
+            http_basic: {
+              accounts: [
+          {
+            username: reqPayload.basicAuthUsername,
+            password: hashedPassword,
+          }
+              ],
+              hash: {
+          algorithm: "bcrypt"
+              },
+              hash_cache: {}
+            }
+          }
+        };
+        const mainRouteLen = newConfigPayload.apps.http.servers.main.routes.length;
+        newConfigPayload.apps.http.servers.main.routes[mainRouteLen-1].handle[0].routes[0].handle.unshift(basicAuthConfig);
+      }
+    }
 
     console.log("New Caddy configuration updated");
     await loadCaddyConfig(newConfigPayload);

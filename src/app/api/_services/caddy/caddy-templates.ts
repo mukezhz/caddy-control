@@ -35,7 +35,16 @@ export const getRouteTemplate = (
 				host: [incomingAddress],
 			},
 		],
-		handle: [handler],
+		handle: [
+			{
+				handler: "subroute",
+				routes: [
+					{
+						handle: [handler],
+					}
+				],
+			}
+		],
 	};
 
 	return routeConfig;
