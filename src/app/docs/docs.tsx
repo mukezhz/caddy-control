@@ -126,7 +126,7 @@ export default function DocsLayout({
               </Button>
             </div>
           </Header>
-          <main className="overflow-auto p-6">{children}</main>
+          <main className="h-full">{children}</main>
         </MainContent>
       </SidebarProvider>
 

@@ -9,7 +9,7 @@ export default function Home() {
   const router = useRouter();
 
   return (
-    <div className="flex flex-col min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-white">
+    <div className="flex flex-col h-full items-stretch bg-white dark:bg-gray-950 text-gray-900 dark:text-white">
       {/* Sticky Header */}
       <header className="sticky top-0 z-10 bg-white/90 dark:bg-gray-950/90 backdrop-blur-sm border-b border-gray-200 dark:border-gray-800">
         <div className="container mx-auto px-4 flex justify-between items-center">
@@ -31,7 +31,7 @@ export default function Home() {
       </header>
 
       {/* Main Content */}
-      <main className="flex-grow flex flex-col justify-center items-center px-4 py-4 md:py-8">
+      <main className="flex flex-col grow h-auto justify-center items-center px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -146,7 +146,7 @@ export default function Home() {
       </main>
 
       {/* Sticky Footer */}
-      <footer className="sticky bottom-0 z-10 bg-white/90 dark:bg-gray-950/90 backdrop-blur-sm border-t border-gray-200 dark:border-gray-800">
+      <footer className="sticky bottom-[19px] z-10 bg-white/90 dark:bg-gray-950/90 backdrop-blur-sm border-t border-gray-200 dark:border-gray-800">
         <div className="container mx-auto px-4 py-3 text-center text-gray-600 dark:text-gray-400">
           <div className="flex justify-end items-center space-x-4">
             <div className="flex text-sm text-right gap-3">
