@@ -21,16 +21,14 @@ import {
   UserAvatar,
   NestedLink,
   SidebarHeaderTitle,
-  SidebarMenu,
 } from '@/components/sidebar';
-import { BookOpen, FileText, Github, Settings } from 'lucide-react';
+import { Github } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 import { Header } from '@/components/header';
 import { ModeToggle } from '@/components/mode-toggle';
 import { Button } from '@/components/button';
 import { useIsMobile } from '../../../hooks/use-mobile';
-import { Title } from '@radix-ui/react-dialog';
 
 export default function DocsLayout({
   children,

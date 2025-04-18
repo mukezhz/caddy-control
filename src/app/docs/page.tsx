@@ -1,6 +1,5 @@
 'use client';
 import { GithubIcon } from 'lucide-react';
-import { ModeToggle } from '@/components/mode-toggle';
 import Image from 'next/image';
 import { Button } from '@/components/button';
 import { useRouter } from 'next/navigation';
