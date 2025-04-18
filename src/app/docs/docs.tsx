@@ -21,14 +21,16 @@ import {
   UserAvatar,
   NestedLink,
   SidebarHeaderTitle,
+  SidebarMenu,
 } from '@/components/sidebar';
-import { Github } from 'lucide-react';
+import { BookOpen, FileText, Github, Settings } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 import { Header } from '@/components/header';
 import { ModeToggle } from '@/components/mode-toggle';
 import { Button } from '@/components/button';
 import { useIsMobile } from '../../../hooks/use-mobile';
+import { Title } from '@radix-ui/react-dialog';
 
 export default function DocsLayout({
   children,
@@ -73,7 +75,6 @@ export default function DocsLayout({
                 isCollapsable={section.pages && section.pages.length > 0}
                 key={section.title}
                 label={section.title}
-                href={section.href}
                 icon={section.icon}
                 defaultOpen={section.defaultOpen}
               >
@@ -110,7 +111,7 @@ export default function DocsLayout({
 
         {/* Main Content */}
         <MainContent>
-          <Header className="justify-between py-2">
+          <Header className="justify-between">
             <div className="flex items-center gap-4">
               <SidebarTrigger />
               <h1 className="text-xl font-bold">Documentation</h1>
@@ -120,14 +121,13 @@ export default function DocsLayout({
               <ModeToggle />
               <Button
                 onClick={() =>
-                  router.push('https://github.com/sanjayc208/pinedocs')
+                  router.push('https://github.com/mukezhz/caddy-control')
                 }
               >
                 <Github className="h-[1.2rem] w-[1.2rem] transition-all" />
               </Button>
             </div>
           </Header>
-          {/* <div className={`grid xl:grid xl:grid-cols-[1fr_270px]`}> */}
           <main className="overflow-auto p-6">{children}</main>
         </MainContent>
       </SidebarProvider>

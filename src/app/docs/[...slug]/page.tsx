@@ -40,7 +40,7 @@ const DocsPage = async ({ params }: { params: tParams }) => {
 
   if (!doc) notFound();
   return (
-    <div className={`grid xl:grid xl:grid-cols-[1fr_270px]`}>
+    <div className={`grid xl:grid xl:grid-cols-[1fr_270px] mx-16`}>
       <article className="overflow-auto">
         <div className="mb-8 text-center">
           <Breadcrumb path={doc.url} />

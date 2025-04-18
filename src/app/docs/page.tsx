@@ -18,7 +18,7 @@ export default function Home() {
           <nav className="flex-1 flex justify-center">
             {/* Navigation links can be added here */}
           </nav>
-          <div className="flex-1 flex gap-2 justify-end">
+          {/* <div className="flex-1 flex gap-2 justify-end">
             <ModeToggle />
             <Button
               onClick={() =>
@@ -27,7 +27,7 @@ export default function Home() {
             >
               <GithubIcon className="h-[1.2rem] w-[1.2rem] transition-all" />
             </Button>
-          </div>
+          </div> */}
         </div>
       </header>
 
@@ -64,9 +64,8 @@ export default function Home() {
               transition={{ duration: 0.6, delay: 0.4 }}
               className="text-shadow-lg mt-6 text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto"
             >
-              A customizable open-source documentation template built with
-              Next.js 15, Tailwind CSS 4, and Contentlayer for beautiful, fast,
-              and flexible documentation.
+              Open source domain routing control service with automated SSL management, 
+              designed for white-label SaaS platforms that need custom domain functionality.
             </motion.p>
           </div>
 
@@ -90,7 +89,7 @@ export default function Home() {
               variant={'outline'}
               size={'md'}
               onClick={() =>
-                router.push('https://github.com/sanjayc208/pinexio')
+                router.push('https://github.com/mukezhz/caddy-control')
               }
             >
               <GithubIcon size={20} />
@@ -101,22 +100,29 @@ export default function Home() {
         <div className="mt-16 mb-6 flex flex-wrap justify-center items-center gap-8 md:gap-12">
           {[
             {
-              src: '/logos/next15.png',
-              label: 'Next.js 15',
+              src: '/logo.png',
+              label: 'Caddy',
               className: 'dark:invert',
             },
             {
-              src: '/logos/ts.png',
-              label: 'Typescript',
+              src: '/logos/nextjs.png',
+              label: 'Next.js',
               className: 'dark:invert',
             },
             {
-              src: '/logos/tailwindcss-light.png',
-              label: 'Tailwind CSS 4',
+              src: '/logos/typescript.png',
+              label: 'TypeScript',
               className: 'dark:invert',
             },
-            { src: '/logos/contentlayer.png', label: 'Contentlayer' },
-            { src: '/logos/mdx.png', label: 'MDX' },
+            {
+              src: '/logos/tailwindcss.png',
+              label: 'Tailwind CSS',
+              className: 'dark:invert',
+            },
+            { 
+              src: '/logos/prisma.png', 
+              label: 'Prisma' 
+            },
           ].map(({ src, label, className }) => (
             <motion.div
               initial={{ opacity: 0, y: 10 }}
@@ -144,27 +150,9 @@ export default function Home() {
       <footer className="sticky bottom-0 z-10 bg-white/90 dark:bg-gray-950/90 backdrop-blur-sm border-t border-gray-200 dark:border-gray-800">
         <div className="container mx-auto px-4 py-3 text-center text-gray-600 dark:text-gray-400">
           <div className="flex justify-end items-center space-x-4">
-            <Button
-              className="px-4 py-2 text-sm font-medium gap-2"
-              onClick={() =>
-                window.open(
-                  'https://vercel.com/new/clone?repository-url=https://github.com/sanjayc208/pinexio',
-                  '_blank'
-                )
-              }
-            >
-              <Image
-                src={'/logos/vercel.png'}
-                height={'20'}
-                width={'20'}
-                alt={'Deploy Vercel'}
-                className={'dark:invert'}
-              />
-              <span>Deploy to Vercel</span>
-            </Button>
             <div className="flex text-sm text-right gap-3">
               <p>
-                Built with ❤️ by <strong>Sanjay Rajeev</strong>
+                Built with ❤️ by <strong>Mukesh Kumar Chaudhary</strong>
               </p>
             </div>
           </div>
