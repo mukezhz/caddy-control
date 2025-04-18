@@ -4,7 +4,7 @@ import { createContentlayerPlugin } from 'next-contentlayer2';
 const nextConfig: NextConfig = {
   /* config options here */
   experimental: {
-    nodeMiddleware: true
+    nodeMiddleware: true,
   },
   output: 'standalone',
   images: {
