@@ -40,7 +40,7 @@ const ProxyRecord = ({ record }: ProxyRecordProps) => {
       </div>
       <div className="text-sm text-gray-500">
         {!record.redirectUrl && (
-          <>Routes to <span className="font-bold text-gray-700">{record.destinationAddress}</span> on port <span className="font-bold text-gray-700">{record.port}</span></>
+          <>Proxy to <span className="font-bold text-gray-700">{record.destinationAddress}</span> on port <span className="font-bold text-gray-700">{record.port}</span></>
         )}
       </div>
     </div>
