@@ -1,0 +1,79 @@
+---
+title: 'Tabs'
+description: 'The Tabs component provides a customizable and smooth tab navigation system, supporting multiple sizes and theme-aware applications, perfect for modern UIs with light and dark modes.'
+date: 2025-03-12
+---
+
+# Tabs Component Documentation
+
+The **Tabs** component is a customizable tab system that supports multiple sizes and provides a smooth transition effect. It is designed for modern, theme-aware applications that use CSS variables (defined in your global CSS) for light and dark modes.
+
+## Preview and Code Snippet
+
+<Tabs defaultValue="preview" size="sm" className="w-full" onTabClick={(value) => console.log("Tab clicked:", value)}>
+  <TabsList className="grid w-full md:w-[30%] grid-cols-2">
+    <Tab value="preview">Preview</Tab>
+    <Tab value="code">Code</Tab>
+  </TabsList>
+  <TabsContent value="preview">
+    <Preview>
+      <Tabs defaultValue="account" size="sm" className="w-auto">
+        <TabsList className="grid grid-cols-2">
+          <Tab value="account">Account</Tab>
+          <Tab value="password">Password</Tab>
+        </TabsList>
+        <TabsContent value="account">
+          <div className="p-4 border border-[var(--color-border)] rounded-md mt-2">
+            <h3 className="text-lg font-medium">Account Settings</h3>
+            <p className="text-sm text-gray-500 mt-1">Manage your account settings and preferences.</p>
+          </div>
+        </TabsContent>
+        <TabsContent value="password">
+          <div className="p-4 border border-[var(--color-border)] rounded-md mt-2">
+            <h3 className="text-lg font-medium">Password Settings</h3>
+            <p className="text-sm text-gray-500 mt-1">Change your password and security settings.</p>
+          </div>
+        </TabsContent>
+      </Tabs>
+    </Preview>
+  </TabsContent>
+  <TabsContent value="code">
+    ```tsx
+    import { Tabs, TabsContent, TabsList, Tab } from "@/components/tabs";
+    
+    export default function Example() {
+      return (
+        <Tabs defaultValue="account" size="sm" className="w-full">
+          <TabsList className="grid grid-cols-2">
+            <Tab value="account">Account</Tab>
+            <Tab value="password">Password</Tab>
+          </TabsList>
+          <TabsContent value="account">
+            <div className="p-4 border border-[var(--color-border)] rounded-md mt-2">
+              <h3 className="text-lg font-medium">Account Settings</h3>
+              <p className="text-sm text-gray-500 mt-1">Manage your account settings and preferences.</p>
+            </div>
+          </TabsContent>
+          <TabsContent value="password">
+            <div className="p-4 border border-[var(--color-border)] rounded-md mt-2">
+              <h3 className="text-lg font-medium">Password Settings</h3>
+              <p className="text-sm text-gray-500 mt-1">Change your password and security settings.</p>
+            </div>
+          </TabsContent>
+        </Tabs>
+      );
+    }
+    ```
+  </TabsContent>
+</Tabs>
+
+## Props
+
+| Prop            | Type                                   | Default     | Description                                       |
+| --------------- | -------------------------------------- | ----------- | ------------------------------------------------- |
+| `defaultValue`  | `string`                               | `""`        | The initial active tab when the component mounts. |
+| `value`         | `string`                               | `""`        | The controlled value of the active tab.           |
+| `onValueChange` | `(value: string) => void`              | `undefined` | Callback function when the active tab changes.    |
+| `onTabClick`    | `(value: string) => void`              | `undefined` | Callback function when a tab is clicked.          |
+| `size`          | `"xs" \| "sm" \| "md" \| "lg" \| "xl"` | `"md"`      | Controls the size of the tab buttons.             |
+| `...props`      | `React.HTMLAttributes<HTMLDivElement>` | –           | Supports all standard `div` attributes.           |

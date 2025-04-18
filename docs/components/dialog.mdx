@@ -1,0 +1,189 @@
+---
+title: Dialog
+description: 'The Dialog component is a customizable modal dialog that supports flexible content, triggers, and closing mechanisms with smooth animations.'
+date: 2025-04-02
+---
+
+# Dialog Component
+
+The `Dialog` component provides a customizable modal dialog with options for flexible content, triggers, and animations. It can be used for confirmations, form submissions, and other interactive UI elements.
+
+## Preview and Code Snippet
+
+<Tabs defaultValue="preview" size="sm" className="w-full">
+  <TabsList className="grid w-full md:w-[30%] grid-cols-2">
+    <Tab value="preview">Preview</Tab>
+    <Tab value="code">Code</Tab>
+  </TabsList>
+  <TabsContent value="preview">
+    <Preview>
+      {(() => {
+        const DialogExample = () => {
+          const { useState } = React;
+          const [open, setOpen] = useState(false);
+
+          return (
+            <div className="flex flex-row gap-6">
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button>Open Dialog (Trigger)</Button>
+                </DialogTrigger>
+                <DialogContent className="bg-accent sm:max-w-md">
+                  <DialogCloseTrigger />
+                  <DialogHeader>
+                    <DialogTitle>Confirm Action</DialogTitle>
+                    <DialogDescription>
+                      Are you sure you want to proceed?
+                    </DialogDescription>
+                  </DialogHeader>
+                  <DialogFooter>
+                    <button className="px-4 py-2 bg-gray-300 dark:text-black rounded-md">Cancel</button>
+                    <button className="px-4 py-2 bg-red-600 text-white rounded-md">Confirm</button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+              <Button
+              variant="primary"
+                  onClick={() => {
+                    console.log('setOpen');
+                    setOpen(true)
+                    }}
+                >
+                  Open Dialog (setOpen)
+                </Button>
+              <Dialog open={open} setOpen={setOpen}>
+                
+                <DialogContent className="bg-accent sm:max-w-md">
+                  <DialogCloseTrigger />
+                  <DialogHeader>
+                    <DialogTitle>Manual Dialog</DialogTitle>
+                    <DialogDescription>This is opened via setOpen.</DialogDescription>
+                  </DialogHeader>
+                  <DialogFooter>
+                    <button onClick={() => setOpen(false)} className="px-4 py-2 rounded-md">Cancel</button>
+                    <button className="px-4 py-2 bg-primary text-white dark:text-black rounded-md">Submit</button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+            </div>
+          );
+        };
+        return <DialogExample />;
+      })()}
+    </Preview>
+  </TabsContent>
+  <TabsContent value="code">
+
+```tsx
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogCloseTrigger,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from '@/components/dialog';
+
+export function DialogExample() {
+  const [open, setOpen] = React.useState(false);
+
+  return (
+    <div className="flex flex-col gap-6">
+      <Dialog>
+        <DialogTrigger>
+          <button className="px-4 py-2 bg-blue-600 text-white rounded-md">
+            Open Dialog (Trigger)
+          </button>
+        </DialogTrigger>
+        <DialogContent className="sm:max-w-md">
+          <DialogCloseTrigger />
+          <DialogHeader>
+            <DialogTitle>Confirm Action</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to proceed?
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <button className="px-4 py-2 bg-gray-300 rounded-md">Cancel</button>
+            <button className="px-4 py-2 bg-red-600 text-white rounded-md">Confirm</button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={open} onOpenChange={setOpen}>
+        <button
+          onClick={() => setOpen(true)}
+          className="px-4 py-2 bg-blue-600 text-white rounded-md"
+        >
+          Open Dialog (setOpen)
+        </button>
+        <DialogContent className="sm:max-w-md">
+          <DialogCloseTrigger />
+          <DialogHeader>
+            <DialogTitle>Manual Dialog</DialogTitle>
+            <DialogDescription>This is opened via setOpen.</DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <button onClick={() => setOpen(false)} className="px-4 py-2 bg-gray-300 rounded-md">Cancel</button>
+            <button className="px-4 py-2 bg-green-600 text-white rounded-md">Submit</button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
+}
+```
+
+  </TabsContent>
+</Tabs>
+
+## Props
+
+### `<Dialog>`
+
+| Prop          | Type                     | Default | Description                                      |
+| ------------- | ------------------------ | ------- | ------------------------------------------------ |
+| `className`   | string                   | -       | Additional CSS classes for styling.              |
+| `open`        | boolean                  | -       | Controls open state manually.                    |
+| `onOpenChange`| (open: boolean) => void  | -       | Callback to handle open state changes.           |
+
+### `<DialogTrigger>`
+
+| Prop        | Type    | Default | Description                                       |
+| ----------- | ------- | ------- | ------------------------------------------------- |
+| `asChild`   | boolean | `false` | Whether to render the trigger as a child element. |
+| `className` | string  | -       | Additional CSS classes.                           |
+
+### `<DialogContent>`
+
+| Prop                  | Type    | Default | Description                                 |
+| --------------------- | ------- | ------- | ------------------------------------------- |
+| `className`           | string  | -       | Additional CSS classes for styling.         |
+| `overlayClassName`    | string  | -       | CSS classes for the overlay.                |
+| `closeOnClickOutside` | boolean | `true`  | Whether clicking outside closes the dialog. |
+
+### `<DialogCloseTrigger>`
+
+| Prop        | Type    | Default | Description                                             |
+| ----------- | ------- | ------- | ------------------------------------------------------- |
+| `asChild`   | boolean | `false` | Whether to render the close trigger as a child element. |
+| `className` | string  | -       | Additional CSS classes.                                 |
+
+### `<DialogHeader>`
+
+This is a container for the dialog header.
+
+### `<DialogTitle>`
+
+This is the title of the dialog.
+
+### `<DialogDescription>`
+
+This is a brief description of the dialog’s purpose.
+
+### `<DialogFooter>`
+
+This is a container for footer actions (e.g., buttons).
+

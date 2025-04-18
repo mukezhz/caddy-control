@@ -1,0 +1,186 @@
+---
+title: Menu
+description: 'The Menu component provides a flexible dropdown menu with support for both standard and autocomplete functionality. It allows users to toggle visibility, select items, and filter results dynamically.'
+date: 2025-03-30
+---
+
+# Menu Component
+
+The `Menu` component provides a dropdown menu with options for standard and autocomplete menus.
+
+## Preview and Code Snippet
+
+<Tabs defaultValue="preview" size="sm" className="w-full">
+  <TabsList className="grid w-full md:w-[30%] grid-cols-2">
+    <Tab value="preview">Preview</Tab>
+    <Tab value="code">Code</Tab>
+  </TabsList>
+  <TabsContent value="preview">
+    <Preview>
+      {(() => {
+        const { useState } = React;
+
+        const [search, setSearch] = useState("");
+        const menuItems = [
+          { label: "Home", icon: "🏠" },
+          { label: "Settings", icon: "⚙️" },
+          { label: "Profile", icon: "👤" },
+          { label: "Logout", icon: "🚪" },
+        ];
+
+        const filteredItems = menuItems.filter((item) =>
+          item.label.toLowerCase().includes(search.toLowerCase())
+        );
+
+        return (
+          <div className="flex flex-row gap-10">
+            <Menu>
+              <MenuTrigger>
+                <span>Menu</span>
+              </MenuTrigger>
+              <PopMenu>
+                <MenuItem>
+                  <span role="img" aria-label="home">🏠</span> Home
+                </MenuItem>
+                <MenuItem>
+                  <span role="img" aria-label="settings">⚙️</span> Settings
+                </MenuItem>
+              </PopMenu>
+            </Menu>
+
+            <Menu>
+              <MenuTrigger>
+                <span>Search Menu</span>
+              </MenuTrigger>
+              <PopMenu>
+                <input
+                  type="text"
+                  placeholder="Search..."
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  className="w-full p-2 border-b border-gray-300 dark:border-gray-600 focus:outline-none"
+                />
+                {filteredItems.map((item) => (
+                  <MenuItem key={item.label}>
+                    <span role="img" aria-label={item.label}>{item.icon}</span> {item.label}
+                  </MenuItem>
+                ))}
+              </PopMenu>
+            </Menu>
+          </div>
+        );
+      })()}
+    </Preview>
+
+  </TabsContent>
+  <TabsContent value="code">
+
+```tsx
+import { useState } from 'react';
+import { Menu, MenuTrigger, PopMenu, MenuItem } from '@/components/menu';
+
+export default function Example() {
+  const [search, setSearch] = useState('');
+  const menuItems = [
+    { label: 'Home', icon: '🏠' },
+    { label: 'Settings', icon: '⚙️' },
+    { label: 'Profile', icon: '👤' },
+    { label: 'Logout', icon: '🚪' },
+  ];
+
+  const filteredItems = menuItems.filter((item) =>
+    item.label.toLowerCase().includes(search.toLowerCase())
+  );
+
+  return (
+    <div className="bg-white text-gray-900 dark:bg-gray-900 dark:text-white p-4 min-h-screen">
+      <Menu>
+        <MenuTrigger>
+          <span>Menu</span>
+        </MenuTrigger>
+        <PopMenu>
+          <MenuItem>
+            <span role="img" aria-label="home">
+              🏠
+            </span>{' '}
+            Home
+          </MenuItem>
+          <MenuItem>
+            <span role="img" aria-label="settings">
+              ⚙️
+            </span>{' '}
+            Settings
+          </MenuItem>
+        </PopMenu>
+      </Menu>
+
+      <Menu>
+        <MenuTrigger>
+          <span>Search Menu</span>
+        </MenuTrigger>
+        <PopMenu>
+          <input
+            type="text"
+            placeholder="Search..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="w-full p-2 border-b border-gray-300 dark:border-gray-600 focus:outline-none"
+          />
+          {filteredItems.map((item) => (
+            <MenuItem key={item.label}>
+              <span role="img" aria-label={item.label}>
+                {item.icon}
+              </span>{' '}
+              {item.label}
+            </MenuItem>
+          ))}
+        </PopMenu>
+      </Menu>
+    </div>
+  );
+}
+```
+
+  </TabsContent>
+</Tabs>
+
+## Props
+
+| Prop        | Type                      | Default | Description                             |
+| ----------- | ------------------------- | ------- | --------------------------------------- |
+| `className` | `string`                  | `''`    | Additional CSS classes.                 |
+| `open`      | `boolean`                 | `false` | Controls the visibility of the menu.    |
+| `setOpen`   | `(open: boolean) => void` | `-`     | Function to toggle the menu state.      |
+| `children`  | `ReactNode`               | `-`     | The content inside the menu components. |
+
+## Usage Steps
+
+1. Import the `Menu`, `MenuTrigger`, `PopMenu`, and `MenuItem` components.
+2. Wrap the menu items inside the `Menu` component.
+3. Use `MenuTrigger` to create a clickable button for toggling the menu.
+4. Wrap menu items inside `PopMenu` for display.
+5. Optionally, include an input field inside `PopMenu` to create an autocomplete menu.
+
+### Example
+
+```tsx
+<Menu>
+  <MenuTrigger>
+    <span>Options</span>
+  </MenuTrigger>
+  <PopMenu>
+    <MenuItem>
+      <span role="img" aria-label="settings">
+        ⚙️
+      </span>{' '}
+      Settings
+    </MenuItem>
+    <MenuItem>
+      <span role="img" aria-label="logout">
+        🚪
+      </span>{' '}
+      Logout
+    </MenuItem>
+  </PopMenu>
+</Menu>
+```

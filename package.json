@@ -9,7 +9,8 @@
     "lint": "next lint",
     "dev:caddy": "docker compose -f docker-compose.dev.yml up -d",
     "image:build": "docker build --platform linux/amd64 -t caddy-control .",
-    "image:push": "docker tag caddy-control:latest itbeeazy/caddy-control:1.0.0 && docker push itbeeazy/caddy-control:1.0.0"
+    "image:push": "docker tag caddy-control:latest itbeeazy/caddy-control:1.0.0 && docker push itbeeazy/caddy-control:1.0.0",
+    "build:content": "contentlayer2 build"
   },
   "keywords": [
     "proxy",
@@ -44,29 +45,45 @@
     "bcryptjs": "^3.0.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "contentlayer": "^0.3.4",
+    "contentlayer2": "^0.5.7",
+    "framer-motion": "^12.7.4",
     "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.483.0",
+    "mdx-bundler": "^10.1.1",
     "next": "canary",
+    "next-contentlayer2": "^0.5.7",
     "next-themes": "^0.4.6",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.54.2",
+    "react-syntax-highlighter": "^15.6.1",
+    "rehype-highlight": "^7.0.2",
+    "rehype-slug": "^6.0.0",
+    "remark-code-import": "^1.2.0",
+    "remark-gfm": "^4.0.1",
     "sonner": "^2.0.1",
     "tailwind-merge": "^3.0.2",
+    "tailwindcss-animated": "^2.0.0",
     "tw-animate-css": "^1.2.4",
     "zod": "^3.24.2",
     "zustand": "^5.0.3"
   },
   "devDependencies": {
+    "@emotion/is-prop-valid": "^1.3.1",
+    "@eslint/eslintrc": "^3.3.1",
+    "@eslint/js": "^9.24.0",
     "@tailwindcss/postcss": "^4",
     "@types/jsonwebtoken": "^9.0.9",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "eslint": "^9",
+    "@types/react-syntax-highlighter": "^15.5.13",
+    "eslint": "^9.23.0",
     "eslint-config-next": "15.2.4",
     "prisma": "^6.5.0",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5.8.2",
+    "typescript-eslint": "^8.30.1"
   }
 }

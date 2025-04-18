@@ -1,0 +1,154 @@
+---
+title: Installation
+description: A guide to install Pinexio locally to your system and get it running
+date: 2025-03-12
+---
+
+# Installation Guide
+
+Welcome to the installation guide for forking the application from GitHub and setting up your development environment!
+
+<Steps>
+  <Step>
+    <StepTitle>Step 1: Fork the Repository</StepTitle>
+    <StepContent>
+    <div>
+      <div>
+        Visit our GitHub repository and click the "Fork" button to create your own copy.
+      </div>
+        <a
+          href="https://github.com/sanjayc208/pinexio"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Fork the Repository on GitHub
+        </a>
+      </div>
+    </StepContent>
+  </Step>
+  <Step>
+    <StepTitle>Step 2: Clone Your Fork</StepTitle>
+    <StepContent>
+    <div>
+      After forking, clone your repository to your local machine:
+  ```sh
+  git clone https://github.com/sanjayc208/pinexio.git
+  ```
+      </div>
+    </StepContent>
+  </Step>
+  <Step>
+    <StepTitle>Step 3: Install Dependencies</StepTitle>
+    <StepContent>
+    <div>
+      Install the project dependencies using your preferred package manager:
+       <CodeTabs tabs={{
+        'npm':{
+          syntax:'npm i'
+        },
+        'pnpm':{
+          syntax:'pnpm i'
+        },
+        'yarn':{
+          syntax:'yarn i'
+        },
+       }} />
+      </div>
+    </StepContent>
+  </Step>
+  <Step>
+    <StepTitle>Step 4: Run the Development Server</StepTitle>
+    <StepContent>
+    <div>
+      Start your development server with one of the following commands:
+      <CodeTabs tabs={{
+        'npm':{
+          syntax:'npm run dev'
+        },
+        'pnpm':{
+          syntax:'pnpm dev'
+        },
+        'yarn':{
+          syntax:'yarn run dev'
+        },
+       }} />
+      </div>
+    </StepContent>
+  </Step>
+  <Step>
+    <StepTitle>Step 5: Make Changes</StepTitle>
+    <StepContent>
+    <div>
+      <p>If you want to make changes:</p>
+
+      1. Edit files in the root directory <code>/</code> for global configurations.
+      2. Update or create MDX files in the <code>docs</code> directory to modify or add documentation.
+      3. Update or create MDX files in the <code>docs</code> directory to modify or add documentation.
+
+          <FolderTree className="overflow-hidden p-2">
+            <Folder element="docs" defaultOpen={true}>
+              <File>
+                <p>page1.mdx</p>
+              </File>
+              <File>
+                <p>page2.mdx</p>
+              </File>
+            </Folder>
+          </FolderTree>
+      4. Refer to the existing documentation to see how things work.
+      </div>
+    </StepContent>
+
+  </Step>
+</Steps>
+
+## What is MDX?
+
+MDX is an extension of Markdown that allows you to write JSX (React components) inside your Markdown files. This means you can mix content with interactive components seamlessly.
+
+For example, in a normal Markdown file, you might write:
+
+```md
+# Welcome to My Docs
+
+This is a simple Markdown page.
+```
+
+But in MDX, you can add React components directly:
+
+```mdx
+import { Button } from '@/components/ui/button';
+
+# Welcome to My Docs
+
+This is a simple Markdown page with a button:
+
+<Button>Click Me</Button>
+```
+
+## Creating an MDX File
+
+To add a new documentation page, create a new `.mdx` file inside the `docs` directory:
+
+```sh
+echo "# My New Page" > docs/my-new-page.mdx
+```
+
+This file will automatically be picked up by the system and rendered as a new documentation page.
+
+Your folder structure should look like this:
+
+<FolderTree className="overflow-hidden p-2">
+  <Folder element="project-root" defaultOpen={true}>
+    <Folder element="docs" defaultOpen={true}>
+      <File>
+        <p>my-new-page.mdx</p>
+      </File>
+      <File>
+        <p>another-page.mdx</p>
+      </File>
+    </Folder>
+  </Folder>
+</FolderTree>
+
+🎉 That’s it! You now have a functional documentation site up and running with your first MDX page.

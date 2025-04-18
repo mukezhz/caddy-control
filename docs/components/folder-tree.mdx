@@ -1,0 +1,99 @@
+---
+title: Folder Tree
+description: 'The FolderTree component is a customizable UI element for displaying and interacting with hierarchical file systems. Ideal for applications needing folder structures, it allows users to create collapsible directories and organize files with ease.'
+date: 2025-03-12
+---
+
+# FolderTree Component Documentation
+
+## Overview
+
+The `FolderTree` component is a customizable folder structure UI component that allows users to represent and interact with a hierarchical file system.
+
+## Preview and Code Snippet
+
+<Tabs defaultValue="preview" size="sm" className="w-full">
+  <TabsList className="grid w-full md:w-[30%] grid-cols-2">
+    <Tab value="preview">Preview</Tab>
+    <Tab value="code">Code</Tab>
+  </TabsList>
+  <TabsContent value="preview">
+    <Preview>
+      <FolderTree className="overflow-hidden bg-background p-2">
+        <Folder element="src" defaultOpen={true}>
+          <Folder element="app" defaultOpen={true}>
+            <File>
+              <p>layout.tsx</p>
+            </File>
+            <File>
+              <p>page.tsx</p>
+            </File>
+          </Folder>
+        </Folder>
+      </FolderTree>
+    </Preview>
+  </TabsContent>
+  <TabsContent value="code">
+    ```tsx
+    <FolderTree className="overflow-hidden bg-background p-2">
+      <Folder element="src" defaultOpen={true}>
+        <Folder element="app" defaultOpen={true}>
+          <File>
+            <p>layout.tsx</p>
+          </File>
+          <File>
+            <p>page.tsx</p>
+          </File>
+        </Folder>
+      </Folder>
+    </FolderTree>
+    ```
+  </TabsContent>
+</Tabs>
+
+## Props
+
+### FolderTree Props
+
+| Prop         | Type     | Default | Description                         |
+| ------------ | -------- | ------- | ----------------------------------- |
+| `className`  | `string` | `-`     | Additional classes for styling      |
+| `indentSize` | `number` | `16`    | Indentation size for nested folders |
+
+### Folder Props
+
+| Prop          | Type      | Default | Description                          |
+| ------------- | --------- | ------- | ------------------------------------ |
+| `element`     | `string`  | `-`     | Name of the folder                   |
+| `defaultOpen` | `boolean` | `false` | Determines if the folder starts open |
+| `className`   | `string`  | `-`     | Additional classes for styling       |
+
+### File Props
+
+| Prop        | Type     | Default | Description                    |
+| ----------- | -------- | ------- | ------------------------------ |
+| `className` | `string` | `-`     | Additional classes for styling |
+
+## Usage Steps
+
+1. **Wrap files and folders inside the `FolderTree` component.**
+2. **Use the `Folder` component to create a collapsible directory.**
+3. **Place `File` components inside `Folder` to represent files.**
+4. **Use `defaultOpen` to control initial visibility.**
+
+### Example
+
+```tsx
+<FolderTree className="bg-gray-100 p-4">
+  <Folder element="src" defaultOpen={true}>
+    <Folder element="components" defaultOpen={true}>
+      <File>
+        <p>Button.tsx</p>
+      </File>
+    </Folder>
+    <File>
+      <p>index.tsx</p>
+    </File>
+  </Folder>
+</FolderTree>
+```

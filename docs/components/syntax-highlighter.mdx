@@ -1,0 +1,61 @@
+---
+title: 'Syntax Highlighter'
+description: 'The Syntax Highlighter component offers customizable and interactive syntax highlighting for code snippets, supporting multiple languages, tabs for variations, and a copy-to-clipboard feature.'
+date: 2025-03-12
+---
+
+# Syntax Highlighter Component Documentation
+
+The **Syntax Highlighter** component provides a customizable and interactive way to display code snippets with syntax highlighting. It supports multiple tabs for different code variations and includes a copy-to-clipboard feature.
+
+## Preview and Code Snippet
+
+<Tabs defaultValue="preview" size="sm" className="w-full">
+  <TabsList className="grid w-full md:w-[30%] grid-cols-2">
+    <Tab value="preview">Preview</Tab>
+    <Tab value="code">Code</Tab>
+  </TabsList>
+  <TabsContent value="preview">
+    <Preview>
+      <CustomSyntaxHighlighter
+        className="xs:w-auto md:w-[60%]"
+        themeMode="dark"
+        tabs={{
+          JavaScript: { syntax: "console.log('Hello, world!');", language: "javascript" },
+          Python: { syntax: "print('Hello, world!')", language: "python" }
+        }}
+        indicatorColor="bg-blue-500"
+      />
+    </Preview>
+  </TabsContent>
+  <TabsContent value="code">
+    ```tsx
+    import CustomSyntaxHighlighter from "@/components/syntax-highlighter";
+
+    export default function Example() {
+      return (
+        <CustomSyntaxHighlighter
+          themeMode="dark"
+          tabs={{
+            JavaScript: { syntax: "console.log('Hello, world!');", language: "javascript" },
+            Python: { syntax: "print('Hello, world!')", language: "python" }
+          }}
+          indicatorColor="bg-blue-500"
+        />
+      );
+    }
+    ```
+
+  </TabsContent>
+</Tabs>
+
+## Props
+
+| Prop             | Type                                                    | Default           | Description                                                                            |
+| ---------------- | ------------------------------------------------------- | ----------------- | -------------------------------------------------------------------------------------- |
+| `tabs`           | `Record<string, { syntax: string; language?: string }>` | `{}`              | An object where keys represent tab names and values contain code and language details. |
+| `className`      | `string`                                                | `undefined`       | Custom CSS classes for additional styling.                                             |
+| `themeMode`      | `'light' \| 'dark'`                                     | `'dark'`          | Controls the theme mode of the syntax highlighter.                                     |
+| `lightTheme`     | `Record<string, any>`                                   | `oneLight`        | Custom theme for light mode.                                                           |
+| `darkTheme`      | `Record<string, any>`                                   | `oneDark`         | Custom theme for dark mode.                                                            |
+| `indicatorColor` | `string`                                                | `'bg-yellow-500'` | Custom color for the active tab indicator.                                             |

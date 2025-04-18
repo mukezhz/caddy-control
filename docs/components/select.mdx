@@ -1,0 +1,152 @@
+---
+title: Select
+description: 'The Select component is a customizable dropdown for single and multiple selections, featuring search, controlled/uncontrolled modes, and flexible UI customization.'
+date: 2025-04-02
+---
+
+# Select Component
+
+The `Select` component provides an intuitive dropdown menu that supports both single and multiple selections with an optional search input.
+
+## Preview and Code Snippet
+
+<Tabs defaultValue="preview" size="sm" className="w-full">
+  <TabsList className="grid w-full md:w-[30%] grid-cols-2">
+    <Tab value="preview">Preview</Tab>
+    <Tab value="code">Code</Tab>
+  </TabsList>
+  <TabsContent value="preview">
+    <Preview className="bg-background">
+      {(() => {
+        const { useState } = React;
+        
+        const options = [
+          "apple", "banana", "blueberry", "grapes", "pineapple", "mango", "strawberry", "orange", "kiwi", "watermelon", "peach", "pear"
+        ];
+        
+        const [selectedFruits, setSelectedFruits] = useState('');
+        const [selectedFruit, setSelectedFruit] = useState('');
+        return (
+        <div className="flex flex-row gap-10">
+          <Select search value={selectedFruits} onSelect={setSelectedFruits} className="w-70">
+            <SelectValue placeholder="Select a fruit" />
+            <SelectContent className="custom-dropdown">
+              {options.map((fruit) => (
+                <SelectItem key={fruit} value={fruit}>{fruit.charAt(0).toUpperCase() + fruit.slice(1)}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          <Select multiple search value={selectedFruit} onSelect={setSelectedFruit} className="w-70">
+            <SelectValue placeholder="Select multiple fruits" />
+            <SelectContent className="custom-dropdown">
+              {options.map((fruit) => (
+                <SelectItem key={fruit} value={fruit}>{fruit.charAt(0).toUpperCase() + fruit.slice(1)}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          </div>
+        );
+      })()}
+    </Preview>
+
+  </TabsContent>
+  <TabsContent value="code">
+
+```tsx
+import { useState } from 'react';
+import {
+  Select,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from '@/components/select';
+
+export const SelectSingle = () => {
+  const [selectedFruits, setSelectedFruit] = useState('apple');
+
+  const handleSelect = (value: string | string[]) => {
+    setSelectedFruit(value as string);
+  };
+
+  return (
+    <Select
+      search
+      value={selectedFruits}
+      onSelect={handleSelect}
+      className="w-70"
+    >
+      <SelectValue placeholder="Select a fruit" />
+      <SelectContent className="custom-dropdown">
+        <SelectItem value="apple">Apple</SelectItem>
+        <SelectItem value="banana">Banana</SelectItem>
+        <SelectItem value="blueberry">Blueberry</SelectItem>
+        <SelectItem value="grapes">Grapes</SelectItem>
+        <SelectItem value="pineapple">Pineapple</SelectItem>
+        <SelectItem value="mango">Mango</SelectItem>
+        <SelectItem value="strawberry">Strawberry</SelectItem>
+        <SelectItem value="orange">Orange</SelectItem>
+        <SelectItem value="kiwi">Kiwi</SelectItem>
+        <SelectItem value="watermelon">Watermelon</SelectItem>
+        <SelectItem value="peach">Peach</SelectItem>
+        <SelectItem value="pear">Pear</SelectItem>
+      </SelectContent>
+    </Select>
+  );
+};
+```
+
+  </TabsContent>
+</Tabs>
+
+## Props
+
+### `<Select>`
+
+| Prop        | Type            | Default            | Description                         |
+| ----------- | --------------- | ------------------ | ----------------------------------- |
+| `value`     | `string         | string[]`          | `null`                              |
+| `onSelect`  | `(value: string | string[]) => void` | `-`                                 |
+| `multiple`  | `boolean`       | `false`            | Enables multiple selections.        |
+| `search`    | `boolean`       | `false`            | Enables search within the dropdown. |
+| `disabled`  | `boolean`       | `false`            | Disables the dropdown.              |
+| `className` | `string`        | `-`                | Additional CSS classes for styling. |
+
+### `<SelectValue>`
+
+| Prop          | Type     | Default     | Description                                 |
+| ------------- | -------- | ----------- | ------------------------------------------- |
+| `placeholder` | `string` | `Select...` | Placeholder text when no value is selected. |
+| `className`   | `string` | `-`         | Additional CSS classes.                     |
+
+### `<SelectContent>`
+
+| Prop        | Type     | Default | Description                         |
+| ----------- | -------- | ------- | ----------------------------------- |
+| `className` | `string` | `-`     | Additional CSS classes for styling. |
+
+### `<SelectItem>`
+
+| Prop        | Type     | Default | Description               |
+| ----------- | -------- | ------- | ------------------------- |
+| `value`     | `string` | `-`     | Value of the select item. |
+| `className` | `string` | `-`     | Additional CSS classes.   |
+
+## Usage Steps
+
+1. Import the `Select` component.
+2. Manage the selected state using `value` and `onSelect`.
+3. Use `multiple` to enable multiple selections.
+4. Enable `search` to allow filtering within the dropdown.
+
+### Example
+
+```tsx
+<Select search value={'apple'} onSelect={(value) => console.log(value)}>
+  <SelectValue placeholder="Select a fruit" />
+  <SelectContent>
+    <SelectItem value="apple">Apple</SelectItem>
+    <SelectItem value="banana">Banana</SelectItem>
+  </SelectContent>
+</Select>
+```

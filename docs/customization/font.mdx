@@ -1,0 +1,96 @@
+---
+title: Font Customization
+description: A guide to modifying fonts and typography settings in your documentation template.
+date: 2025-03-15
+---
+
+# Font Customization
+
+The font used in this template is defined in `src/layout.tsx` using the `next/font/google` package. You can modify the font, its size, weight, and other typographic settings easily.
+
+## Location of Font Definition
+
+The font is imported and configured in `project-root/src/layout.tsx`:
+
+```tsx
+import { Geist } from 'next/font/google';
+
+const geistSans = Geist({
+  variable: '--font-geist-sans',
+  subsets: ['latin'],
+});
+```
+
+## Applying the Font Globally
+
+To apply the font globally, it is used in the `<body>` tag inside `project-root/src/layout.tsx`:
+
+```tsx
+<html lang="en" suppressHydrationWarning>
+  <body
+    className={`
+      ${geistSans.className}
+      text-sm
+      font-regular tracking-wide antialiased`}
+  >
+```
+
+- `text-sm` is a Tailwind CSS utility class that controls the base font size.
+- You can change this to `xs`,`md`,`lg`, `xs`, `2xl`, or any other Tailwind font size to modify the default text size.
+
+## Modifying Font Size & Tailwind Config
+
+If you need more control over typography settings, you can modify `tailwind.config.js` in the project root:
+
+```js
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: [
+    './pages/**/*.{js,ts,jsx,tsx,mdx}',
+    './components/**/*.{js,ts,jsx,tsx,mdx}',
+    './app/**/*.{js,ts,jsx,tsx,mdx}',
+  ],
+  theme: {
+    extend: {
+      // Your theme extensions
+    },
+  },
+  screens: {
+    xs: '100px',
+    sm: '640px',
+    md: '768px',
+    lg: '1024px',
+    xl: '1280px',
+    '2xl': '1536px',
+  },
+  plugins: [],
+};
+```
+
+- The `screens` object defines responsive breakpoints. You can modify them based on your requirements.
+- The default values provided are industry standards, but you can adjust them as needed.
+
+## Customizing Font Weight
+
+To change the font weight, modify `src/layer.tsx` by adding a `weight` array:
+
+```tsx
+const geistSans = Geist({
+  variable: '--font-geist-sans',
+  weight: ['400', '700'],
+  subsets: ['latin'],
+});
+```
+
+- `"400"` represents regular weight, while `"700"` is bold.
+- You can add more values like `"300"` (light) or `"900"` (extra bold) if required.
+
+## Summary
+
+- The font is defined in `src/layer.tsx`.
+- Global styles are applied via the `<body>` tag in `layout.tsx`.
+- Font size and typography settings are managed using Tailwind CSS classes.
+- `tailwind.config.js` allows customization of font sizes and responsive breakpoints.
+- You can modify font weight by adding an array of values in the font configuration.
+
+This guide helps you easily modify fonts and typography settings according to your design requirements.

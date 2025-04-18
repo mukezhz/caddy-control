@@ -1,0 +1,144 @@
+---
+title: 'Sidebar'
+description: 'The Sidebar component is a customizable and flexible navigation panel that supports collapsible menus, nested links, and icons. Ideal for applications, dashboards, and documentation sites requiring structured navigation.'
+date: 2025-03-12
+---
+
+# Sidebar Component Documentation
+
+The **Sidebar** component is a flexible and customizable navigation panel. It supports collapsible menus, nested links, and icons, making it ideal for documentation sites, dashboards, and applications with structured navigation.
+
+## Preview and Code Snippet
+
+<Tabs defaultValue="preview" size="sm" className="w-full">
+  <TabsList className="grid w-full md:w-[30%] grid-cols-2">
+    <Tab value="preview">Preview</Tab>
+    <Tab value="code">Code</Tab>
+  </TabsList>
+  <TabsContent value="preview">
+    <Preview className="bg-background">
+    <SidebarLayout>
+      <SidebarProvider mobileView={false} defaultOpen={false} defaultSide="left" defaultMaxWidth={400} showIconsOnCollapse={true}>
+        <Sidebar className="!h-fit" >
+          <SidebarHeader>
+            <SidebarTrigger />
+            <SidebarHeaderTitle>Documentation</SidebarHeaderTitle>
+            <BookOpen className="h-5 w-5" />
+          </SidebarHeader>
+          <SidebarContent>
+            <SidebarMenu>
+              <SidebarMenuItem icon={<BookOpen className="h-5 w-5" />} label="Getting Started"/>
+              <SidebarMenuItem icon={<Settings className="h-5 w-5" />} label="Configuration"/>
+            </SidebarMenu>
+          </SidebarContent>
+          <SidebarFooter>
+            <div className="text-sm text-gray-500">v1.0.0</div>
+          </SidebarFooter>
+        </Sidebar>
+        <MainContent>
+            <main className="overflow-auto p-6">{<h1 className="text-2xl font-bold">Main Content</h1>}</main>
+        </MainContent>
+      </SidebarProvider>
+      </SidebarLayout>
+    </Preview>
+  </TabsContent>
+  <TabsContent value="code">
+    ```tsx
+    import { SidebarProvider, Sidebar, SidebarHeader, SidebarTrigger, SidebarHeaderTitle, SidebarContent, SidebarMenu, SidebarMenuItem, SidebarFooter, NestedLink } from "@/components/sidebar";
+    import { BookOpen, Settings, FileText } from "lucide-react";
+    
+    export default function Example() {
+      return (
+        <SidebarProvider defaultOpen={false} defaultSide="right" defaultMaxWidth={300} showIconsOnCollapse={true}>
+          <Sidebar>
+            <SidebarHeader>
+              <SidebarTrigger />
+              <SidebarHeaderTitle>Documentation</SidebarHeaderTitle>
+              <BookOpen className="h-5 w-5" />
+            </SidebarHeader>
+            <SidebarContent>
+              <SidebarMenu>
+                <SidebarMenuItem icon={<BookOpen className="h-5 w-5" />} label="Getting Started" href="/docs/getting-started" />
+                <SidebarMenuItem icon={<Settings className="h-5 w-5" />} label="Configuration" href="/docs/configuration" />
+              </SidebarMenu>
+            </SidebarContent>
+            <SidebarFooter>
+              <div className="text-sm text-gray-500">v1.0.0</div>
+            </SidebarFooter>
+          </Sidebar>
+        </SidebarProvider>
+      );
+    }
+    ```
+  </TabsContent>
+</Tabs>
+
+## Props
+
+### `<SidebarProvider>`
+
+| Prop                | Type            | Default   | Description |
+|---------------------|----------------|-----------|-------------|
+| children           | React.ReactNode | -         | The child components of the provider. |
+| defaultOpen        | boolean         | true      | Determines if the sidebar is open by default. |
+| defaultSide        | 'left' \| 'right' | 'left'    | The default position of the sidebar. |
+| defaultMaxWidth    | number          | 280       | The maximum width of the sidebar in pixels. |
+| showIconsOnCollapse | boolean         | true      | Determines if icons should be shown when the sidebar is collapsed. |
+| mobileView        | boolean         | true      | Enables mobile-specific sidebar behavior. |
+
+### `<Sidebar>`
+
+| Prop       | Type              | Default | Description |
+|------------|-------------------|---------|-------------|
+| className  | string            | -       | Additional CSS classes for styling. |
+| children   | React.ReactNode   | -       | The child elements inside the sidebar. |
+
+### `<SidebarHeader>`
+
+| Prop       | Type              | Default | Description |
+|------------|-------------------|---------|-------------|
+| children   | React.ReactNode   | -       | The header content of the sidebar. |
+
+### `<SidebarContent>`
+
+| Prop       | Type              | Default | Description |
+|------------|-------------------|---------|-------------|
+| children   | React.ReactNode   | -       | The main content area of the sidebar. |
+
+### `<SidebarFooter>`
+
+| Prop       | Type              | Default | Description |
+|------------|-------------------|---------|-------------|
+| children   | React.ReactNode   | -       | The footer section of the sidebar. |
+
+### `<SidebarMenu>`
+
+| Prop       | Type              | Default | Description |
+|------------|-------------------|---------|-------------|
+| children   | React.ReactNode   | -       | The navigation menu inside the sidebar. |
+
+### `<SidebarMenuItem>`
+
+| Prop          | Type              | Default    | Description |
+|--------------|-------------------|------------|-------------|
+| icon         | React.ReactNode   | -          | An optional icon to display in the menu item. |
+| label        | string            | -          | The text label for the menu item. |
+| href         | string            | -          | The link to navigate to. |
+| children     | React.ReactNode   | -          | Sub-menu items if applicable. |
+| isActive     | boolean           | undefined  | Manually set active state. |
+| defaultOpen  | boolean           | false      | Whether the submenu is open by default. |
+| alwaysOpen   | boolean           | false      | Keeps the submenu permanently open. |
+| isCollapsable | boolean           | false      | Whether the submenu can be collapsed. |
+
+### `<SidebarLayout>`
+
+| Prop       | Type              | Default | Description |
+|------------|-------------------|---------|-------------|
+| children   | React.ReactNode   | -       | The child components inside the layout. |
+
+### `<MainContent >`
+
+| Prop       | Type              | Default | Description |
+|------------|-------------------|---------|-------------|
+| children   | React.ReactNode   | -       | The main content area. |
+

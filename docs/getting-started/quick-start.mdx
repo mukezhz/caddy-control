@@ -1,0 +1,62 @@
+---
+title: Quick Start Guide
+description: Learn how to quickly create your own documentation or post.
+---
+
+# Quick Start Guide
+
+Getting started with your documentation is simple! Just follow this step:
+
+## Create Your MDX File and Add Metadata
+
+Inside your project, navigate to the `docs` folder and create a new `.mdx` file:
+
+```sh
+project-root/docs/YOUR-PAGE-NAME.mdx
+```
+
+At the top of your MDX file, add the following metadata:
+
+```mdx
+---
+title: HTTP Server
+description: This section is about HTTP Server.
+---
+```
+
+<div>
+  - **`title`**: Defines the title displayed on the page.
+  <br />- **`description`**: Helps with SEO and improves discoverability.
+</div>
+
+<Note>
+  Use hyphens (`-`) in file names instead of spaces or special characters. The
+  breadcrumb navigation will automatically format hyphens as spaces.
+</Note>
+
+## Start Writing
+
+Below the metadata, start writing your documentation using Markdown and MDX. You can include:
+
+- Regular Markdown content
+- Code blocks
+- React components (if needed)
+
+Once your file is created, it will automatically be available in the route and search bar.
+
+<FolderTree className="overflow-hidden p-2">
+  <Folder element="project-root" defaultOpen={true}>
+    <Folder element="docs" defaultOpen={true}>
+      <File>
+        <p>your-page-name.mdx</p>
+      </File>
+    </Folder>
+  </Folder>
+</FolderTree>
+
+## Optional: Add to Sidebar and Table of Contents
+
+If you want your new page to appear in the sidebar and TOC:
+
+- Visit **[docs/customization/sidebar](/docs/customization/sidebar)** to customization the sidebar.
+- Visit **[docs/customization/toc](/docs/customization/toc)** to configure the table of contents.

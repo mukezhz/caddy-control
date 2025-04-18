@@ -1,0 +1,148 @@
+---
+title: Popover
+description: 'The Popover component provides a floating UI container that can be triggered by clicking or hovering over elements. It supports smart positioning, click-outside detection, and customizable content.'
+date: 2025-03-30
+---
+
+# Popover Component
+
+The `Popover` component provides a flexible and responsive floating container that can be triggered to appear around any element.
+
+## Preview and Code Snippet
+
+<Tabs defaultValue="preview" size="sm" className="w-full">
+  <TabsList className="grid w-full md:w-[30%] grid-cols-2">
+    <Tab value="preview">Preview</Tab>
+    <Tab value="code">Code</Tab>
+  </TabsList>
+  <TabsContent value="preview">
+    <Preview>
+      {(() => {
+        return (
+          <div className="flex flex-row gap-10 p-10 items-center justify-center">
+            <Popover>
+              <PopoverTrigger>
+                <Button variant={'primary'}>Click me</Button>
+              </PopoverTrigger>
+              <PopoverContent className="p-4 w-64">
+                <p>Simple popover content.</p>
+              </PopoverContent>
+            </Popover>
+            <Popover>
+              <PopoverTrigger>
+                <Button variant={'outline'}>Give Feedback</Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-64 p-4">
+                <h3 className="text-lg font-medium mb-3">Feedback</h3>
+                <textarea className="w-full p-2 border rounded-md mb-3" placeholder="Your feedback..." rows={3} />
+                <PopoverClose>
+                    <Button>Submit</Button>
+                </PopoverClose>
+              </PopoverContent>
+            </Popover>
+          </div>
+        );
+      })()}
+    </Preview>
+  </TabsContent>
+  <TabsContent value="code">
+
+```tsx
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverClose,
+} from '@/components/popover';
+
+export default function Example() {
+  return (
+    <div className="flex gap-6">
+      <Popover>
+        <PopoverTrigger>
+          <button className="px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-300">
+            Click me
+          </button>
+        </PopoverTrigger>
+        <PopoverContent className="p-4 w-64">
+          <p>Simple popover content.</p>
+        </PopoverContent>
+      </Popover>
+      <Popover>
+        <PopoverTrigger>
+          <button className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">
+            Give Feedback
+          </button>
+        </PopoverTrigger>
+        <PopoverContent className="w-64 p-4">
+          <h3 className="text-lg font-medium mb-3">Feedback</h3>
+          <textarea
+            className="w-full p-2 border rounded-md mb-3"
+            placeholder="Your feedback..."
+            rows={3}
+          />
+          <PopoverClose>
+            <Button>Submit</Button>
+          </PopoverClose>
+        </PopoverContent>
+      </Popover>
+    </div>
+  );
+}
+```
+
+  </TabsContent>
+</Tabs>
+
+## Features
+
+- **Smart Positioning**: Automatically adjusts to available space.
+- **Click Outside Detection**: Closes when clicking outside the popover.
+- **Responsive**: Adapts to different screen sizes.
+- **Customizable**: Accepts any content inside.
+
+## Props
+
+### `Popover`
+
+| Prop           | Type                      | Default     | Description                                 |
+| -------------- | ------------------------- | ----------- | ------------------------------------------- |
+| `open`         | `boolean`                 | `false`     | Controls whether the popover is open.       |
+| `onOpenChange` | `(open: boolean) => void` | `undefined` | Callback fired when the open state changes. |
+
+### `PopoverContent`
+
+| Prop         | Type                                 | Default      | Description                                           |
+| ------------ | ------------------------------------ | ------------ | ----------------------------------------------------- | 
+| `side`       | `"top" \| "bottom" \|"left"\| "right"`| `"bottom"`   | Determines the preferred position of the popover. |
+| `align`      | `"start"\|"center"\|"end"`         | `"center"`   | Controls the alignment of the popover relative to the trigger. |
+| `sideOffset` | `number`                             | `4`          | Sets the spacing between the popover and the trigger. |
+
+## Usage
+
+```tsx
+<Popover>
+  <PopoverTrigger>
+    <button>Click me</button>
+  </PopoverTrigger>
+  <PopoverContent>
+    <p>Popover content here.</p>
+  </PopoverContent>
+</Popover>
+```
+
+### With Close Button
+
+```tsx
+<Popover>
+  <PopoverTrigger>
+    <button>Open</button>
+  </PopoverTrigger>
+  <PopoverContent>
+    <p>Some content.</p>
+    <PopoverClose>
+      <button>Close</button>
+    </PopoverClose>
+  </PopoverContent>
+</Popover>
+```

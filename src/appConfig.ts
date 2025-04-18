@@ -13,7 +13,6 @@ export const validateEnv = () => envSchema.safeParse(process.env);
 /* eslint-disable @typescript-eslint/no-namespace */
 declare global {
   namespace NodeJS {
-    /* eslint-disable @typescript-eslint/no-empty-object-type */
     interface ProcessEnv extends z.infer<typeof envSchema> {}
   }
 }

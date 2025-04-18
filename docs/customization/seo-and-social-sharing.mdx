@@ -1,0 +1,99 @@
+---
+title: Setting Up Metadata for SEO and Social Sharing
+description: Learn how to configure metadata for SEO and social media sharing in your Next.js documentation site.
+date: 2025-03-20
+---
+
+# Setting Up Metadata for SEO and Social Sharing
+
+Proper metadata configuration is crucial for making your documentation site discoverable on search engines and look great when shared on social media. This guide will walk you through setting up metadata in your **Next.js** project.
+
+## Why Metadata Matters
+
+- Improves search engine rankings (SEO)
+- Ensures rich previews when shared on Twitter, LinkedIn, and Facebook
+- Helps define authorship and branding
+
+## Configuring Metadata in Next.js
+
+Next.js provides built-in support for metadata configuration via the [`metadata` API](https://nextjs.org/docs/app/api-reference/functions/generate-metadata).
+
+### Step 1: Create or Change Existing Metadata Configuration File
+
+Inside your project, create a new file at:
+
+<FolderTree className="overflow-hidden p-2">
+  <Folder element="project-root" defaultOpen={true}>
+    <Folder element="config" defaultOpen={true}>
+      <File>
+        <p>meta.tsx</p>
+      </File>
+    </Folder>
+  </Folder>
+</FolderTree>
+
+### Example JSON
+
+```tsx
+export const meta = {
+  metadataBase: new URL('https://pinexio.vercel.app'),
+  title: 'Pinexio - Documentation Template',
+  description:
+    'A customizable open-source documentation template built with Next.js.',
+  authors: [{ name: 'Sanjay Rajeev' }],
+  keywords: [
+    'Pinexio',
+    'documentation template',
+    'Next.js',
+    'React',
+    'JavaScript',
+  ],
+  publisher: 'Sanjay Rajeev',
+  creator: 'Sanjay Rajeev',
+  openGraph: {
+    type: 'website',
+    title: 'Pinexio - Documentation Template',
+    description:
+      'A customizable open-source documentation template built with Next.js.',
+    images: [
+      {
+        url: '/og_image.png',
+        width: 1200,
+        height: 630,
+        alt: 'Pinexio Documentation Template',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Pinexio - Documentation Template',
+    description:
+      'A customizable open-source documentation template built with Next.js.',
+    images: ['/og_image.png'],
+    creator: '@sanjayrajeev',
+  },
+  alternates: {
+    canonical: 'https://pinexio.vercel.app',
+  },
+  robots: 'index, follow',
+  hreflang: {
+    en: 'https://pinexio.vercel.app',
+  },
+};
+```
+
+### Step 2: Verify Your Metadata
+
+Once you've set up the metadata, verify it using:
+
+- [Google Rich Results Test](https://search.google.com/test/rich-results)
+- [Twitter Card Validator](https://cards-dev.twitter.com/validator)
+- [Facebook Sharing Debugger](https://developers.facebook.com/tools/debug/)
+
+## Learn More
+
+For more advanced metadata options, check out the [Next.js Metadata API](https://nextjs.org/docs/app/api-reference/functions/generate-metadata).
+
+---
+
+This setup ensures your documentation pages are well-optimized for search engines and social media. 🚀

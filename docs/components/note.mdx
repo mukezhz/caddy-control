@@ -1,0 +1,77 @@
+---
+title: Note
+description: 'The Note component is designed to display contextual messages in various styles, including info, success, warning, and more. Perfect for alerting users or providing helpful tips in your UI. Easily customizable with support for icons and additional styles.'
+date: 2025-03-12
+---
+
+# Note Component
+
+The `Note` component is used to display contextual messages with different styles based on the type of note.
+
+## Preview and Code Snippet
+
+<Tabs defaultValue="preview" size="sm" className="w-full" onTabClick={(value) => console.log("Tab clicked:", value)}>
+  <TabsList className="grid w-full md:w-[30%] grid-cols-2">
+    <Tab value="preview">Preview</Tab>
+    <Tab value="code">Code</Tab>
+  </TabsList>
+  <TabsContent value="preview">
+    <Preview>
+    <div className="grid grid-cols-2 gap-4">
+<Note type="info">This is an informational note.</Note>
+
+<Note type="success">This is a success message.</Note>
+
+<Note type="warning">This is a warning message.</Note>
+
+<Note>This is an Normal message.</Note>
+
+</div>
+    </Preview>
+  </TabsContent>
+  <TabsContent value="code">
+
+```tsx
+import { Note } from '@/components/note';
+
+export default function Example() {
+  return (
+    <div className="grid grid-col">
+      <Note type="info">This is an informational note.</Note>
+      <Note type="success">This is a success message.</Note>
+      <Note type="warning">This is a warning message.</Note>
+      <Note type="alert">This is an alert message.</Note>
+      <Note type="tip">This is a helpful tip.</Note>
+    </div>
+  );
+}
+```
+
+  </TabsContent>
+</Tabs>
+
+## Props
+
+| Prop        | Type                                                           | Default  | Description                       |
+| ----------- | -------------------------------------------------------------- | -------- | --------------------------------- |
+| `type`      | `none` \| `info` \| `warning` \| `alert` \| `success` \| `tip` | `'none'` | Determines the style of the note. |
+| `className` | `string`                                                       | `''`     | Additional CSS classes.           |
+| `hideIcon`  | `boolean`                                                      | `false`  | Hides the note icon when `true`.  |
+| `children`  | `ReactNode`                                                    | `-`      | The content of the note.          |
+
+## Usage Steps
+
+1. Import the `Note` component from your components folder.
+2. Use the `type` prop to specify the type of note.
+3. Optionally, use `hideIcon` to hide the icon.
+4. Add your message inside the `<Note>` component.
+
+### Example
+
+```tsx
+<Note type="success" hideIcon={true}>
+  Success without an icon!
+</Note>
+```
+
+This component helps in displaying contextual messages effectively in your UI.

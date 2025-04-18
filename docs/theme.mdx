@@ -1,0 +1,75 @@
+---
+title: Theme
+description: 'Learn how to customize the theme of your project with easy-to-use CSS variables for light and dark modes. This guide covers background and foreground colors, primary and secondary branding colors, and provides a clear structure for modifying the theme to suit your design needs.'
+date: 2025-03-12
+---
+
+# Theming in Your Project
+
+## Overview
+
+The theming system in your project is defined in `src/global.css`. It includes both **light** and **dark** themes, ensuring consistency throughout the application. Any changes to themes should be made in this file to maintain a unified styling approach.
+
+## Understanding Foreground and Background
+
+- **Background**: Represents the underlying surface color of an element, such as page backgrounds, cards, and modals.
+- **Foreground**: Refers to everything that appears in front of the background, such as text, icons, and interactive elements.
+- Maintaining a proper contrast between foreground and background ensures readability and accessibility.
+
+## Primary and Secondary Colors
+
+- **Primary Color**: The main color used in the UI, typically for branding, buttons, and highlights.
+- **Secondary Color**: A complementary color used for less prominent elements, such as secondary buttons and backgrounds.
+
+These colors are defined using **HSL variables**, making it easier to adjust them globally without modifying individual components.
+
+## Where to Modify Themes
+
+To update themes, modify the variables in `@layer base` inside `global.css`. Below is a highlighted snippet showing where developers should make changes:
+
+```css
+:root {
+  /* Light Mode */
+  --background: 0 0% 100%; /* White */
+  --foreground: 0 0% 9%; /* Black */
+
+  --primary: 222.2 47.4% 11.2%;
+  --primary-foreground: 210 40% 98%;
+
+  --secondary: 210 40% 96.1%;
+  --secondary-foreground: 222.2 47.4% 11.2%;
+}
+
+.dark {
+  /* Dark Mode */
+  --background: 0 0% 4%; /* Very dark */
+  --foreground: 0 0% 93%; /* Light text */
+
+  --primary: 210 40% 98%;
+  --primary-foreground: 222.2 47.4% 11.2%;
+
+  --secondary: 217.2 32.6% 17.5%;
+  --secondary-foreground: 210 40% 98%;
+}
+```
+
+## Additional Theme Variables
+
+Other UI components also use variables to define styling, including:
+
+- **Borders** (`--border`, `--border-header`)
+- **Status Colors** (`--success`, `--warning`, `--destructive`)
+- **Components** (`--card`, `--popover`, `--button`)
+- **Sidebar** (`--sidebar`, `--sidebar-active`)
+
+Developers can customize these variables based on design requirements.
+
+## Summary
+
+- **Make theme changes in `src/global.css`**.
+- **Understand foreground (text, icons) vs. background (page, containers)**.
+- **Modify primary and secondary colors for branding consistency**.
+- **Ensure contrast for accessibility**.
+- **Leverage theme variables for easy customization**.
+
+For further modifications, refer to the full theme structure in `global.css`. 🚀

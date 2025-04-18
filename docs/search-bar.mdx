@@ -1,0 +1,74 @@
+---
+title: 'Search Bar'
+date: 2025-03-12
+description: 'Effortless search integration with Contentlayer and regex-based highlighting.'
+---
+
+# No-Setup Search Bar 🚀
+
+One of the coolest things about **Pinexio** is its built-in search functionality. Thanks to **Contentlayer**, there is absolutely **no additional setup** required. Any `.mdx` file inside the `docs/` folder is automatically indexed and searchable. That means **no third-party libraries**, no extra indexing steps, and no configuration—just write your documentation, and it’s instantly searchable!
+
+## 🔍 How It Works
+
+The logic for searching and highlighting results is handled inside the **`SearchDialog`** component. Here’s how it works:
+
+1. **Regex-based search**: The search input filters through all `.mdx` files and highlights matching text.
+2. **Instant results**: Matches appear as you type, making navigation seamless.
+3. **Keyboard shortcut support**: Press `Cmd + K` (Mac) or `Ctrl + K` (Windows/Linux) to open the search box instantly.
+4. **Highlighted snippets**: The searched term is highlighted within the results.
+
+## ✨ Key Features
+
+- **📂 No Configuration Needed** – Contentlayer automatically makes all `.mdx` files searchable.
+- **⚡ Instant Search** – Type in the search box, and relevant results appear immediately.
+- **🎨 Customizable Highlighting** – The `highlightText` function ensures matched keywords stand out.
+- **⌨️ Keyboard Shortcuts** – Quick access using `Cmd + K` or `Ctrl + K`.
+- **📌 Contextual Snippets** – The `getSnippet` function provides relevant text around the search term.
+
+## 🛠 Customization
+
+Developers can tweak the search experience by modifying:
+
+- `highlightText(text, searchTerm)`: Controls how search terms are highlighted.
+- `getSnippet(text, searchTerm, contextLength)`: Adjusts how much surrounding text is shown in results.
+- Styling: The UI is fully customizable with Tailwind CSS.
+
+## 🔧 Code Snippet: Search Highlighting
+
+```tsx
+function highlightText(text: string, searchTerm: string): React.ReactNode {
+  if (!searchTerm) return text;
+  const regex = new RegExp(`(${searchTerm})`, 'gi');
+  const parts = text.split(regex);
+  return (
+    <>
+      {parts.map((part, i) =>
+        regex.test(part) ? (
+          <span key={i} className="bg-yellow-300 dark:text-black rounded-sm">
+            {part}
+          </span>
+        ) : (
+          part
+        )
+      )}
+    </>
+  );
+}
+```
+
+## 📷 Visual Preview
+
+![Search Bar Demo](#)
+
+## 🎯 Why This is Cool
+
+- **Developers don’t need to learn anything new**—just write documentation, and it’s searchable.
+- **No indexing or database setup required**—Contentlayer handles everything automatically.
+- **Regex-based highlighting provides accurate and readable results**.
+- **Easily customizable for advanced search experiences**.
+
+This makes **Pinexio’ search a true "No-Setup Search" solution**, saving time and effort while delivering a powerful experience for users.
+
+---
+
+Want to enhance search further? Feel free to tweak the `SearchDialog` component to add fuzzy search, filters, or UI improvements. 🚀

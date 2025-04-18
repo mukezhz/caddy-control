@@ -1,0 +1,116 @@
+---
+title: Sidebar Customization
+description: A guide to modifying the sidebar navigation in your documentation template.
+date: 2025-03-15
+---
+
+# Sidebar Customization
+
+The sidebar navigation in this documentation template is defined in the `config/sidebar.tsx` file. Developers can easily modify the sidebar structure by adding, updating, or removing items in this configuration.
+
+## Folder Structure
+
+The sidebar configuration is stored in the `config` directory:
+
+<FolderTree className="overflow-hidden p-2">
+  <Folder element="project-root" defaultOpen={true}>
+    <Folder element="config" defaultOpen={true}>
+      <File>
+        <p>sidebar.tsx</p>
+      </File>
+    </Folder>
+    <Folder element="docs" defaultOpen={false}>
+      <Folder element="getting-started" defaultOpen={false}>
+        <File>
+          <p>introduction.mdx</p>
+        </File>
+        <File>
+          <p>installation.mdx</p>
+        </File>
+      </Folder>
+      <File>
+        <p>theme.mdx</p>
+      </File>
+      <File>
+        <p>search-bar.mdx</p>
+      </File>
+    </Folder>
+    <Folder element="components" defaultOpen={false}>
+      <File>
+        <p>Sidebar.tsx</p>
+      </File>
+    </Folder>
+  </Folder>
+</FolderTree>
+
+## Editing Sidebar Navigation
+
+To customize the sidebar, open `config/sidebar.tsx` and modify the `sidebarNav` array.
+
+### Sidebar Structure
+
+Each sidebar item follows this structure:
+
+```tsx
+{
+    title: string; // Display title
+    icon?: JSX.Element; // Optional icon component
+    href?: string; // Optional link if there are no sub-pages
+    pages?: {
+        title: string; // Sub-page title
+        href: string; // Sub-page link
+    }[];
+}
+```
+
+### Adding a New Sidebar Section
+
+If you want to add a new section, append an object to the `sidebarNav` array:
+
+```tsx
+{
+    title: "New Section",
+    icon: <Component className="h-5 w-5" />, // Use any icon
+    pages: [
+        {
+            title: "New Page",
+            href: "/docs/new-section/new-page",
+        }
+    ]
+}
+```
+
+### Adding a Single Page Without Sub-Pages
+
+To add a single page (without dropdown sub-pages):
+
+```tsx
+{
+    title: "Standalone Page",
+    icon: <Search className="h-5 w-5" />,
+    href: "/docs/standalone-page",
+    pages: [] // Keep empty
+}
+```
+
+### Removing an Existing Section
+
+Simply remove the corresponding object from the `sidebarNav` array.
+
+### Updating an Existing Section
+
+Modify the `title`, `href`, or `pages` array for an existing item.
+
+## Where is the Sidebar Rendered?
+
+The sidebar is typically used inside a `Sidebar.tsx` component inside the `components` directory. Ensure that this component correctly maps over the `sidebarNav` array and renders it dynamically.
+
+## Summary
+
+- The sidebar structure is defined in `config/sidebar.tsx`.
+- Each section contains a `title`, optional `icon`, and `pages` array.
+- To modify the sidebar, update the `sidebarNav` array.
+- Changes are automatically reflected in the sidebar component.
+- This is a simple modification that can be done quickly.
+
+This guide should help developers easily navigate and modify the sidebar for their documentation.

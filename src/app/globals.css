@@ -1,0 +1,187 @@
+@import 'tailwindcss';
+@import 'tailwindcss-animated';
+
+@variant dark (&:is(.dark *));
+
+html {
+  scroll-behavior: smooth;
+}
+
+[id] {
+  scroll-margin-top: 4rem; /* Default for mobile */
+
+  @media (min-width: 1024px) {
+    scroll-margin-top: 5rem; /* Desktop header height */
+  }
+}
+
+/* You can add plugins here if needed */
+/* @plugin "tailwindcss-animate"; */
+
+@theme {
+  /* Map HSL variables to semantic color names */
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+
+  /* Borders */
+  --color-border: hsl(var(--border));
+  --color-border-header: hsl(var(--border-header));
+
+  /* UI Colors */
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+
+  /* Component Colors */
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+
+  /* Status Colors */
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-success: hsl(var(--success));
+  --color-success-foreground: hsl(var(--success-foreground));
+  --color-warning: hsl(var(--warning));
+  --color-warning-foreground: hsl(var(--warning-foreground));
+
+  /* Other UI Elements */
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --color-sidebar: hsl(var(--sidebar));
+  --color-sidebar-active: hsl(var(--sidebar-active));
+  --color-sidebar-foreground: hsl(var(--sidebar-foreground));
+  --color-sidebar-active-foreground: hsl(var(--sidebar-active-foreground));
+  --color-button: hsl(var(--button));
+  --color-button-border: hsl(var(--button-border));
+  --color-button-foreground: hsl(var(--button-foreground));
+  --color-button-hover: hsl(var(--button-hover));
+  --color-button-secondary: hsl(var(--button-secondary));
+  --color-button-secondary-foreground: hsl(var(--button-secondary-foreground));
+
+  /* Border Radius */
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  :root {
+    /* Base Theme - Light Mode */
+    --background: 0 0% 100%;
+    --foreground: 0 0% 9%;
+
+    /* Borders */
+    --border: 0 0% 85%;
+    --border-header: 0 0% 85%;
+
+    /* UI Colors */
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 215 14% 34%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 215.4 35.87% 87.65%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    /* Component Colors */
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 9%;
+
+    /* Status Colors */
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --success: 142 71% 45%;
+    --success-foreground: 210 40% 98%;
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 9%;
+
+    /* Other UI Elements */
+    --input: 220 13% 91%;
+    --ring: 222.2 47.4% 11.2%;
+
+    /* Border Radius */
+    --radius: 0.5rem;
+
+    /* Sidebar Elements (using secondary as base) */
+    --sidebar: 210 40% 96.1%;
+    /* Same as secondary */
+    --sidebar-foreground: 215.4 16.3% 46.9%;
+    /* Same as muted-foreground */
+    --sidebar-active: 215 14% 34%;
+    /* Light gray for active state */
+    --sidebar-active-foreground: 222.2 47.4% 11.2%;
+  }
+
+  .dark {
+    /* Base Theme - Dark Mode */
+    --background: 0 0% 4%;
+    --foreground: 0 0% 93%;
+
+    /* Borders */
+    --border: 240 3.7% 25.9%;
+    --border-header: 240 3.7% 15.9%;
+
+    /* UI Colors */
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 220 13% 31%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 215 23.96% 33.07%;
+    --accent-foreground: 210 40% 98%;
+
+    /* Component Colors */
+    --card: 0 0% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 6%;
+    --popover-foreground: 0 0% 93%;
+
+    /* Status Colors */
+    --destructive: 0 62.8% 50.6%;
+    --destructive-foreground: 210 40% 98%;
+    --success: 142 69% 40%;
+    --success-foreground: 210 40% 98%;
+    --warning: 38 92% 45%;
+    --warning-foreground: 0 0% 9%;
+
+    /* Other UI Elements */
+    --input: 240 3.7% 15.9%;
+    --ring: 210 40% 98%;
+
+    /* Sidebar Elements (using muted as base) */
+    --sidebar: 217.2 32.6% 17.5%;
+    /* Same as muted/secondary in dark mode */
+    --sidebar-foreground: 215 20.2% 65.1%;
+    /* Same as muted-foreground */
+    --sidebar-active: 220 13% 31%;
+    /* Darker gray for active state */
+    --sidebar-active-foreground: 210 40% 98%;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: Arial, Helvetica, sans-serif, var(--font-geist-mono);
+  }
+}
+
+@layer utilities {
+  .border-b-header {
+    @apply border-b;
+    border-bottom-color: var(--color-border-header);
+  }
+}

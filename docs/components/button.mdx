@@ -1,0 +1,55 @@
+---
+title: 'Button'
+description: 'A fully customizable, theme-aware button component with multiple variants and sizes, perfect for modern web applications. Ideal for developers looking for flexible UI elements in both light and dark modes.'
+date: 2025-03-12
+---
+
+# Button Component Documentation
+
+The **Button** component is a fully customizable button that supports multiple variants and size options. It is designed for modern, theme-aware applications that use CSS variables (defined in your global CSS) for light and dark modes.
+
+## Preview and Code Snippet
+
+<Tabs defaultValue="preview" size="sm" className="w-full" onTabClick={(value) => console.log("Tab clicked:", value)}>
+  <TabsList className="grid w-full md:w-[30%] grid-cols-2">
+    <Tab value="preview">Preview</Tab>
+    <Tab value="code">Code</Tab>
+  </TabsList>
+  <TabsContent value="preview">
+    <Preview>
+      <div className="flex flex-col gap-4 items-center">
+        <Button variant="primary" size="xs">Primary XS</Button>
+        <Button variant="secondary" size="sm">Secondary SM</Button>
+        <Button variant="outline" size="md">Outline MD</Button>
+        <Button variant="none" size="lg">None LG</Button>
+        <Button variant="primary" size="xl">Primary XL</Button>
+      </div>
+    </Preview>
+  </TabsContent>
+  <TabsContent value="code">
+    ```tsx
+    import React from "react";
+    import { Button } from "@/components/button";
+    
+    export default function Example() {
+      return (
+        <div className="p-4 flex flex-col gap-4 items-center">
+          <Button variant="primary" size="xs">Primary XS</Button>
+          <Button variant="secondary" size="sm">Secondary SM</Button>
+          <Button variant="outline">Outline MD</Button>
+          <Button variant="none" size="lg">None LG</Button>
+          <Button variant="primary" size="xl">Primary XL</Button>
+        </div>
+      );
+    }
+    ```
+  </TabsContent>
+</Tabs>
+
+## Props
+
+| Prop       | Type                                              | Default     | Description                                                       |
+| ---------- | ------------------------------------------------- | ----------- | ----------------------------------------------------------------- |
+| `variant`  | `"primary" \| "secondary" \| "outline" \| "none"` | `"outline"` | Defines the button style variant. Uses theme-aware CSS variables. |
+| `size`     | `"xs" \| "sm" \| "md" \| "lg" \| "xl"`            | `"sm"`      | Controls the size of the button (affecting padding, font-size).   |
+| `...props` | `React.ButtonHTMLAttributes<HTMLButtonElement>`   | –           | Supports all standard button attributes.                          |

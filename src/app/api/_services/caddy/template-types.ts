@@ -43,7 +43,6 @@ export type HandlerConfig = {
 	status_code?: number
 	transport?: {
 		protocol: string;
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		tls?: Record<string, any>;
 	};
 };

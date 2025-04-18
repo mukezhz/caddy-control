@@ -11,7 +11,7 @@ const NAV_ITEMS = [
     { name: "API Keys", href: "/api-keys" },
     {
         name: "Docs",
-        href: "https://github.com/avashForReal/caddy-control",
+        href: "/docs",
         newTab: true,
         icon: <IconExternalLink stroke={1.5} width={16} height={16} />
     },

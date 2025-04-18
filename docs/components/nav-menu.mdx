@@ -1,0 +1,176 @@
+---
+title: 'NavMenu Documentation'
+description: 'Detailed usage guide for the NavMenu component.'
+---
+
+# NavMenu
+
+The `NavMenu` component is a flexible and customizable navigation menu that supports dynamic positioning based on screen space.
+
+## Preview and Code Snippet
+
+<Tabs defaultValue="preview" size="sm" className="w-full">
+  <TabsList className="grid w-full md:w-[30%] grid-cols-2">
+    <Tab value="preview">Preview</Tab>
+    <Tab value="code">Code</Tab>
+  </TabsList>
+  <TabsContent value="preview">
+    <Preview>
+    <div className="flex gap-8 bg-background p-4">
+      <NavMenu>
+        <NavMenuList>
+          <NavMenuItem>
+            <NavMenuTrigger>Getting started</NavMenuTrigger>
+            <NavMenuContent position="down">
+              <ul className="grid gap-3 p-4 w-64">
+                <NavListItem href="/docs" title="Introduction">Overview of components and usage.</NavListItem>
+                <NavListItem href="/docs/installation" title="Installation">Learn how to install dependencies.</NavListItem>
+              </ul>
+            </NavMenuContent>
+          </NavMenuItem>
+        </NavMenuList>
+      </NavMenu>
+      
+      <NavMenu>
+        <NavMenuList>
+          <NavMenuItem>
+            <NavMenuTrigger>Components</NavMenuTrigger>
+            <NavMenuContent position="down">
+              <ul className="grid gap-3 p-4 w-64">
+                <NavListItem href="/components/button" title="Button">Usage of button component.</NavListItem>
+                <NavListItem href="/components/card" title="Card">Learn how to use cards effectively.</NavListItem>
+              </ul>
+            </NavMenuContent>
+          </NavMenuItem>
+        </NavMenuList>
+      </NavMenu>
+      
+      <NavMenu>
+        <NavMenuList>
+          <NavMenuItem>
+            <NavMenuTrigger>Resources</NavMenuTrigger>
+            <NavMenuContent position="up">
+              <ul className="grid gap-3 p-4 w-64">
+                <NavListItem href="/resources/blogs" title="Blogs">Read insightful blogs and tutorials.</NavListItem>
+                <NavListItem href="/resources/community" title="Community">Join discussions and share knowledge.</NavListItem>
+              </ul>
+            </NavMenuContent>
+          </NavMenuItem>
+        </NavMenuList>
+      </NavMenu>
+    </div>
+    </Preview>
+
+  </TabsContent>
+  <TabsContent value="code">
+
+```tsx
+import { useState } from 'react';
+import { Menu, MenuTrigger, PopMenu, MenuItem } from '@/components/menu';
+
+export default function Example() {
+  return (
+    <div className="flex gap-8 bg-background p-4">
+      <NavMenu>
+        <NavMenuList>
+          <NavMenuItem>
+            <NavMenuTrigger>Getting started</NavMenuTrigger>
+            <NavMenuContent position="down">
+              <ul className="grid gap-3 p-4 w-64">
+                <NavListItem href="/docs" title="Introduction">
+                  Overview of components and usage.
+                </NavListItem>
+                <NavListItem href="/docs/installation" title="Installation">
+                  Learn how to install dependencies.
+                </NavListItem>
+              </ul>
+            </NavMenuContent>
+          </NavMenuItem>
+        </NavMenuList>
+      </NavMenu>
+
+      <NavMenu>
+        <NavMenuList>
+          <NavMenuItem>
+            <NavMenuTrigger>Components</NavMenuTrigger>
+            <NavMenuContent position="down">
+              <ul className="grid gap-3 p-4 w-64">
+                <NavListItem href="/components/button" title="Button">
+                  Usage of button component.
+                </NavListItem>
+                <NavListItem href="/components/card" title="Card">
+                  Learn how to use cards effectively.
+                </NavListItem>
+              </ul>
+            </NavMenuContent>
+          </NavMenuItem>
+        </NavMenuList>
+      </NavMenu>
+
+      <NavMenu>
+        <NavMenuList>
+          <NavMenuItem>
+            <NavMenuTrigger>Resources</NavMenuTrigger>
+            <NavMenuContent position="up">
+              <ul className="grid gap-3 p-4 w-64">
+                <NavListItem href="/resources/blogs" title="Blogs">
+                  Read insightful blogs and tutorials.
+                </NavListItem>
+                <NavListItem href="/resources/community" title="Community">
+                  Join discussions and share knowledge.
+                </NavListItem>
+              </ul>
+            </NavMenuContent>
+          </NavMenuItem>
+        </NavMenuList>
+      </NavMenu>
+    </div>
+  );
+}
+```
+
+  </TabsContent>
+</Tabs>
+
+## Props
+
+### `NavMenu`
+
+| Prop       | Type  | Default | Description |
+| ---------- | ----- | ------- | ----------- |
+| `position` | `up` | `down` | `'down'`    |
+
+### `NavMenuItem`
+
+| Prop        | Type         | Default | Description                                        |
+| ----------- | ------------ | ------- | -------------------------------------------------- |
+| `onClick`   | `() => void` | `-`     | Function to execute when the menu item is clicked. |
+| `className` | `string`     | `-`     | Additional class names for styling.                |
+
+## Positioning Behavior
+
+The `position` prop controls whether the menu expands upwards or downwards. If not specified, the menu dynamically adjusts based on available screen space.
+
+### Example with `position="up"`
+
+```tsx
+<NavMenu position="up">
+  <NavMenuItem>Settings</NavMenuItem>
+  <NavMenuItem>Logout</NavMenuItem>
+</NavMenu>
+```
+
+## Custom Styling
+
+You can extend the `NavMenu` styles using Tailwind CSS or custom class names.
+
+```tsx
+<NavMenu className="bg-gray-800 text-white">
+  <NavMenuItem className="hover:bg-gray-700">Profile</NavMenuItem>
+</NavMenu>
+```
+
+## Accessibility
+
+- `aria-expanded` is automatically managed for toggling the menu.
+- Uses `role="menu"` and `role="menuitem"` for proper navigation.
