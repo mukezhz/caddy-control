@@ -1,4 +1,4 @@
-import { allDocs } from 'contentlayer/generated';
+import { allDocs } from 'contentlayer2/generated';
 import { notFound } from 'next/navigation';
 import { Mdx } from '@/components/mdx-components';
 import Breadcrumb from '@/components/bread-crumb';

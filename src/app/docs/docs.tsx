@@ -3,7 +3,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { allDocs } from 'contentlayer/generated';
+import { allDocs } from 'contentlayer2/generated';
 import SearchDialog from '@/components/search-dialog';
 import { sidebarNav } from '../../../config/sidebar';
 import Image from 'next/image';

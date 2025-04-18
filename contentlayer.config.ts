@@ -34,4 +34,5 @@ export default makeSource({
     remarkPlugins: [remarkGfm, codeImport],
     rehypePlugins: [rehypeSlug, highlight],
   },
+  disableImportAliasWarning: true,
 });
