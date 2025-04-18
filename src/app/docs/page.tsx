@@ -12,7 +12,7 @@ export default function Home() {
     <div className="flex flex-col min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-white">
       {/* Sticky Header */}
       <header className="sticky top-0 z-10 bg-white/90 dark:bg-gray-950/90 backdrop-blur-sm border-b border-gray-200 dark:border-gray-800">
-        <div className="container mx-auto px-4 py-2 flex justify-between items-center">
+        <div className="container mx-auto px-4 flex justify-between items-center">
           <div className="flex-1">{/* Empty space for layout balance */}</div>
           <nav className="flex-1 flex justify-center">
             {/* Navigation links can be added here */}
