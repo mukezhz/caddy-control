@@ -1,62 +1,167 @@
 ---
 title: Quick Start Guide
-description: Learn how to quickly create your own documentation or post.
+description: Learn how to quickly get started with Caddy Control - managing domains, creating API keys, and configuring your first proxy.
 ---
 
 # Quick Start Guide
 
-Getting started with your documentation is simple! Just follow this step:
+This guide will help you get started with Caddy Control by walking you through the essential tasks: logging in, managing domains, and creating API keys.
 
-## Create Your MDX File and Add Metadata
+## Logging In
 
-Inside your project, navigate to the `docs` folder and create a new `.mdx` file:
+After installation, access your Caddy Control dashboard using the domain you configured during setup. The default credentials are:
 
-```sh
-project-root/docs/YOUR-PAGE-NAME.mdx
+- Username: `admin`
+- Password: `admin`
+
+You'll be prompted to change your password after the first login.
+
+## Dashboard Overview
+
+The Caddy Control dashboard is organized into several key sections:
+
+- **Dashboard Home**: Overview of your proxy configurations
+- **Domains**: Manage your domain routing configurations
+- **API Keys**: Create and manage API keys for programmatic access
+- **Settings**: Configure system settings and user preferences
+
+## Managing Domains
+
+<Steps>
+  <Step>
+    <StepTitle>Step 1: Add a New Domain</StepTitle>
+    <StepContent>
+      <div>
+        <p>From the Domains page, click on "Add Domain" to open the domain configuration form.</p>
+        
+        <p>Fill in the following information:</p>
+        <ul>
+          <li><strong>Incoming Address</strong>: The domain that users will visit (e.g., custom-domain.com)</li>
+          <li><strong>Destination Address</strong>: The upstream server or IP where traffic should be proxied</li>
+          <li><strong>Port</strong>: The port on the destination (usually 443 for HTTPS or 80 for HTTP)</li>
+          <li><strong>Enable HTTPS</strong>: Toggle to enable/disable HTTPS for this domain</li>
+        </ul>
+      </div>
+    </StepContent>
+  </Step>
+  
+  <Step>
+    <StepTitle>Step 2: Configure DNS</StepTitle>
+    <StepContent>
+      <div>
+        <p>For your domain to work with Caddy Control:</p>
+        
+        <ol>
+          <li>Go to your domain registrar or DNS provider</li>
+          <li>Create an A record pointing your domain to your Caddy Control server's IP address</li>
+          <li>Wait for DNS propagation (can take up to 48 hours, but often much faster)</li>
+        </ol>
+        
+        <FolderTree className="overflow-hidden p-2">
+          <Folder element="DNS Configuration" defaultOpen={true}>
+            <File>
+              <p>custom-domain.com (A) → Your Server IP</p>
+            </File>
+          </Folder>
+        </FolderTree>
+        
+        <Note>
+          Caddy Control performs checks to verify that your domain's DNS is properly configured to point to your server.
+        </Note>
+      </div>
+    </StepContent>
+  </Step>
+  
+  <Step>
+    <StepTitle>Step 3: Check Domain Status</StepTitle>
+    <StepContent>
+      <div>
+        <p>Caddy Control performs automatic checks on your domains:</p>
+        
+        <ul>
+          <li><strong>DNS Check</strong>: Verifies that the domain resolves to your proxy IP</li>
+          <li><strong>Proxy Reachability</strong>: Ensures requests reach the proxy</li>
+        </ul>
+        
+        <p>These checks help diagnose configuration issues and ensure your domain is properly set up.</p>
+        
+        <Note>
+          Caddy automatically handles SSL/TLS certificate acquisition and renewal through Let's Encrypt once DNS is properly configured.
+        </Note>
+      </div>
+    </StepContent>
+  </Step>
+</Steps>
+
+## Managing API Keys
+
+API keys allow programmatic access to Caddy Control, which is essential for automating domain management in your applications.
+
+<Steps>
+  <Step>
+    <StepTitle>Step 1: Create an API Key</StepTitle>
+    <StepContent>
+      <div>
+        <ol>
+          <li>Navigate to the "API Keys" section in the dashboard</li>
+          <li>Click on "Create API Key"</li>
+          <li>Enter a descriptive name for your key</li>
+          <li>Click "Create" to generate the key</li>
+        </ol>
+        
+        <Note>
+          Make sure to copy and securely store your API key when it's displayed. For security reasons, the full key will not be shown again.
+        </Note>
+      </div>
+    </StepContent>
+  </Step>
+  
+  <Step>
+    <StepTitle>Step 2: Using API Keys</StepTitle>
+    <StepContent>
+      <div>
+        <p>To authenticate your API requests, include your API key in the request headers:</p>
+        
+        ```bash
+        curl -X GET https://your-caddy-control-domain.com/api/domains \
+          -H "x-api-key: your_api_key_here"
+        ```
+        
+        <p>See the API Reference section for complete documentation of available endpoints.</p>
+      </div>
+    </StepContent>
+  </Step>
+</Steps>
+
+## Using the API
+
+Caddy Control provides a comprehensive API for managing domains programmatically. Here's a quick example of adding a domain via the API:
+
+```bash
+curl -X POST https://your-caddy-control-domain.com/api/domain/add \
+  -H "x-api-key: your_api_key_here" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "domain": "api-example.com",
+    "destination": "internal-service.com",
+    "port": "443",
+    "enableHttps": true
+  }'
 ```
 
-At the top of your MDX file, add the following metadata:
+For more detailed information about the available API endpoints, check out the [API Reference](/docs/api/overview) section.
 
-```mdx
----
-title: HTTP Server
-description: This section is about HTTP Server.
----
-```
+## Best Practices
 
-<div>
-  - **`title`**: Defines the title displayed on the page.
-  <br />- **`description`**: Helps with SEO and improves discoverability.
-</div>
+1. **Regular Backups**: Periodically export your Caddy configuration
+2. **API Key Security**: Rotate API keys regularly and never share them publicly
+3. **DNS Configuration**: Ensure your DNS settings are correct before adding domains
+4. **Monitoring**: Regularly check domain status for any configuration issues
 
-<Note>
-  Use hyphens (`-`) in file names instead of spaces or special characters. The
-  breadcrumb navigation will automatically format hyphens as spaces.
-</Note>
+## Next Steps
 
-## Start Writing
+Now that you've got the basics down, explore these topics:
 
-Below the metadata, start writing your documentation using Markdown and MDX. You can include:
-
-- Regular Markdown content
-- Code blocks
-- React components (if needed)
-
-Once your file is created, it will automatically be available in the route and search bar.
-
-<FolderTree className="overflow-hidden p-2">
-  <Folder element="project-root" defaultOpen={true}>
-    <Folder element="docs" defaultOpen={true}>
-      <File>
-        <p>your-page-name.mdx</p>
-      </File>
-    </Folder>
-  </Folder>
-</FolderTree>
-
-## Optional: Add to Sidebar and Table of Contents
-
-If you want your new page to appear in the sidebar and TOC:
-
-- Visit **[docs/customization/sidebar](/docs/customization/sidebar)** to customization the sidebar.
-- Visit **[docs/customization/toc](/docs/customization/toc)** to configure the table of contents.
+- [API Endpoints Documentation](/docs/api/endpoints) - Learn about all available API endpoints
+- [Authentication](/docs/api/authentication) - Detailed information about authentication methods
+- [Troubleshooting](/docs/customization/troubleshooting) - Solutions for common issues

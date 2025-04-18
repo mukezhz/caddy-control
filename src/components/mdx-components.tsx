@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import { useMDXComponent } from 'next-contentlayer2/hooks';
+import { useMDXComponent } from 'next-contentlayer/hooks';
 import clsx from 'clsx';
 import SearchButton from '@/components/search-button';
 import Preview from '@/components/preview';

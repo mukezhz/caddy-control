@@ -1,50 +1,45 @@
 export const meta = {
-  metadataBase: new URL('https://pinexio.vercel.app'),
-  title: 'Pinexio - Documentation template',
+  metadataBase: new URL('https://caddy-control.vercel.app'),
+  title: 'Caddy Control - Documentation',
   description:
-    'A customizable Open Source documentation template built with Next.js',
-  authors: [{ name: 'Sanjay Rajeev' }],
+    'Open-source solution for domain routing and proxy management! 🚀',
+  authors: [{ name: 'Mukesh Kumar Chaudhary' }],
   keywords: [
-    'Pinexio',
-    'documentation template',
-    'template',
+    'Caddy Control',
     'Next.js',
-    'React',
-    'JavaScript',
+    'Proxy',
+    'Caddy',
+    'Documentation',
   ],
-  publisher: 'Sanjay Rajeev',
-  creator: 'Sanjay Rajeev',
+  publisher: 'Mukesh Kumar Chaudhary',
+  creator: 'Mukesh Kumar Chaudhary',
   openGraph: {
     type: 'website',
-    title: 'Pinexio - Documentation Template',
+    title: 'Caddy Control - Documentation',
     description:
-      'A customizable open-source documentation template built with Next.js.',
+      'Open-source solution for domain routing and proxy management! 🚀',
     images: [
       {
-        url: '/og_image.png',
+        url: '/logo.png',
         width: 1200,
         height: 630,
-        alt: 'Pinexio Documentation Template',
+        alt: 'Caddy Control Documentation',
       },
     ],
   },
   twitter: {
-    card: 'summary_large_image', // Type of Twitter card
-    title: 'Pinexio - Documentation Template', // Twitter card title
+    card: 'summary_large_image',
+    title: 'Caddy Control - Documentation',
     description:
-      'A customizable open-source documentation template built with Next.js.', // Twitter card description
-    images: ['/og_image.png'], // Image used in the Twitter card
-    creator: '@sanjayrajeev', // Twitter handle of the content creator (optional)
+      'Open-source solution for domain routing and proxy management! 🚀',
+    images: ['/logo.png'],
+    creator: '@mukezhz',
   },
-  // SEO Enhancements
   alternates: {
-    canonical: 'https://pinexio.vercel.app', // Set the canonical URL
+    canonical: 'https://caddy-control.vercel.app',
   },
-  robots: 'index, follow', // Allows search engines to index and follow links
-  // Optional: Hreflang for multilingual content (if applicable)
+  robots: 'index, follow',
   hreflang: {
-    en: 'https://pinexio.vercel.app', // English version URL
-    // Add more hreflang if you have other languages (example: Spanish)
-    // "es": "https://pinexio.vercel.app/es",
+    en: 'https://caddy-control.vercel.app',
   },
 };

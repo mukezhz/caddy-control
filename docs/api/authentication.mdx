@@ -1,0 +1,157 @@
+---
+title: 'API Authentication'
+description: 'Learn how to authenticate with the Caddy Control API using API keys, and manage your API keys effectively.'
+date: 2025-04-18
+---
+
+# API Authentication
+
+Caddy Control uses API keys for authenticating requests to the API. This page explains how to create, use, and manage API keys for secure access to the Caddy Control API.
+
+## API Key Authentication
+
+All API requests to Caddy Control require authentication via an API key. API keys provide a simple and secure way to authenticate with the API without using user credentials.
+
+### Using API Keys
+
+To authenticate your API requests, include your API key in the `x-api-key` HTTP header:
+
+```bash
+curl -X GET https://your-caddy-control-domain.com/api/domains \
+  -H "x-api-key: your_api_key_here"
+```
+
+### API Key Security
+
+API keys have full access to your Caddy Control instance, so it's important to keep them secure:
+
+- Store keys securely in environment variables or a secure key management system
+- Never expose keys in client-side code or public repositories
+- Use different keys for different applications or services
+- Rotate keys regularly
+
+## Managing API Keys
+
+### Creating API Keys
+
+You can create API keys either through the Caddy Control dashboard or via the API:
+
+#### Via the Dashboard
+
+1. Log in to your Caddy Control dashboard
+2. Navigate to the "API Keys" section
+3. Click "Create API Key"
+4. Enter a descriptive name for the key
+5. Copy and securely store the generated key (it will not be shown again)
+
+#### Via the API
+
+Send a POST request to the `/api/key` endpoint:
+
+```bash
+curl -X POST https://your-caddy-control-domain.com/api/key \
+  -H "x-api-key: your_existing_api_key" \
+  -H "Content-Type: application/json" \
+  -d '{"name": "Development Key"}'
+```
+
+Response:
+
+```json
+{
+  "data": {
+    "id": "clqr5l9d50001sy2uorjt2wua",
+    "name": "Development Key",
+    "keyId": "keyid_123456",
+    "key": "key_f7sd89f7s98df79s8df7s9d8f7",
+    "createdAt": "2025-04-18T08:59:25.481Z"
+  },
+  "message": "API key created successfully. Please save your key as it won't be displayed again."
+}
+```
+
+**Important:** The full API key is only returned once when it's created. Make sure to copy and securely store it, as you won't be able to retrieve it later.
+
+### Listing API Keys
+
+You can view all your current API keys (without the full key value) through:
+
+#### Dashboard
+
+Navigate to the "API Keys" section in the dashboard.
+
+#### API
+
+```bash
+curl -X GET https://your-caddy-control-domain.com/api/key \
+  -H "x-api-key: your_api_key_here"
+```
+
+Response:
+
+```json
+{
+  "data": [
+    {
+      "id": "clqr5l9d50001sy2uorjt2wua",
+      "name": "Development Key",
+      "keyId": "keyid_123456",
+      "createdAt": "2025-04-18T08:59:25.481Z"
+    }
+  ],
+  "total": 1
+}
+```
+
+### Deleting API Keys
+
+If an API key is no longer needed or may have been compromised, you should delete it:
+
+#### Dashboard
+
+1. Go to the "API Keys" section
+2. Find the key you want to delete
+3. Click the delete button and confirm the deletion
+
+#### API
+
+```bash
+curl -X DELETE https://your-caddy-control-domain.com/api/key/clqr5l9d50001sy2uorjt2wua \
+  -H "x-api-key: your_api_key_here"
+```
+
+Response:
+
+```json
+{
+  "message": "API key deleted successfully"
+}
+```
+
+## Best Practices for API Key Management
+
+1. **Use Descriptive Names**: Give each key a clear purpose in its name, like "Production Server" or "Development Testing"
+2. **Implement Key Rotation**: Regularly rotate your API keys, especially for production environments
+3. **Principle of Least Privilege**: In future versions with role-based permissions, assign only the permissions needed for each key
+4. **Monitor Key Usage**: Keep track of how and when keys are being used
+5. **Revoke Unused Keys**: Delete any API keys that are no longer in use
+6. **Secure Storage**: Store API keys in environment variables or secure key management solutions
+7. **Never Commit Keys**: Always exclude API keys from version control
+
+## Troubleshooting Authentication Issues
+
+If you're experiencing authentication issues:
+
+1. **Verify the API key**: Make sure the key being used is valid and correctly formatted
+2. **Check the header name**: Ensure you're using `x-api-key` (case-sensitive)
+3. **Key permissions**: Check if the key might have limited permissions
+4. **Recently created key**: If you just created the key, it might take a moment to propagate
+
+### Common Authentication Errors
+
+| Error Message | Possible Cause |
+|--------------|----------------|
+| "Invalid API key" | The API key doesn't exist or is formatted incorrectly |
+| "API key required" | The `x-api-key` header is missing |
+| "API key expired" | The key has been revoked or expired (if expiry is implemented) |
+| "API key lacks permission" | The key doesn't have permission for the requested action (future feature) |

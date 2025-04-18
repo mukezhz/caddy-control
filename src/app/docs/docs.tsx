@@ -56,14 +56,14 @@ export default function DocsLayout({
                   className={'h-auto w-aut dark:invert'}
                   width={100}
                   height={100}
-                  src={`/logos/pinedocs.png`}
+                  src={`/logo.png`}
                 />
               }
             />
 
-            <Link href={'/'} className="flex flex-1 gap-3">
-              <SidebarHeaderTitle>
-                PINE<span className="text-4xl">X</span>IO
+            <Link href={'/docs'} className="flex flex-1 gap-3">
+              <SidebarHeaderTitle className='text-lg'>
+                Caddy Control
               </SidebarHeaderTitle>
             </Link>
           </SidebarHeader>
@@ -91,7 +91,7 @@ export default function DocsLayout({
               avatar={
                 <Image
                   alt="logo"
-                  src={'https://avatars.githubusercontent.com/u/24631970?v=4'}
+                  src={'https://avatars.githubusercontent.com/u/43813670?v=4'}
                   width={100}
                   height={100}
                 />
@@ -99,10 +99,10 @@ export default function DocsLayout({
             />
             <div className="flex flex-col">
               <span className="text-sm font-medium text-gray-900 dark:text-white">
-                Sanjay Rajeev
+                Mukesh Kumar Chaudhary
               </span>
               <span className="text-xs text-gray-500 dark:text-gray-400">
-                sanjayc208@gmail.com
+                mukezhz@gmail.com
               </span>
             </div>
           </SidebarFooter>

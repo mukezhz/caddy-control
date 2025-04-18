@@ -1,0 +1,103 @@
+---
+title: 'API Overview'
+description: 'An overview of the Caddy Control REST API - learn how to programmatically manage your domains and proxy configurations.'
+date: 2025-04-18
+---
+
+# API Overview
+
+Caddy Control provides a comprehensive REST API that allows you to programmatically manage domains, proxy configurations, and API keys. This overview introduces the core concepts of the API.
+
+## Base URL
+
+All API endpoints are relative to your Caddy Control installation:
+
+```
+https://your-caddy-control-domain.com/api
+```
+
+Replace `your-caddy-control-domain.com` with the domain where you've deployed Caddy Control.
+
+## Authentication
+
+All API requests require authentication using API keys. Include your API key in the `x-api-key` header:
+
+```bash
+curl -X GET https://your-caddy-control-domain.com/api/domains \
+  -H "x-api-key: your_api_key_here"
+```
+
+API keys can be created and managed through the Caddy Control dashboard or via the API. See the [Authentication](/docs/api/authentication) section for more details.
+
+## Response Format
+
+API responses are returned in JSON format. Successful responses typically include a `data` property containing the requested information.
+
+### Success Response Example
+
+```json
+{
+  "data": {
+    "id": "cm8o9l9d50001sy2uorjt2wua",
+    "incomingAddress": "example.com",
+    "destinationAddress": "destination-server.com",
+    "port": 443,
+    "isLocked": false,
+    "enableHttps": true,
+    "createdAt": "2025-04-18T08:59:25.481Z"
+  }
+}
+```
+
+### Error Response Example
+
+```json
+{
+  "error": "Domain already exists",
+  "status": 400
+}
+```
+
+## Rate Limiting
+
+The API implements rate limiting to prevent abuse. If you exceed the rate limit, you'll receive a `429 Too Many Requests` response. The response headers include information about your rate limit status.
+
+## Available Endpoints
+
+Caddy Control API endpoints are organized into the following categories:
+
+### Domain Management
+
+- [GET /api/domains](/docs/api/endpoints#get-domains) - List all registered domains
+- [POST /api/domain/add](/docs/api/endpoints#add-domain) - Add a new domain
+- [DELETE /api/domain/:id](/docs/api/endpoints#delete-domain) - Delete a domain by ID
+
+### Caddy Configuration
+
+- [GET /api/caddy/config](/docs/api/endpoints#get-caddy-config) - Get the current Caddy configuration
+
+### API Key Management
+
+- [GET /api/key](/docs/api/endpoints#get-api-keys) - List all API keys
+- [POST /api/key](/docs/api/endpoints#create-api-key) - Create a new API key
+- [DELETE /api/key/:id](/docs/api/endpoints#delete-api-key) - Delete an API key by ID
+
+## API Versioning
+
+The current API is considered v1 and does not require a version prefix in the URL. Future API versions will be announced and documented accordingly.
+
+## SDKs & Libraries
+
+Currently, there are no official SDKs for the Caddy Control API. The API is designed to be easily consumed using standard HTTP clients in any programming language.
+
+## Best Practices
+
+1. **Store API Keys Securely**: Never expose your API keys in client-side code or public repositories.
+2. **Implement Retry Logic**: For production applications, implement retry logic with exponential backoff for failed requests.
+3. **Handle Rate Limits**: Be prepared to handle rate limit errors by implementing proper backoff strategies.
+4. **Validate Input**: Always validate input data before sending it to the API to ensure proper formatting.
+5. **Monitor API Usage**: Keep track of your API usage to stay within rate limits and optimize your application.
+
+## Next Steps
+
+For detailed information about specific endpoints, parameters, and response formats, check out the [API Endpoints](/docs/api/endpoints) documentation.

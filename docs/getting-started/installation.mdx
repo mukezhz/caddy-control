@@ -1,154 +1,202 @@
 ---
 title: Installation
-description: A guide to install Pinexio locally to your system and get it running
-date: 2025-03-12
+description: A guide to install Caddy Control locally for development or in production using Docker
+date: 2025-04-18
 ---
 
 # Installation Guide
 
-Welcome to the installation guide for forking the application from GitHub and setting up your development environment!
+Welcome to the installation guide for Caddy Control! This guide will walk you through setting up Caddy Control both for local development and production deployment using Docker.
+
+## Local Development Setup
 
 <Steps>
   <Step>
-    <StepTitle>Step 1: Fork the Repository</StepTitle>
+    <StepTitle>Step 1: Clone the Repository</StepTitle>
     <StepContent>
     <div>
       <div>
-        Visit our GitHub repository and click the "Fork" button to create your own copy.
+        Clone the Caddy Control repository to your local machine:
       </div>
-        <a
-          href="https://github.com/sanjayc208/pinexio"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Fork the Repository on GitHub
-        </a>
+      ```sh
+      git clone https://github.com/avashForReal/caddy-control.git
+      cd caddy-control
+      ```
       </div>
     </StepContent>
   </Step>
+  
   <Step>
-    <StepTitle>Step 2: Clone Your Fork</StepTitle>
+    <StepTitle>Step 2: Set Up Caddy Server</StepTitle>
     <StepContent>
     <div>
-      After forking, clone your repository to your local machine:
-  ```sh
-  git clone https://github.com/sanjayc208/pinexio.git
-  ```
+      <p>For local development, we recommend using the included Docker Compose configuration to set up Caddy Server:</p>
+      
+      ```sh
+      pnpm dev:caddy
+      ```
+      
+      This command uses the `docker-compose.dev.yml` file to start a local instance of Caddy Server.
+      
+      <Note>
+        While using Docker is recommended, you can also install Caddy directly on your system by following the <a href="https://caddyserver.com/docs/install" target="_blank" rel="noopener noreferrer">official Caddy installation guide</a>.
+      </Note>
       </div>
     </StepContent>
   </Step>
+  
   <Step>
-    <StepTitle>Step 3: Install Dependencies</StepTitle>
+    <StepTitle>Step 3: Configure Environment Variables</StepTitle>
     <StepContent>
     <div>
-      Install the project dependencies using your preferred package manager:
-       <CodeTabs tabs={{
-        'npm':{
-          syntax:'npm i'
-        },
-        'pnpm':{
-          syntax:'pnpm i'
-        },
-        'yarn':{
-          syntax:'yarn i'
-        },
-       }} />
+      Create a `.env` file in the root directory with the following configuration:
+      
+      ```
+      APP_HOST=<YOUR-APP_DOMAIN>
+      CADDY_SERVER_IP=localhost
+      CADDY_ADMIN_URL=http://localhost:2019
+      JWT_SECRET="awesomesecret"
+      ```
+      
+      <strong>Environment Variable Descriptions:</strong>
+      <ul>
+        <li><strong>APP_HOST</strong>: Not critical for local development</li>
+        <li><strong>CADDY_SERVER_IP</strong>: IP of the Caddy server (use localhost for local development)</li>
+        <li><strong>CADDY_ADMIN_URL</strong>: URL of the Caddy admin API</li>
+        <li><strong>JWT_SECRET</strong>: Secret key used for JWT token generation</li>
+      </ul>
       </div>
     </StepContent>
   </Step>
+  
   <Step>
-    <StepTitle>Step 4: Run the Development Server</StepTitle>
+    <StepTitle>Step 4: Install Dependencies</StepTitle>
     <StepContent>
     <div>
-      Start your development server with one of the following commands:
-      <CodeTabs tabs={{
-        'npm':{
-          syntax:'npm run dev'
-        },
-        'pnpm':{
-          syntax:'pnpm dev'
-        },
-        'yarn':{
-          syntax:'yarn run dev'
-        },
-       }} />
+      Install the project dependencies:
+      
+      ```sh
+      pnpm install
+      ```
+      
+      <Note>
+        While pnpm is recommended, you can also use npm or yarn.
+      </Note>
       </div>
     </StepContent>
   </Step>
+  
   <Step>
-    <StepTitle>Step 5: Make Changes</StepTitle>
+    <StepTitle>Step 5: Start the Development Server</StepTitle>
     <StepContent>
     <div>
-      <p>If you want to make changes:</p>
-
-      1. Edit files in the root directory <code>/</code> for global configurations.
-      2. Update or create MDX files in the <code>docs</code> directory to modify or add documentation.
-      3. Update or create MDX files in the <code>docs</code> directory to modify or add documentation.
-
-          <FolderTree className="overflow-hidden p-2">
-            <Folder element="docs" defaultOpen={true}>
-              <File>
-                <p>page1.mdx</p>
-              </File>
-              <File>
-                <p>page2.mdx</p>
-              </File>
-            </Folder>
-          </FolderTree>
-      4. Refer to the existing documentation to see how things work.
+      Start the development server:
+      
+      ```sh
+      pnpm dev
+      ```
+      
+      The first time you run the application, an initial user will be created with:
+      <ul>
+        <li><strong>Username:</strong> admin</li>
+        <li><strong>Password:</strong> admin</li>
+      </ul>
+      
+      You will be prompted to change this password after your first login.
       </div>
     </StepContent>
-
   </Step>
 </Steps>
 
-## What is MDX?
+## Production Deployment with Docker
 
-MDX is an extension of Markdown that allows you to write JSX (React components) inside your Markdown files. This means you can mix content with interactive components seamlessly.
+For production environments, we recommend using Docker to deploy Caddy Control.
 
-For example, in a normal Markdown file, you might write:
+<Steps>
+  <Step>
+    <StepTitle>Step 1: Server Requirements</StepTitle>
+    <StepContent>
+    <div>
+      <p>Ensure your server meets these requirements:</p>
+      <ul>
+        <li>A server with a public IP address</li>
+        <li>Ports 80 and 443 exposed for incoming traffic</li>
+        <li>Docker and Docker Compose installed</li>
+      </ul>
+      </div>
+    </StepContent>
+  </Step>
+  
+  <Step>
+    <StepTitle>Step 2: Run the Deployment Script</StepTitle>
+    <StepContent>
+    <div>
+      <p>Run our automated deployment script:</p>
+      
+      ```sh
+      bash -c "$(curl -sSL https://raw.githubusercontent.com/avashForReal/caddy-control/refs/heads/main/deploy.sh)"
+      ```
+      
+      <img src="/setup.png" alt="Setup Screen" className="border border-gray-300 rounded-md my-4" />
+      
+      You'll need to provide:
+      <ul>
+        <li><strong>Server IP</strong>: The public IP address of your server</li>
+        <li><strong>App Host Domain</strong>: The domain you'll use to access Caddy Control (must have an A record pointing to your server IP)</li>
+        <li><strong>JWT Secret</strong>: A secret string for JWT token generation (or generate one automatically)</li>
+      </ul>
+      </div>
+    </StepContent>
+  </Step>
+  
+  <Step>
+    <StepTitle>Step 3: DNS Configuration</StepTitle>
+    <StepContent>
+    <div>
+      <p>Create an A record for your App Host Domain pointing to your Server IP.</p>
+      
+      <FolderTree className="overflow-hidden p-2">
+        <Folder element="DNS Records" defaultOpen={true}>
+          <File>
+            <p>yourdomain.com → Your Server IP</p>
+          </File>
+        </Folder>
+      </FolderTree>
+      
+      <Note>
+        All domains that you'll manage with Caddy Control will also need A records pointing to your Server IP.
+      </Note>
+      </div>
+    </StepContent>
+  </Step>
+  
+  <Step>
+    <StepTitle>Step 4: Access Caddy Control</StepTitle>
+    <StepContent>
+    <div>
+      <p>Once the deployment is complete, you can access Caddy Control at your specified App Host Domain.</p>
+      
+      Login with:
+      <ul>
+        <li><strong>Username:</strong> admin</li>
+        <li><strong>Password:</strong> admin</li>
+      </ul>
+      
+      You will be prompted to change this password after your first login.
+      </div>
+    </StepContent>
+  </Step>
+</Steps>
 
-```md
-# Welcome to My Docs
+## Verifying Your Installation
 
-This is a simple Markdown page.
-```
+After installation, verify that Caddy Control is working correctly by:
 
-But in MDX, you can add React components directly:
+1. Logging into the dashboard
+2. Creating an API key
+3. Adding a test domain with proper DNS configuration
+4. Verifying that HTTPS is automatically configured for your domain
 
-```mdx
-import { Button } from '@/components/ui/button';
+## Next Steps
 
-# Welcome to My Docs
-
-This is a simple Markdown page with a button:
-
-<Button>Click Me</Button>
-```
-
-## Creating an MDX File
-
-To add a new documentation page, create a new `.mdx` file inside the `docs` directory:
-
-```sh
-echo "# My New Page" > docs/my-new-page.mdx
-```
-
-This file will automatically be picked up by the system and rendered as a new documentation page.
-
-Your folder structure should look like this:
-
-<FolderTree className="overflow-hidden p-2">
-  <Folder element="project-root" defaultOpen={true}>
-    <Folder element="docs" defaultOpen={true}>
-      <File>
-        <p>my-new-page.mdx</p>
-      </File>
-      <File>
-        <p>another-page.mdx</p>
-      </File>
-    </Folder>
-  </Folder>
-</FolderTree>
-
-🎉 That’s it! You now have a functional documentation site up and running with your first MDX page.
+Now that you have Caddy Control up and running, check out the [Quick Start Guide](/docs/getting-started/quick-start) to learn how to manage domains and API keys.
