@@ -10,3 +10,5 @@ db/
 docker-compose.yml
 Dockerfile
 .next
+.contentlayer/
+docker-compose.*

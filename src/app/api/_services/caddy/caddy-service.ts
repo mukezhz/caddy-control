@@ -6,7 +6,7 @@ import prisma from "../../../../lib/prisma";
 const caddyAdminURL = process.env.CADDY_ADMIN_URL;
 const appHost = process.env.APP_HOST;
 const appPort = process.env.PORT;
-const appService = "caddycontrol"
+const appService = process.env.SERVICE_NAME || "caddycontrol"
 
 
 export const getCaddyConfig = async (timeout = 0): Promise<MainConfig> => {
