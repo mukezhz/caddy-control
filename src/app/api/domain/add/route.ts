@@ -108,7 +108,8 @@ export async function POST(request: NextRequest) {
             reqPayload.domain,
             reqPayload.destinationAddress,
             parsedPort ?? 80,
-            reqPayload.enableHttps
+            reqPayload.enableHttps,
+            reqPayload.versions,
           );
           newConfigPayload.apps.http.servers.main.routes.push(routeConfig);
           
@@ -119,7 +120,7 @@ export async function POST(request: NextRequest) {
               destinationAddress: reqPayload.destinationAddress,
               port: parsedPort || 0,
               enableHttps: reqPayload.enableHttps,
-              redirectUrl: null // No redirection
+              redirectUrl: null, // No redirection
             }
           });
         }

@@ -1,4 +1,4 @@
-import type { HandlerConfig, MainConfig, RouteConfig, RouteHandlerConfig } from "./template-types";
+import type { HandlerConfig, MainConfig, RouteConfig, RouteHandlerConfig, TransportVersion } from "./template-types";
 
 export const getCaddyConfigTemplate = (configuredRoutes: RouteConfig[]) => {
 	const caddyConfig: MainConfig = {
@@ -27,8 +27,9 @@ export const getRouteTemplate = (
 	targetAddress: string,
 	upstreamPort = 443,
 	enableHttps = true,
+	versions?: TransportVersion[],
 ): RouteConfig => {
-	const handler = getHandlerTemplate(targetAddress, upstreamPort, enableHttps);
+	const handler = getHandlerTemplate(targetAddress, upstreamPort, enableHttps, versions);
 	const routeConfig: RouteConfig = {
 		match: [
 			{
@@ -45,6 +46,7 @@ export const getHandlerTemplate = (
 	targetAddress: string,
 	upstreamPort = 443,
 	enableHttps = true,
+	versions?: TransportVersion[],
 ): HandlerConfig => {
 	const handlerConfig: HandlerConfig = {
 		handler: "reverse_proxy",
@@ -62,6 +64,9 @@ export const getHandlerTemplate = (
 			protocol: "http",
 		},
 	};
+	if (versions?.length && handlerConfig.transport) {
+		handlerConfig.transport.versions = versions;
+	}
 
 	if (!enableHttps) {
 		delete handlerConfig?.transport?.tls;

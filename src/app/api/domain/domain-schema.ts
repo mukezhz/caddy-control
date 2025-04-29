@@ -20,9 +20,10 @@ export const addDomainSchema = z.object({
     .string(),
   port: z.string(),
   enableHttps: z.boolean().default(true),
+  versions: z.array(z.enum(["h1", "h2", "h2c", "h3"])).optional(),
 }).superRefine((data, ctx) => {
   const issues = [];
-  
+
   if (data.enableRedirection && data.redirectTo) {
     if (!domainRegex.test(data.redirectTo.trim())) {
       ctx.addIssue({
@@ -33,12 +34,12 @@ export const addDomainSchema = z.object({
       issues.push("redirectTo");
     }
   }
-  
+
   if (!data.enableRedirection) {
     const portNumber = parseInt(data.port, 10);
     if (isNaN(portNumber) || portNumber < 1 || portNumber > 65535) {
       ctx.addIssue({
-        path: ["port"], 
+        path: ["port"],
         message: "Invalid port number",
         code: z.ZodIssueCode.custom,
       });
@@ -54,7 +55,7 @@ export const addDomainSchema = z.object({
       issues.push("destinationAddress");
     }
   }
-  
+
   return issues.length === 0;
 });
 

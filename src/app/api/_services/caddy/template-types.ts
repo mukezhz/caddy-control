@@ -44,5 +44,8 @@ export type HandlerConfig = {
 	transport?: {
 		protocol: string;
 		tls?: Record<string, any>;
+		versions?: TransportVersion[];
 	};
 };
+
+export type TransportVersion = "h1" | "h2" | "h2c" | "h3"
