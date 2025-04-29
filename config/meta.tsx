@@ -3,7 +3,10 @@ export const meta = {
   title: 'Caddy Control - Documentation',
   description:
     'Open-source solution for domain routing and proxy management! 🚀',
-  authors: [{ name: 'Mukesh Kumar Chaudhary' }],
+  authors: [
+    { name: 'Mukesh Kumar Chaudhary', url: 'https://mukesh.name.np' },
+    { name: 'Avash Ghimire', url: 'https://avashghimire.com.np' }
+  ],
   keywords: [
     'Caddy Control',
     'Next.js',
