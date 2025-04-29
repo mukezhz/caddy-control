@@ -20,6 +20,7 @@ RUN pnpm build
 # production stage
 FROM base AS runner
 WORKDIR /app
+RUN apt-get update -y && apt-get install -y openssl
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next/standalone ./
