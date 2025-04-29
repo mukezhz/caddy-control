@@ -5,7 +5,7 @@ const envSchema = z.object({
   CADDY_SERVER_IP: z.string(),
   CADDY_ADMIN_URL: z.string(),
   JWT_SECRET: z.string(),
-  SERVICE_NAME: z.string(),
+  SERVICE_NAME: z.string().optional(),
 });
 
 export const validateEnv = () => envSchema.safeParse(process.env);
