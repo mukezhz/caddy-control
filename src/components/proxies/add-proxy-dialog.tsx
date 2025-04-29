@@ -15,6 +15,9 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '../ui/input'
 import { useAddDomain } from '@/hooks/domains/domain.hooks'
 import { Checkbox } from '../ui/checkbox'
+import { TransportVersion } from '@/app/api/_services/caddy/template-types'
+import { useState } from 'react'
+import { ChevronDownIcon, ChevronUpIcon } from 'lucide-react'
 
 interface Props {
     open: boolean
@@ -23,6 +26,7 @@ interface Props {
 
 export function AddProxyDialog({ open, onClose }: Props) {
     const addDomainMutation = useAddDomain()
+    const [showAdvanced, setShowAdvanced] = useState(false)
 
     const form = useForm<AddDomainValues>({
         resolver: zodResolver(addDomainSchema),
@@ -32,7 +36,8 @@ export function AddProxyDialog({ open, onClose }: Props) {
             redirectTo: '',
             destinationAddress: '',
             port: '',
-            enableHttps: true
+            enableHttps: true,
+            versions: undefined
         },
     })
 
@@ -55,6 +60,27 @@ export function AddProxyDialog({ open, onClose }: Props) {
             console.error("Error submitting form:", error);
         }
     }
+
+    // Helper function to handle version checkbox changes
+    const handleVersionChange = (version: TransportVersion, checked: boolean) => {
+        const currentVersions = form.getValues('versions') || [];
+        
+        if (checked && !currentVersions.includes(version)) {
+            // Add version
+            form.setValue('versions', [...currentVersions, version]);
+        } else if (!checked && currentVersions.includes(version)) {
+            // Remove version
+            form.setValue('versions', currentVersions.filter(v => v !== version));
+        }
+    };
+
+    // List of available HTTP protocol versions
+    const protocolVersions = [
+        { value: 'h1', label: 'HTTP/1.1' },
+        { value: 'h2', label: 'HTTP/2' },
+        { value: 'h2c', label: 'HTTP/2 Cleartext' },
+        { value: 'h3', label: 'HTTP/3' }
+    ];
 
     return (
         <Dialog
@@ -165,6 +191,49 @@ export function AddProxyDialog({ open, onClose }: Props) {
                                         </FormItem>
                                     )}
                                 />
+
+                                {/* Advanced Settings Toggle */}
+                                <div 
+                                    className="flex items-center justify-between cursor-pointer pt-2"
+                                    onClick={() => setShowAdvanced(!showAdvanced)}
+                                >
+                                    <h3 className="text-sm font-medium text-gray-700">Advanced Settings</h3>
+                                    {showAdvanced ? <ChevronUpIcon size={18} /> : <ChevronDownIcon size={18} />}
+                                </div>
+
+                                {/* Advanced Settings Content */}
+                                {showAdvanced && (
+                                    <div className="space-y-3 px-1 pt-1 pb-3 border-t">
+                                        <div className="space-y-3">
+                                            <FormLabel>HTTP Protocol Versions</FormLabel>
+                                            <div className="grid grid-cols-2 gap-3">
+                                                {protocolVersions.map((version) => {
+                                                    const currentVersions = form.watch('versions') || [];
+                                                    const isChecked = currentVersions.includes(version.value as TransportVersion);
+                                                    
+                                                    return (
+                                                        <div key={version.value} className="flex items-center space-x-2">
+                                                            <Checkbox 
+                                                                id={`version-${version.value}`} 
+                                                                checked={isChecked}
+                                                                onCheckedChange={(checked) => handleVersionChange(version.value as TransportVersion, !!checked)}
+                                                            />
+                                                            <label 
+                                                                htmlFor={`version-${version.value}`}
+                                                                className="text-sm font-medium cursor-pointer"
+                                                            >
+                                                                {version.label}
+                                                            </label>
+                                                        </div>
+                                                    );
+                                                })}
+                                            </div>
+                                            <p className="text-sm text-muted-foreground">
+                                                Optional: Select HTTP protocol versions or leave empty to use server defaults
+                                            </p>
+                                        </div>
+                                    </div>
+                                )}
 
                                 <Button 
                                     type='submit' 
