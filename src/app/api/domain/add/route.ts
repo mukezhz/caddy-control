@@ -5,15 +5,14 @@ import {
   loadCaddyConfig,
   validateIncomingDomain,
 } from "../../_services/caddy/caddy-service";
-import { getRouteTemplate, getRedirectTemplate } from "../../_services/caddy/caddy-templates";
+import { getRouteTemplate, getRedirectTemplate } from "../..//_services/caddy/caddy-templates";
 import prisma from "../../../../lib/prisma";
 import { Prisma } from "@prisma/client";
-import { getUserFromHeader, hasPermission } from "../../_services/user/user-service";
+import { getUserFromHeader, hasPermission } from "../..//_services/user/user-service";
 import { Resources } from "@/config/resources";
 
 export async function POST(request: NextRequest) {
   try {
-    // Get user from request headers
     const user = await getUserFromHeader(request);
 
     if (!user) {
@@ -33,17 +32,9 @@ export async function POST(request: NextRequest) {
     const reqBody = await request.json();
     const reqPayload = addDomainSchema.parse(reqBody);
 
-    // Check if the domain is already registered
     const { currentConfig, hasExistingRoute } = await validateIncomingDomain(
       reqPayload.domain
     );
-
-    if (hasExistingRoute) {
-      return NextResponse.json(
-        { error: `Domain ${reqPayload.domain} is already registered` },
-        { status: 409 }
-      );
-    }
 
     if (!currentConfig) {
       return NextResponse.json(
@@ -58,81 +49,82 @@ export async function POST(request: NextRequest) {
     await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
       console.log("Preparing configuration changes.");
       
-      const existingDomain = await tx.domains.findUnique({
-        where: { incomingAddress: reqPayload.domain }
-      });
-
-      if (existingDomain) {
-        console.log(`Domain ${reqPayload.domain} already exists in database, updating...`);
-
-        await tx.domains.update({
-          where: { incomingAddress: reqPayload.domain },
-          data: {
-            destinationAddress: reqPayload.enableRedirection && reqPayload.redirectTo ?
-              reqPayload.redirectTo.trim() : reqPayload.destinationAddress,
-            port: parsedPort ?? undefined,
-            enableHttps: reqPayload.enableHttps,
-            redirectUrl: reqPayload.enableRedirection && reqPayload.redirectTo ?
-              reqPayload.redirectTo.trim() : null,
+      if (hasExistingRoute) {
+        const routeIndex = newConfigPayload.apps.http.servers.main.routes.findIndex(
+          (route: any) => {
+            const match = route.match?.find((m: any) => 
+              m.host?.includes(reqPayload.domain)
+            );
+            return !!match;
           }
-        });
-      } else {
-        if (reqPayload.enableRedirection && reqPayload.redirectTo && reqPayload.redirectTo.trim()) {
-          const redirectConfig = getRedirectTemplate(
-            reqPayload.domain,
-            reqPayload.redirectTo,
-            reqPayload.enableHttps
-          );
-          newConfigPayload.apps.http.servers.main.routes.push(redirectConfig);
-
-          await tx.domains.create({
-            data: {
-              incomingAddress: reqPayload.domain,
-              destinationAddress: reqPayload.redirectTo.trim(),
-              port: parsedPort || 0,
-              enableHttps: reqPayload.enableHttps,
-              redirectUrl: reqPayload.redirectTo.trim()
-            }
-          });
-        } else {
-          const routeConfig = getRouteTemplate(
-            reqPayload.domain,
-            reqPayload.destinationAddress,
-            parsedPort ?? 80,
-            reqPayload.enableHttps,
-            reqPayload.versions,
-          );
-          newConfigPayload.apps.http.servers.main.routes.push(routeConfig);
-
-          await tx.domains.create({
-            data: {
-              incomingAddress: reqPayload.domain,
-              destinationAddress: reqPayload.destinationAddress,
-              port: parsedPort || 0,
-              enableHttps: reqPayload.enableHttps,
-              redirectUrl: null,
-            }
-          });
+        );
+        
+        if (routeIndex !== -1) {
+          newConfigPayload.apps.http.servers.main.routes.splice(routeIndex, 1);
+          console.log(`Removed existing route for ${reqPayload.domain}`);
         }
       }
       
-      // Load the updated configuration to Caddy after all changes have been made
+      const redirectTo = reqPayload.redirectTo || '';
+      const isRedirectEnabled = reqPayload.enableRedirection && redirectTo.trim() !== '';
+      const destinationOrRedirect = isRedirectEnabled ? 
+        redirectTo.trim() : reqPayload.destinationAddress;
+      
+      if (isRedirectEnabled) {
+        const redirectConfig = getRedirectTemplate(
+          reqPayload.domain,
+          redirectTo.trim(),
+          reqPayload.enableHttps
+        );
+        newConfigPayload.apps.http.servers.main.routes.push(redirectConfig);
+      } else {
+        const routeConfig = getRouteTemplate(
+          reqPayload.domain,
+          reqPayload.destinationAddress,
+          parsedPort ?? 80,
+          reqPayload.enableHttps,
+          reqPayload.versions,
+        );
+        newConfigPayload.apps.http.servers.main.routes.push(routeConfig);
+      }
+      
+      await tx.domains.upsert({
+        where: { 
+          incomingAddress: reqPayload.domain 
+        },
+        create: {
+          incomingAddress: reqPayload.domain,
+          destinationAddress: destinationOrRedirect,
+          port: parsedPort || 0,
+          enableHttps: reqPayload.enableHttps,
+          redirectUrl: isRedirectEnabled ? destinationOrRedirect : null,
+        },
+        update: {
+          destinationAddress: destinationOrRedirect,
+          port: parsedPort || 0,
+          enableHttps: reqPayload.enableHttps,
+          redirectUrl: isRedirectEnabled ? destinationOrRedirect : null,
+        }
+      });
+      
+      console.log(`Domain ${reqPayload.domain} upserted in database`);
+      
       console.log("Saving updated configuration to Caddy.")
       const loadConfigRes = await loadCaddyConfig(newConfigPayload);
       console.log("Loaded Caddy config: ", loadConfigRes)
 
-      // Save the configuration to the database after successful Caddy update
-      const createResponse = await tx.caddyConfiguration.create({
+      await tx.caddyConfiguration.create({
         data: {
           config: JSON.parse(JSON.stringify(newConfigPayload)),
         },
       });
-      console.log("Caddy configuration created: ", createResponse.id);
+      console.log("Caddy configuration created and stored");
     });
 
+    const action = hasExistingRoute ? "updated" : "added";
     return NextResponse.json(
       {
-        message: "Domain added successfully!",
+        message: `Domain ${action} successfully!`,
       },
       { status: 201 }
     );

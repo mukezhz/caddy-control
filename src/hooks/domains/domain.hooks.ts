@@ -6,8 +6,29 @@ import { handleServerError } from "@/lib/handle-server-error";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
+// Types for domain import functionality
+export type ParsedDomain = {
+  incomingAddress: string;
+  destinationAddress: string;
+  port: number;
+  enableHttps: boolean;
+  redirectUrl?: string;
+  isValid: boolean;
+  errorMessage?: string;
+};
+
+export type ImportResult = {
+  success: number;
+  failed: number;
+};
+
+export type ImportDomainsOptions = {
+  parsedDomains: ParsedDomain[];
+  configText: string;
+};
+
 // Define query keys as constants to avoid string duplication and typos
-const QUERY_KEYS = {
+export const QUERY_KEYS = {
   DOMAINS: "registered-domains",
   CONFIG: "raw-config",
 } as const;
@@ -43,10 +64,70 @@ export const domainService = {
       data: payload
     });
     return response?.data;
+  },
+
+  importDomains: async (options: ImportDomainsOptions): Promise<ImportResult> => {
+    const { parsedDomains, configText } = options;
+
+    if (!parsedDomains.length) {
+      return { success: 0, failed: 0 };
+    }
+
+    let successCount = 0;
+    let failCount = 0;
+
+    try {
+      // Save the Caddy configuration first
+      await apiClient.post('/api/config/import', {
+        config: JSON.parse(configText)
+      });
+
+      // Then add each domain
+      for (const domain of parsedDomains) {
+        if (!domain.isValid) {
+          failCount += 1;
+          continue;
+        }
+
+        try {
+          if (domain.redirectUrl) {
+            // Add redirect domain
+            await domainService.addDomain({
+              domain: domain.incomingAddress,
+              enableRedirection: true,
+              redirectTo: domain.redirectUrl,
+              enableHttps: domain.enableHttps,
+              destinationAddress: "",
+              port: "0"
+            });
+          } else {
+            // Add regular domain
+            await domainService.addDomain({
+              domain: domain.incomingAddress,
+              enableRedirection: false,
+              destinationAddress: domain.destinationAddress,
+              port: domain.port.toString(),
+              enableHttps: domain.enableHttps
+            });
+          }
+          successCount += 1;
+        } catch (error) {
+          console.error("Error importing domain:", domain.incomingAddress, error);
+          failCount += 1;
+        }
+      }
+
+      return {
+        success: successCount,
+        failed: failCount
+      };
+    } catch (error) {
+      console.error("Import error:", error);
+      throw error;
+    }
   }
 };
 
-// Helper to invalidate common domain queries
 const invalidateDomainQueries = async (queryClient: ReturnType<typeof useQueryClient>) => {
   await Promise.all([
     queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.DOMAINS], exact: false }),
@@ -54,7 +135,6 @@ const invalidateDomainQueries = async (queryClient: ReturnType<typeof useQueryCl
   ]);
 };
 
-// React Query hooks
 export const useGetRegisteredDomains = (enabled = true) => {
   return useQuery({
     queryKey: [QUERY_KEYS.DOMAINS],
@@ -77,7 +157,7 @@ export const useGetRawConfig = (enabled = true) => {
 
 export const useAddDomain = () => {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: domainService.addDomain,
     throwOnError: false,
@@ -91,13 +171,32 @@ export const useAddDomain = () => {
 
 export const useDeleteDomain = () => {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: domainService.deleteDomain,
     throwOnError: false,
     onError: handleServerError,
     onSuccess: async () => {
       toast("Proxy deleted!");
+      await invalidateDomainQueries(queryClient);
+    },
+  });
+};
+
+export const useImportDomains = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: domainService.importDomains,
+    throwOnError: false,
+    onError: handleServerError,
+    onSuccess: async (result) => {
+      if (result.success > 0) {
+        toast.success(`Successfully imported ${result.success} domains`);
+      }
+      if (result.failed > 0) {
+        toast.error(`Failed to import ${result.failed} domains`);
+      }
       await invalidateDomainQueries(queryClient);
     },
   });

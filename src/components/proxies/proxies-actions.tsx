@@ -3,25 +3,37 @@ import { Button } from '../ui/button'
 import { IconPlus, IconRefresh } from '@tabler/icons-react'
 import { useQueryClient, useIsFetching } from '@tanstack/react-query'
 import { AddProxyDialog } from './add-proxy-dialog'
-import { Eye, ArrowRight } from 'lucide-react'
+import { Eye, ArrowRight, Import } from 'lucide-react'
 import { ViewRawDialog } from './view-raw-dialog'
-import { hasPermission } from '@/store/authStore'
+import { hasPermission, useAuthStore } from '@/store/authStore'
 import { Resources } from '@/config/resources'
 import { AddRedirectionDialog } from './add-redirection-dialog'
+import { QUERY_KEYS, useAddDomain } from '@/hooks/domains/domain.hooks'
+import { DomainImportDialogs } from './domain-import-dialogs'
 
+/**
+ * ProxiesActions component provides UI for managing domains and proxies
+ */
 const ProxiesActions = () => {
+    // State for dialog visibility
     const [addDialogOpen, setAddDialogOpen] = useState(false);
     const [addRedirectionOpen, setAddRedirectionOpen] = useState(false);
     const [rawDialogOpen, setRawDialogOpen] = useState(false);
-    const queryClient = useQueryClient();
-    const isFetchingDomains = useIsFetching({ queryKey: ["registered-domains"] });
-    
-    // Check if user has permissions to add proxies
-    const canModifyProxies = hasPermission(Resources.WithManage(Resources.PROXY_MANAGEMENT));
+    const [showImportDialog, setShowImportDialog] = useState(false);
 
+    // Fetch domain data
+    const queryClient = useQueryClient();
+    const isFetchingDomains = useIsFetching({ queryKey: [QUERY_KEYS.DOMAINS] });
+    
+    // User permissions
+    const { user } = useAuthStore();
+    const canModifyProxies = hasPermission(Resources.WithManage(Resources.PROXY_MANAGEMENT));
+    const canManageDomains = user?.isAdmin;
+
+    // Handlers
     const refreshProxies = async () => {
         queryClient.invalidateQueries({
-            queryKey: ["registered-domains"]
+            queryKey: [QUERY_KEYS.DOMAINS]
         })
     }
 
@@ -33,7 +45,7 @@ const ProxiesActions = () => {
         setAddRedirectionOpen(true)
     }
 
-    const handlViewRaw = () => {
+    const handleViewRaw = () => {
         setRawDialogOpen(true)
     }
 
@@ -46,7 +58,11 @@ const ProxiesActions = () => {
                     </span>
                     Refresh
                 </Button>
-                <Button onClick={handlViewRaw} className='cursor-pointer' variant={'outline'}>
+                <Button variant="outline" onClick={() => setShowImportDialog(true)} disabled={!canManageDomains}>
+                    <Import className="mr-2 h-4 w-4" />
+                    Import Configuration
+                </Button>
+                <Button onClick={handleViewRaw} className='cursor-pointer' variant={'outline'}>
                     <span>
                         <Eye />
                     </span>
@@ -69,6 +85,8 @@ const ProxiesActions = () => {
                     </>
                 )}
             </div>
+
+            {/* Dialogs */}
             <AddProxyDialog
                 open={addDialogOpen}
                 onClose={() => setAddDialogOpen(false)}
@@ -80,6 +98,12 @@ const ProxiesActions = () => {
             <ViewRawDialog
                 open={rawDialogOpen}
                 onClose={() => setRawDialogOpen(false)}
+            />
+            
+            {/* Import configuration dialogs */}
+            <DomainImportDialogs 
+                showImportDialog={showImportDialog}
+                setShowImportDialog={setShowImportDialog}
             />
         </>
     )
