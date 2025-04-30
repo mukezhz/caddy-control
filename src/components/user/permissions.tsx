@@ -171,7 +171,6 @@ export default function PermissionsManagement() {
               <TableRow>
                 <TableHead>Permission Name</TableHead>
                 <TableHead>Description</TableHead>
-                {canModify && <TableHead className="w-[100px]">Actions</TableHead>}
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -179,13 +178,6 @@ export default function PermissionsManagement() {
                 <TableRow key={permission.id}>
                   <TableCell className="font-medium">{permission.name}</TableCell>
                   <TableCell>{permission.description || "-"}</TableCell>
-                  {canModify && (
-                    <TableCell>
-                      <Button variant="outline" size="sm">
-                        Delete
-                      </Button>
-                    </TableCell>
-                  )}
                 </TableRow>
               ))}
               {!permissionsData?.data?.length && (

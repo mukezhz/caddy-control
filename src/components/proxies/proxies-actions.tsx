@@ -39,7 +39,7 @@ const ProxiesActions = () => {
 
     return (
         <>
-            <div className='flex items-center justify-end gap-4'>
+            <div className='flex items-center justify-end gap-4 flex-wrap'>
                 <Button onClick={refreshProxies} className='cursor-pointer' variant={'outline'}>
                     <span>
                         <IconRefresh className={isFetchingDomains ? 'animate-spin' : ''} />
