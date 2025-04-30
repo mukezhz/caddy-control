@@ -31,14 +31,28 @@ export const useAuthStore = create<AuthStore>()(
       hasPermission: (permissionName) => {
         const { user } = get();
 
-        // Admin users have all permissions
         if (user?.isAdmin) return true;
 
         if (!user?.role?.permissions || user.role.permissions.length === 0) return false;
-        // Check if user has the specified permission
-        return !!user.role.permissions.some(
+        
+        const hasExactPermission = user.role.permissions.some(
           (permission) => permission.name === permissionName
         );
+        
+        if (hasExactPermission) return true;
+        
+        // If checking for a 'view' permission, check if the user has the corresponding 'manage' permission
+        if (permissionName.endsWith(':view')) {
+          const resourceName = permissionName.split(':')[0];
+          const managePermission = `${resourceName}:manage`;
+          
+          // Having 'manage' permission implies having 'view' permission for the same resource
+          return user.role.permissions.some(
+            (permission) => permission.name === managePermission
+          );
+        }
+        
+        return false;
       }
     }),
     {
@@ -48,7 +62,6 @@ export const useAuthStore = create<AuthStore>()(
   )
 );
 
-// for use outside tsx components, e.g. api client
 export const getAccessToken = () => useAuthStore.getState().accessToken;
 export const resetAuth = () => useAuthStore.getState().resetAuthStore();
 export const hasPermission = (permissionName: string) => useAuthStore.getState().hasPermission(permissionName);

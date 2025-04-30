@@ -97,14 +97,26 @@ export const getUserFromHeader = async (req: NextRequest) => {
  * @returns boolean indicating if the user has the permission
  */
 export const hasPermission = (user: User, permissionName: string): boolean => {
-  // Admin users have all permissions
   if (user?.isAdmin) return true;
 
-  // If no role or permissions, deny access
   if (!user?.role?.permissions || user.role.permissions.length === 0) return false;
 
-  // Check if user has the specified permission
-  return user.role.permissions.some(
+  const hasExactPermission = user.role.permissions.some(
     (permission) => permission.name === permissionName
   );
-};
+
+  if (hasExactPermission) return true;
+  
+  // If checking for a 'view' permission, check if the user has the corresponding 'manage' permission
+  if (permissionName.endsWith(':view')) {
+    const resourceName = permissionName.split(':')[0];
+    const managePermission = `${resourceName}:manage`;
+    
+    // Having 'manage' permission implies having 'view' permission for the same resource
+    return user.role.permissions.some(
+      (permission) => permission.name === managePermission
+    );
+  }
+  
+  return false;
+}

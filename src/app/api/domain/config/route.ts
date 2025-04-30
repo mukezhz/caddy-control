@@ -16,12 +16,10 @@ export async function GET(request: NextRequest) {
 
     const path = request.nextUrl.pathname;
     let requiredPermission = "proxy_management:view";
-
-    if (path.includes('/proxies')) {
-      requiredPermission = 'proxy_management:manage';
-    }
-    if (!user.isAdmin && !hasPermission(user, requiredPermission) &&
-      !hasPermission(user, 'user_management:view')) {
+    
+    // Check if user has relevant permissions
+    // Having proxy_management:manage permission automatically includes proxy_management:view access
+    if (!user.isAdmin && !hasPermission(user, requiredPermission)) {
       return NextResponse.json(
         { error: "Forbidden - Insufficient permissions" },
         { status: 403 }

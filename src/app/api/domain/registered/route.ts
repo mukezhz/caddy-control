@@ -16,10 +16,9 @@ export async function GET(request: NextRequest) {
       );
     }
     
-    // Check if user has permission to view domains - use OR logic for permissions
-    if (!user.isAdmin && 
-        !hasPermission(user, "proxy_management:view") && 
-        !hasPermission(user, "proxy_management:manage")) {
+    // Check if user has permission to view domains
+    // Note: Having proxy_management:manage permission automatically includes proxy_management:view access
+    if (!user.isAdmin && !hasPermission(user, "proxy_management:view")) {
       return NextResponse.json(
         { error: "Forbidden - Insufficient permissions" },
         { status: 403 }

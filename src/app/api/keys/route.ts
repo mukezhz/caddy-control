@@ -68,10 +68,9 @@ export async function GET(request: NextRequest) {
       );
     }
     
-    // Check if user has permission to view API keys
-    if (!user.isAdmin && 
-        !hasPermission(user, "api_management:view") && 
-        !hasPermission(user, "api_management:manage")) {
+    // Check if user has permission to view API keys (requires api_management:view or api_management:manage)
+    // Note: Having api_management:manage permission automatically includes api_management:view access
+    if (!user.isAdmin && !hasPermission(user, "api_management:view")) {
       return NextResponse.json(
         { error: "Forbidden - Insufficient permissions" },
         { status: 403 }
