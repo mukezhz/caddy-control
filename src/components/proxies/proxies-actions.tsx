@@ -3,13 +3,15 @@ import { Button } from '../ui/button'
 import { IconPlus, IconRefresh } from '@tabler/icons-react'
 import { useQueryClient, useIsFetching } from '@tanstack/react-query'
 import { AddProxyDialog } from './add-proxy-dialog'
-import { Eye } from 'lucide-react'
+import { Eye, ArrowRight } from 'lucide-react'
 import { ViewRawDialog } from './view-raw-dialog'
 import { hasPermission } from '@/store/authStore'
 import { Resources } from '@/config/resources'
+import { AddRedirectionDialog } from './add-redirection-dialog'
 
 const ProxiesActions = () => {
     const [addDialogOpen, setAddDialogOpen] = useState(false);
+    const [addRedirectionOpen, setAddRedirectionOpen] = useState(false);
     const [rawDialogOpen, setRawDialogOpen] = useState(false);
     const queryClient = useQueryClient();
     const isFetchingDomains = useIsFetching({ queryKey: ["registered-domains"] });
@@ -25,6 +27,10 @@ const ProxiesActions = () => {
 
     const handleAddProxy = () => {
         setAddDialogOpen(true)
+    }
+
+    const handleAddRedirection = () => {
+        setAddRedirectionOpen(true)
     }
 
     const handlViewRaw = () => {
@@ -47,17 +53,29 @@ const ProxiesActions = () => {
                     View Raw JSON
                 </Button>
                 {canModifyProxies && (
-                    <Button onClick={handleAddProxy} className='cursor-pointer' variant={'default'}>
-                        <span>
-                            <IconPlus />
-                        </span>
-                        Add Proxy
-                    </Button>
+                    <>
+                        <Button onClick={handleAddRedirection} className='cursor-pointer' variant={'outline'}>
+                            <span className="mr-1">
+                                <ArrowRight size={16} />
+                            </span>
+                            Add Redirection
+                        </Button>
+                        <Button onClick={handleAddProxy} className='cursor-pointer' variant={'default'}>
+                            <span>
+                                <IconPlus />
+                            </span>
+                            Add Proxy
+                        </Button>
+                    </>
                 )}
             </div>
             <AddProxyDialog
                 open={addDialogOpen}
                 onClose={() => setAddDialogOpen(false)}
+            />
+            <AddRedirectionDialog
+                open={addRedirectionOpen}
+                onClose={() => setAddRedirectionOpen(false)}
             />
             <ViewRawDialog
                 open={rawDialogOpen}

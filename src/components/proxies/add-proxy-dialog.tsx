@@ -32,7 +32,7 @@ export function AddProxyDialog({ open, onClose }: Props) {
         resolver: zodResolver(addDomainSchema),
         defaultValues: {
             domain: '',
-            enableRedirection: false,
+            enableRedirection: false, // Always false for proxies
             redirectTo: '',
             destinationAddress: '',
             port: '',
@@ -46,12 +46,9 @@ export function AddProxyDialog({ open, onClose }: Props) {
             const processedValues = {
                 ...values,
                 port: values.port || '80',
-                redirectTo: values.enableRedirection ? values.redirectTo?.trim() || undefined : undefined
+                enableRedirection: false, // Ensure redirection is disabled for proxies
+                redirectTo: undefined // No redirect for proxies
             };
-            if (values.enableRedirection) {
-                processedValues.destinationAddress = '';
-                processedValues.port = '0';
-            }
             
             await addDomainMutation.mutateAsync(processedValues);
             form.reset();
@@ -91,7 +88,7 @@ export function AddProxyDialog({ open, onClose }: Props) {
                 <DialogHeader className='text-left'>
                     <DialogTitle>{'Add Proxy'}</DialogTitle>
                     <DialogDescription>
-                        {'Enter the details below.'}{' '}
+                        {'Enter the proxy details below.'}{' '}
                         Click save when you&apos;re done.
                     </DialogDescription>
                 </DialogHeader>
@@ -115,64 +112,30 @@ export function AddProxyDialog({ open, onClose }: Props) {
                                 
                                 <FormField
                                     control={form.control}
-                                    name='enableRedirection'
-                                    render={({ field: { value, onChange, ...restField } }) => (
-                                        <FormItem className="space-y-1 flex items-center gap-2">
-                                            <FormLabel>Enable Redirection</FormLabel>
+                                    name='destinationAddress'
+                                    render={({ field }) => (
+                                        <FormItem className='space-y-1'>
+                                            <FormLabel>Destination Address</FormLabel>
                                             <FormControl>
-                                                <Checkbox checked={value} onCheckedChange={onChange} {...restField} />
+                                                <Input placeholder="Enter destination address" {...field} />
                                             </FormControl>
                                             <FormMessage />
                                         </FormItem>
                                     )}
                                 />
-                                
-                                {form.watch('enableRedirection') && (
-                                    <FormField
-                                        control={form.control}
-                                        name='redirectTo'
-                                        render={({ field }) => (
-                                            <FormItem className='space-y-1'>
-                                                <FormLabel>Redirect To</FormLabel>
-                                                <FormControl>
-                                                    <Input placeholder="Enter redirect domain (e.g. example.com)" {...field} />
-                                                </FormControl>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
-                                )}
-
-                                {!form.watch('enableRedirection') && (
-                                    <>
-                                        <FormField
-                                            control={form.control}
-                                            name='destinationAddress'
-                                            render={({ field }) => (
-                                                <FormItem className='space-y-1'>
-                                                    <FormLabel>Destination Address</FormLabel>
-                                                    <FormControl>
-                                                        <Input placeholder="Enter destination address" {...field} />
-                                                    </FormControl>
-                                                    <FormMessage />
-                                                </FormItem>
-                                            )}
-                                        />
-                                        <FormField
-                                            control={form.control}
-                                            name='port'
-                                            render={({ field }) => (
-                                                <FormItem className='space-y-1'>
-                                                    <FormLabel>Destination Port</FormLabel>
-                                                    <FormControl>
-                                                        <Input type='number' placeholder="Enter destination port" {...field} />
-                                                    </FormControl>
-                                                    <FormMessage />
-                                                </FormItem>
-                                            )}
-                                        />
-                                    </>
-                                )}
+                                <FormField
+                                    control={form.control}
+                                    name='port'
+                                    render={({ field }) => (
+                                        <FormItem className='space-y-1'>
+                                            <FormLabel>Destination Port</FormLabel>
+                                            <FormControl>
+                                                <Input type='number' placeholder="Enter destination port" {...field} />
+                                            </FormControl>
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
                                 
                                 <FormField
                                     control={form.control}

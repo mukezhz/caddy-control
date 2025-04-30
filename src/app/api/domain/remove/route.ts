@@ -14,14 +14,14 @@ export async function DELETE(request: NextRequest) {
   try {
     // Get user from request headers
     const user = await getUserFromHeader(request);
-    
+
     if (!user) {
       return NextResponse.json(
         { error: "Unauthorized" },
         { status: 401 }
       );
     }
-    
+
     // Check if user has permission to delete domains (requires proxy_management:manage)
     if (!user.isAdmin && !hasPermission(user, Resources.WithManage(Resources.PROXY_MANAGEMENT))) {
       return NextResponse.json(
@@ -63,9 +63,17 @@ export async function DELETE(request: NextRequest) {
     );
 
     if (!hasExistingRoute) {
+      await prisma.domains.delete({
+        where: {
+          incomingAddress: reqPayload.incomingAddress,
+        },
+      });
+      console.log("Domain not registered in Caddy, deleting from database");
       return NextResponse.json(
-        { error: "Domain not registered in caddy!" },
-        { status: 404 }
+        {
+          message: "Domain deleted successfully!",
+        },
+        { status: 200 }
       );
     }
 
