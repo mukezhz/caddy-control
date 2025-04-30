@@ -50,8 +50,11 @@ export default function UserManagement() {
   const { mutate: assignRole, isPending } = useAssignRole();
   const { user } = useAuthStore();
   
+  // Check if user can view settings
+  const canView = user?.isAdmin || hasPermission('user_management:manage') || hasPermission('user_management:view') || hasPermission('user_management:view');
+  
   // Check if user can modify settings
-  const canModify = user?.isAdmin || hasPermission('system:manage');
+  const canModify = user?.isAdmin || hasPermission('user_management:manage');
   
   const [isAssignDialogOpen, setIsAssignDialogOpen] = useState(false);
   const [isCreateUserDialogOpen, setIsCreateUserDialogOpen] = useState(false);
@@ -122,6 +125,10 @@ export default function UserManagement() {
         <div className="flex justify-center p-4">
           <Spinner />
         </div>
+      ) : !canView ? (
+        <div className="text-center py-4">
+          You don't have permission to view this content
+        </div>
       ) : (
         <div className="rounded-md border">
           <Table>
@@ -158,6 +165,7 @@ export default function UserManagement() {
                             username: user.username,
                             roleId: user.role?.id
                           })}
+                          disabled={user.isAdmin}
                         >
                           {user.role?.id ? "Change Role" : "Assign Role"}
                         </Button>

@@ -38,10 +38,13 @@ export default function PermissionsManagement() {
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [selectedPermissions, setSelectedPermissions] = useState<string[]>([]);
   const { user } = useAuthStore();
-  
+
+  // Check if user has view permissions
+  const canView = user?.isAdmin || hasPermission('user_management:manage') || hasPermission('user_management:view');
+
   // Check if user can modify settings
-  const canModify = user?.isAdmin || hasPermission('system:manage');
-  
+  const canModify = user?.isAdmin || hasPermission('user_management:manage');
+
   const { mutate: createPermission, isPending } = useCreatePermission();
 
   // Initialize selectedPermissions with existing permissions when dialog opens
@@ -126,7 +129,7 @@ export default function PermissionsManagement() {
   const handleToggleManage = (resourceId: string, checked: boolean) => {
     const resource = RESOURCES.find(r => r.id === resourceId);
     if (!resource) return;
-    
+
     resource.availableActions.forEach(action => {
       const permId = generatePermissionName(resourceId, action);
       if (checked) {
@@ -156,6 +159,10 @@ export default function PermissionsManagement() {
       {isLoading ? (
         <div className="flex justify-center p-4">
           <Spinner />
+        </div>
+      ) : !canView ? (
+        <div className="text-center py-4">
+          You don't have permission to view this content
         </div>
       ) : (
         <div className="rounded-md border">
@@ -202,18 +209,18 @@ export default function PermissionsManagement() {
                 Select resources and actions to create permissions for. Each combination will create a separate permission.
               </DialogDescription>
             </DialogHeader>
-            
+
             <Accordion type="multiple" className="w-full">
               {RESOURCES.map((resource) => {
-                const allPermissionsSelected = resource.availableActions.every(action => 
+                const allPermissionsSelected = resource.availableActions.every(action =>
                   selectedPermissions.includes(generatePermissionName(resource.id, action))
                 );
-                
+
                 return (
                   <AccordionItem key={resource.id} value={resource.id}>
                     <div className="flex items-center">
                       <div className="flex items-center space-x-2 mr-3 ml-2">
-                        <Checkbox 
+                        <Checkbox
                           id={`resource-${resource.id}`}
                           checked={allPermissionsSelected}
                           onCheckedChange={(checked) => handleToggleManage(resource.id, !!checked)}
@@ -233,10 +240,10 @@ export default function PermissionsManagement() {
                             const permId = generatePermissionName(resource.id, action);
                             const permDescription = getPermissionDescription(resource.id, action);
                             const alreadyExists = existingPermissionNames.has(permId);
-                            
+
                             return (
                               <div key={permId} className="flex items-center space-x-2">
-                                <Checkbox 
+                                <Checkbox
                                   id={permId}
                                   checked={selectedPermissions.includes(permId)}
                                   onCheckedChange={() => togglePermission(permId)}
@@ -258,7 +265,7 @@ export default function PermissionsManagement() {
                 );
               })}
             </Accordion>
-            
+
             <DialogFooter>
               <div className="flex justify-between w-full items-center">
                 <div className="text-sm text-muted-foreground">

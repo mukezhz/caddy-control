@@ -17,7 +17,9 @@ export default function SettingsPage() {
   const { accessToken, user, setUser } = useAuthStore();
   const { isLoading } = useGetProfile(!!accessToken);
   const { data: userData, isLoading: isLoadingProfile } = useGetProfile(!!accessToken)
-  const hasSettingsAccess = user?.isAdmin || hasPermission('system:manage') || hasPermission('system:view');
+  const hasSettingsAccess = user?.isAdmin || 
+                           hasPermission('user_management:manage') || 
+                           hasPermission('user_management:view');
 
   useEffect(() => {
     if (userData) {

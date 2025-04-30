@@ -25,8 +25,11 @@ export default function RolesManagement() {
   const [selectedRole, setSelectedRole] = useState<Role | null>(null);
   const { user } = useAuthStore();
   
+  // Check if user has view permissions
+  const canView = user?.isAdmin || hasPermission('user_management:manage') || hasPermission('user_management:view');
+  
   // Check if user can modify settings
-  const canModify = user?.isAdmin || hasPermission('system:manage');
+  const canModify = user?.isAdmin || hasPermission('user_management:manage');
 
   const handleEditRole = (role: Role) => {
     if (!canModify) return;
@@ -46,6 +49,10 @@ export default function RolesManagement() {
       {isLoading ? (
         <div className="flex justify-center p-4">
           <Spinner />
+        </div>
+      ) : !canView ? (
+        <div className="text-center py-4">
+          You don't have permission to view this content
         </div>
       ) : (
         <div className="rounded-md border">

@@ -16,8 +16,8 @@ export async function DELETE(
       );
     }
 
-    // Check if user has permission to delete users (requires admin or system:manage)
-    if (!currentUser.isAdmin && !hasPermission(currentUser, "system:manage")) {
+    // Check if user has permission to delete users (requires admin or user_management:manage)
+    if (!currentUser.isAdmin && !hasPermission(currentUser, "user_management:manage")) {
       return NextResponse.json(
         { error: "Forbidden - Insufficient permissions" },
         { status: 403 }
