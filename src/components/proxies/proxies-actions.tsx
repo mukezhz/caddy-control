@@ -14,7 +14,7 @@ const ProxiesActions = () => {
     const isFetchingDomains = useIsFetching({ queryKey: ["registered-domains"] });
     
     // Check if user has permissions to add proxies
-    const canModifyProxies = hasPermission('proxies:manage') || hasPermission('proxies:modify');
+    const canModifyProxies = hasPermission('proxy_management:manage');
 
     const refreshProxies = async () => {
         queryClient.invalidateQueries({

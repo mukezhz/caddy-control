@@ -16,8 +16,6 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Check if user has permission to view permissions
-    // Note: Having user_management:manage permission automatically includes user_management:view access
     if (!user.isAdmin && !hasPermission(user, "user_management:view")) {
       return NextResponse.json(
         { error: "Forbidden - Insufficient permissions" },

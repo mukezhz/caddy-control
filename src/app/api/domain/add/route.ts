@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
       );
     }
     
-    if (!hasPermission(user, "proxies:manage") && !hasPermission(user, "proxies:modify")) {
+    if (!hasPermission(user, "proxy_management:manage")) {
       return NextResponse.json(
         { error: "Forbidden - Insufficient permissions" },
         { status: 403 }

@@ -51,7 +51,7 @@ export default function UserManagement() {
   const { user } = useAuthStore();
   
   // Check if user can view settings
-  const canView = user?.isAdmin || hasPermission('user_management:manage') || hasPermission('user_management:view') || hasPermission('user_management:view');
+  const canView = user?.isAdmin || hasPermission('user_management:manage') || hasPermission('user_management:view');
   
   // Check if user can modify settings
   const canModify = user?.isAdmin || hasPermission('user_management:manage');

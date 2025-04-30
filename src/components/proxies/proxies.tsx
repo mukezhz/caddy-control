@@ -49,7 +49,7 @@ const ProxyRecord = ({ record }: ProxyRecordProps) => {
 
 const ProxyRecordCheckResults = ({ record, handleDeleteClick }: ProxyCheckResults) => {
   // Check if user has permission to delete proxies
-  const canDeleteProxy = hasPermission('proxies:manage') || hasPermission('proxies:modify');
+  const canDeleteProxy = hasPermission('proxy_management:manage');
   
   return (
     <div className="flex items-center justify-start gap-6">

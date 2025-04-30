@@ -9,7 +9,6 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
     const { accessToken } = useAuthStore();
     const router = useRouter();
 
-
     useEffect(() => {
         if (accessToken && !checking) {
             router.replace("/");

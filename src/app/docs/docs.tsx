@@ -129,33 +129,6 @@ export default function DocsLayout({
           <main className="h-full">{children}</main>
         </MainContent>
       </SidebarProvider>
-
-      {/* Right Sidebar Provider */}
-      {/* <SidebarProvider defaultOpen={false} defaultSide="right" defaultMaxWidth={300} showIconsOnCollapse={true}>
-        <Sidebar>
-          <SidebarHeader>
-            <SidebarTrigger />
-            <Title>Documentation</Title>
-            <BookOpen className="h-5 w-5" />
-          </SidebarHeader>
-
-          <SidebarContent>
-            <SidebarMenu>
-              <SidebarMenuItem icon={<BookOpen className="h-5 w-5" />} label="Getting Started" href="/docs/getting-started" />
-              <SidebarMenuItem icon={<Settings className="h-5 w-5" />} label="Configuration" href="/docs/configuration" />
-              <SidebarMenuItem icon={<FileText className="h-5 w-5" />} label="API Reference" defaultOpen={true}>
-                <NestedLink href="/docs/api/overview">Overview</NestedLink>
-                <NestedLink href="/docs/api/endpoints">Endpoints</NestedLink>
-                <NestedLink href="/docs/api/authentication">Authentication</NestedLink>
-              </SidebarMenuItem>
-            </SidebarMenu>
-          </SidebarContent>
-
-          <SidebarFooter>
-            <div className="text-sm text-gray-500">v1.0.0</div>
-          </SidebarFooter>
-        </Sidebar>
-      </SidebarProvider> */}
     </SidebarLayout>
   );
 }

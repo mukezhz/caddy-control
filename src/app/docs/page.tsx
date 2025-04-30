@@ -17,16 +17,9 @@ export default function Home() {
           <nav className="flex-1 flex justify-center">
             {/* Navigation links can be added here */}
           </nav>
-          {/* <div className="flex-1 flex gap-2 justify-end">
-            <ModeToggle />
-            <Button
-              onClick={() =>
-                router.push('https://github.com/mukezhz/caddy-control')
-              }
-            >
-              <GithubIcon className="h-[1.2rem] w-[1.2rem] transition-all" />
-            </Button>
-          </div> */}
+          <div className="flex-1 flex gap-2 justify-end">
+            {/* Header actions */}
+          </div>
         </div>
       </header>
 
