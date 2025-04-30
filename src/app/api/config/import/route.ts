@@ -4,8 +4,7 @@ import prisma from "../../../../lib/prisma";
 import { loadCaddyConfig } from "../../_services/caddy/caddy-service";
 import { Prisma } from "@prisma/client";
 import type { MainConfig } from "../..//_services/caddy/template-types";
-import { getUserFromHeader, hasPermission } from "../..//_services/user/user-service";
-import { Resources } from "@/config/resources";
+import { getUserFromHeader } from "../..//_services/user/user-service";
 
 // Schema for validation
 const importConfigSchema = z.object({
@@ -24,10 +23,10 @@ const importConfigSchema = z.object({
 export async function POST(request: NextRequest) {
   try {
     const user = await getUserFromHeader(request);
-    
+
     if (!user?.isAdmin) {
       return NextResponse.json(
-        { error: "Unauthorized" }, 
+        { error: "Unauthorized" },
         { status: 403 }
       );
     }
@@ -37,10 +36,10 @@ export async function POST(request: NextRequest) {
 
     if (!result.success) {
       return NextResponse.json(
-        { 
-          error: "Invalid request body", 
-          details: result.error.errors 
-        }, 
+        {
+          error: "Invalid request body",
+          details: result.error.errors
+        },
         { status: 400 }
       );
     }

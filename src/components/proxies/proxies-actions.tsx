@@ -8,29 +8,25 @@ import { ViewRawDialog } from './view-raw-dialog'
 import { hasPermission, useAuthStore } from '@/store/authStore'
 import { Resources } from '@/config/resources'
 import { AddRedirectionDialog } from './add-redirection-dialog'
-import { QUERY_KEYS, useAddDomain } from '@/hooks/domains/domain.hooks'
+import { QUERY_KEYS } from '@/hooks/domains/domain.hooks'
 import { DomainImportDialogs } from './domain-import-dialogs'
 
 /**
  * ProxiesActions component provides UI for managing domains and proxies
  */
 const ProxiesActions = () => {
-    // State for dialog visibility
     const [addDialogOpen, setAddDialogOpen] = useState(false);
     const [addRedirectionOpen, setAddRedirectionOpen] = useState(false);
     const [rawDialogOpen, setRawDialogOpen] = useState(false);
     const [showImportDialog, setShowImportDialog] = useState(false);
 
-    // Fetch domain data
     const queryClient = useQueryClient();
     const isFetchingDomains = useIsFetching({ queryKey: [QUERY_KEYS.DOMAINS] });
-    
-    // User permissions
+
     const { user } = useAuthStore();
     const canModifyProxies = hasPermission(Resources.WithManage(Resources.PROXY_MANAGEMENT));
     const canManageDomains = user?.isAdmin;
 
-    // Handlers
     const refreshProxies = async () => {
         queryClient.invalidateQueries({
             queryKey: [QUERY_KEYS.DOMAINS]
@@ -99,9 +95,9 @@ const ProxiesActions = () => {
                 open={rawDialogOpen}
                 onClose={() => setRawDialogOpen(false)}
             />
-            
+
             {/* Import configuration dialogs */}
-            <DomainImportDialogs 
+            <DomainImportDialogs
                 showImportDialog={showImportDialog}
                 setShowImportDialog={setShowImportDialog}
             />
