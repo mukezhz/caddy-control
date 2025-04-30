@@ -3,6 +3,7 @@ import { AssignRoleSchema } from "@/schemas/user/roles.schema";
 import prisma from "@/lib/prisma";
 import { z } from "zod";
 import { getUserFromHeader, hasPermission } from "../../_services/user/user-service";
+import { Resources } from "@/config/resources";
 
 export async function POST(request: NextRequest) {
   try {
@@ -16,7 +17,7 @@ export async function POST(request: NextRequest) {
     }
     
     // Check if user has permission to assign roles (requires admin or user_management:manage)
-    if (!user.isAdmin && !hasPermission(user, "user_management:manage")) {
+    if (!user.isAdmin && !hasPermission(user, Resources.WithManage(Resources.USER_MANAGEMENT))) {
       return NextResponse.json(
         { error: "Forbidden - Insufficient permissions" },
         { status: 403 }

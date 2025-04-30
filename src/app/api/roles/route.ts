@@ -3,6 +3,7 @@ import { CreateRoleSchema } from "@/schemas/user/roles.schema";
 import prisma from "@/lib/prisma";
 import { z } from "zod";
 import { getUserFromHeader, hasPermission } from "../_services/user/user-service";
+import { Resources } from "@/config/resources";
 
 // Get all roles
 export async function GET(request: NextRequest) {
@@ -18,7 +19,7 @@ export async function GET(request: NextRequest) {
     
     // Check if user has permission to view roles
     // Note: Having user_management:manage permission automatically includes user_management:view access
-    if (!user.isAdmin && !hasPermission(user, "user_management:view")) {
+    if (!user.isAdmin && !hasPermission(user, Resources.WithView(Resources.USER_MANAGEMENT))) {
       return NextResponse.json(
         { error: "Forbidden - Insufficient permissions" },
         { status: 403 }
@@ -70,7 +71,7 @@ export async function POST(request: NextRequest) {
     }
     
     // Check if user has permission to create roles (requires admin or user_management:manage)
-    if (!user.isAdmin && !hasPermission(user, "user_management:manage")) {
+    if (!user.isAdmin && !hasPermission(user, Resources.WithManage(Resources.USER_MANAGEMENT))) {
       return NextResponse.json(
         { error: "Forbidden - Insufficient permissions" },
         { status: 403 }

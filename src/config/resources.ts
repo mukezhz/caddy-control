@@ -8,22 +8,31 @@ export interface Resource {
   availableActions: ResourceAction[];
 }
 
+export const Resources = {
+  PROXY_MANAGEMENT: 'proxy_management',
+  API_MANAGEMENT: 'api_management',
+  USER_MANAGEMENT: 'user_management',
+  WithManage: (resource: string) => `${resource}:manage`,
+  WithView: (resource: string) => `${resource}:view`,
+}
+
+
 // Define the resources available in the system
 export const RESOURCES: Resource[] = [
   {
-    id: 'proxy_management',
+    id: Resources.PROXY_MANAGEMENT,
     name: 'Proxy Management',
     description: 'Manage proxies and domain configurations',
     availableActions: ['view', 'manage'],
   },
   {
-    id: 'api_management',
+    id: Resources.API_MANAGEMENT,
     name: 'API Management',
     description: 'Manage API keys for system access',
     availableActions: ['view', 'manage'],
   },
   {
-    id: 'user_management',
+    id: Resources.USER_MANAGEMENT,
     name: 'User Management',
     description: 'Manage user accounts and permissions',
     availableActions: ['view', 'manage'],
@@ -39,11 +48,11 @@ export const generatePermissionName = (resourceId: string, action: ResourceActio
 export const getPermissionDescription = (resourceId: string, action: ResourceAction): string => {
   const resource = RESOURCES.find(r => r.id === resourceId);
   if (!resource) return '';
-  
+
   const actionDescriptions: Record<ResourceAction, string> = {
     view: `View ${resource.name.toLowerCase()}`,
     manage: `Full management of ${resource.name.toLowerCase()}`
   };
-  
+
   return actionDescriptions[action];
 };

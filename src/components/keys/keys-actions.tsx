@@ -4,6 +4,7 @@ import { IconPlus, IconRefresh } from '@tabler/icons-react'
 import { useQueryClient, useIsFetching } from '@tanstack/react-query'
 import { CreateKeyDialog } from './create-key-dialog'
 import { hasPermission } from '@/store/authStore'
+import { Resources } from '@/config/resources'
 
 const KeyActions = () => {
     const [addDialogOpen, setAddDialogOpen] = useState(false);
@@ -11,7 +12,7 @@ const KeyActions = () => {
     const isFetchingKeys = useIsFetching({ queryKey: ["api-keys"] });
     
     // Check if user has permissions to create API keys
-    const canModifyKeys = hasPermission('api_management:manage');
+    const canModifyKeys = hasPermission(Resources.WithManage(Resources.API_MANAGEMENT));
 
     const refreshKeys = async () => {
         queryClient.invalidateQueries({

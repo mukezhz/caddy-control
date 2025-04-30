@@ -5,6 +5,7 @@ import { Trash, Clipboard, Eye, EyeOff } from "lucide-react";
 import KeyDeleteConfirm from "./key-delete-confirm";
 import { toast } from "sonner";
 import { hasPermission } from "@/store/authStore";
+import { Resources } from "@/config/resources";
 
 type Props = {
   keysData: {
@@ -19,7 +20,7 @@ const Keys = ({ keysData }: Props) => {
   const [visibleKeys, setVisibleKeys] = useState<{ [key: number]: boolean }>({});
   
   // Check if user has permission to delete API keys
-  const canDeleteKey = hasPermission('api_management:manage');
+  const canDeleteKey = hasPermission(Resources.WithManage(Resources.API_MANAGEMENT));
 
   const handleDeleteCancel = () => {
     setOpenDelete(false);

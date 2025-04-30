@@ -3,6 +3,7 @@ import { UpdateRoleSchema } from "@/schemas/user/roles.schema";
 import prisma from "@/lib/prisma";
 import { z } from "zod";
 import { getUserFromHeader, hasPermission } from "../../_services/user/user-service";
+import { Resources } from "@/config/resources";
 
 export async function PUT(
   request: NextRequest,
@@ -21,7 +22,7 @@ export async function PUT(
     }
 
     // Check if user has permission to update roles (requires admin or user_management:manage)
-    if (!user.isAdmin && !hasPermission(user, "user_management:manage")) {
+    if (!user.isAdmin && !hasPermission(user, Resources.WithManage(Resources.USER_MANAGEMENT))) {
       return NextResponse.json(
         { error: "Forbidden - Insufficient permissions" },
         { status: 403 }
@@ -114,7 +115,7 @@ export async function DELETE(
     }
 
     // Check if user has permission to delete roles (requires admin or user_management:manage)
-    if (!user.isAdmin && !hasPermission(user, "user_management:manage")) {
+    if (!user.isAdmin && !hasPermission(user, Resources.WithManage(Resources.USER_MANAGEMENT))) {
       return NextResponse.json(
         { error: "Forbidden - Insufficient permissions" },
         { status: 403 }

@@ -11,6 +11,7 @@ import PermissionsManagement from "@/components/user/permissions";
 import UserManagement from "@/components/user/user-management";
 import { Spinner } from "@/components/ui/spinner";
 import { BoxLoader } from "@/components/loader";
+import { Resources } from "@/config/resources";
 
 export default function SettingsPage() {
   const router = useRouter();
@@ -18,8 +19,8 @@ export default function SettingsPage() {
   const { isLoading } = useGetProfile(!!accessToken);
   const { data: userData, isLoading: isLoadingProfile } = useGetProfile(!!accessToken)
   const hasSettingsAccess = user?.isAdmin || 
-                           hasPermission('user_management:manage') || 
-                           hasPermission('user_management:view');
+                           hasPermission(Resources.WithManage(Resources.USER_MANAGEMENT)) || 
+                           hasPermission(Resources.WithView(Resources.USER_MANAGEMENT));
 
   useEffect(() => {
     if (userData) {

@@ -3,6 +3,7 @@ import { checkDomain } from "../../_services/dns/dns-service";
 import prisma from "../../../../lib/prisma";
 import { DomainWithCheckResults } from "../domain-types";
 import { getUserFromHeader, hasPermission } from "../../_services/user/user-service";
+import { Resources } from "@/config/resources";
 
 export async function GET(request: NextRequest) {
   try {
@@ -18,7 +19,7 @@ export async function GET(request: NextRequest) {
     
     // Check if user has permission to view domains
     // Note: Having proxy_management:manage permission automatically includes proxy_management:view access
-    if (!user.isAdmin && !hasPermission(user, "proxy_management:view")) {
+    if (!user.isAdmin && !hasPermission(user, Resources.WithView(Resources.PROXY_MANAGEMENT))) {
       return NextResponse.json(
         { error: "Forbidden - Insufficient permissions" },
         { status: 403 }

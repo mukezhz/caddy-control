@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { getUserFromHeader, hasPermission } from "../../_services/user/user-service";
+import { Resources } from "@/config/resources";
 
 export async function GET(request: NextRequest) {
   try {
@@ -15,7 +16,7 @@ export async function GET(request: NextRequest) {
     
     // Check if user has permission to list users
     // Note: Having user_management:manage permission automatically includes user_management:view access
-    if (!user.isAdmin && !hasPermission(user, "user_management:view")) {
+    if (!user.isAdmin && !hasPermission(user, Resources.WithView(Resources.USER_MANAGEMENT))) {
       return NextResponse.json(
         { error: "Forbidden - Insufficient permissions" },
         { status: 403 }

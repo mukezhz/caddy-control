@@ -6,6 +6,7 @@ import { Button } from "../ui/button";
 import ProxyDeleteConfirm from "./proxy-delete-confirm";
 import { useState } from "react";
 import { hasPermission } from "@/store/authStore";
+import { Resources } from "@/config/resources";
 
 type Props = {
   proxyData: {
@@ -49,7 +50,7 @@ const ProxyRecord = ({ record }: ProxyRecordProps) => {
 
 const ProxyRecordCheckResults = ({ record, handleDeleteClick }: ProxyCheckResults) => {
   // Check if user has permission to delete proxies
-  const canDeleteProxy = hasPermission('proxy_management:manage');
+  const canDeleteProxy = hasPermission(Resources.WithManage(Resources.PROXY_MANAGEMENT));
   
   return (
     <div className="flex items-center justify-start gap-6">

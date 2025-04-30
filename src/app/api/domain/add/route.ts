@@ -9,6 +9,7 @@ import { getRouteTemplate, getRedirectTemplate } from "../../_services/caddy/cad
 import prisma from "../../../../lib/prisma";
 import { Prisma } from "@prisma/client";
 import { getUserFromHeader, hasPermission } from "../../_services/user/user-service";
+import { Resources } from "@/config/resources";
 
 export async function POST(request: NextRequest) {
   try {
@@ -22,7 +23,7 @@ export async function POST(request: NextRequest) {
       );
     }
     
-    if (!hasPermission(user, "proxy_management:manage")) {
+    if (!hasPermission(user, Resources.WithManage(Resources.PROXY_MANAGEMENT))) {
       return NextResponse.json(
         { error: "Forbidden - Insufficient permissions" },
         { status: 403 }

@@ -17,6 +17,7 @@ import { CreateRoleDialog } from "@/components/user/create-role-dialog";
 import { EditRoleDialog } from "@/components/user/edit-role-dialog";
 import { Spinner } from "../ui/spinner";
 import { useAuthStore, hasPermission } from "@/store/authStore";
+import { Resources } from "@/config/resources";
 
 export default function RolesManagement() {
   const { data: rolesData, isLoading } = useGetRoles();
@@ -26,10 +27,10 @@ export default function RolesManagement() {
   const { user } = useAuthStore();
   
   // Check if user has view permissions
-  const canView = user?.isAdmin || hasPermission('user_management:manage') || hasPermission('user_management:view');
+  const canView = user?.isAdmin || hasPermission(Resources.WithManage(Resources.USER_MANAGEMENT)) || hasPermission(Resources.WithView(Resources.USER_MANAGEMENT));
   
   // Check if user can modify settings
-  const canModify = user?.isAdmin || hasPermission('user_management:manage');
+  const canModify = user?.isAdmin || hasPermission(Resources.WithManage(Resources.USER_MANAGEMENT));
 
   const handleEditRole = (role: Role) => {
     if (!canModify) return;

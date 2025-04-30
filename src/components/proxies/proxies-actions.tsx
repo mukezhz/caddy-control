@@ -6,6 +6,7 @@ import { AddProxyDialog } from './add-proxy-dialog'
 import { Eye } from 'lucide-react'
 import { ViewRawDialog } from './view-raw-dialog'
 import { hasPermission } from '@/store/authStore'
+import { Resources } from '@/config/resources'
 
 const ProxiesActions = () => {
     const [addDialogOpen, setAddDialogOpen] = useState(false);
@@ -14,7 +15,7 @@ const ProxiesActions = () => {
     const isFetchingDomains = useIsFetching({ queryKey: ["registered-domains"] });
     
     // Check if user has permissions to add proxies
-    const canModifyProxies = hasPermission('proxy_management:manage');
+    const canModifyProxies = hasPermission(Resources.WithManage(Resources.PROXY_MANAGEMENT));
 
     const refreshProxies = async () => {
         queryClient.invalidateQueries({

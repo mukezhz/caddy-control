@@ -9,6 +9,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { Resources } from '@/config/resources'
 import { useLogout } from '@/hooks/user/user.hooks'
 import { getInitialsForAvatar } from '@/lib/utils'
 import { useAuthStore, hasPermission } from '@/store/authStore'
@@ -27,7 +28,7 @@ export function ProfileDropdown({
   const nameInitials = getInitialsForAvatar(user?.username || 'xo')
 
   // Check if user has access to settings (admin or has user_management:manage permission)
-  const hasSettingsAccess = user?.isAdmin || hasPermission('user_management:manage') || hasPermission('user_management:view')
+  const hasSettingsAccess = user?.isAdmin || hasPermission(Resources.WithManage(Resources.USER_MANAGEMENT)) || hasPermission(Resources.WithView(Resources.USER_MANAGEMENT))
 
   return (
     <DropdownMenu modal={false}>

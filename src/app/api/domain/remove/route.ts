@@ -8,6 +8,7 @@ import {
 import prisma from "../../../../lib/prisma";
 import { Prisma } from "@prisma/client";
 import { getUserFromHeader, hasPermission } from "../../_services/user/user-service";
+import { Resources } from "@/config/resources";
 
 export async function DELETE(request: NextRequest) {
   try {
@@ -22,7 +23,7 @@ export async function DELETE(request: NextRequest) {
     }
     
     // Check if user has permission to delete domains (requires proxy_management:manage)
-    if (!user.isAdmin && !hasPermission(user, "proxy_management:manage")) {
+    if (!user.isAdmin && !hasPermission(user, Resources.WithManage(Resources.PROXY_MANAGEMENT))) {
       return NextResponse.json(
         { error: "Forbidden - Insufficient permissions" },
         { status: 403 }

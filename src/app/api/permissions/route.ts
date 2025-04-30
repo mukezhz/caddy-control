@@ -3,6 +3,7 @@ import { CreatePermissionSchema } from "@/schemas/user/roles.schema";
 import prisma from "@/lib/prisma";
 import { z } from "zod";
 import { getUserFromHeader, hasPermission } from "../_services/user/user-service";
+import { Resources } from "@/config/resources";
 
 // Get all permissions
 export async function GET(request: NextRequest) {
@@ -16,7 +17,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    if (!user.isAdmin && !hasPermission(user, "user_management:view")) {
+    if (!user.isAdmin && !hasPermission(user, Resources.WithView(Resources.USER_MANAGEMENT))) {
       return NextResponse.json(
         { error: "Forbidden - Insufficient permissions" },
         { status: 403 }
@@ -55,7 +56,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Allow both admins and users with user_management:manage permission
-    if (!user.isAdmin && !hasPermission(user, "user_management:manage")) {
+    if (!user.isAdmin && !hasPermission(user, Resources.WithManage(Resources.USER_MANAGEMENT))) {
       return NextResponse.json(
         { error: "Forbidden - Insufficient permissions" },
         { status: 403 }

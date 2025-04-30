@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { getUserFromHeader, hasPermission } from "../../_services/user/user-service";
+import { Resources } from "@/config/resources";
 
 export async function DELETE(
   request: NextRequest,
@@ -17,7 +18,7 @@ export async function DELETE(
     }
 
     // Check if user has permission to delete users (requires admin or user_management:manage)
-    if (!currentUser.isAdmin && !hasPermission(currentUser, "user_management:manage")) {
+    if (!currentUser.isAdmin && !hasPermission(currentUser, Resources.WithManage(Resources.USER_MANAGEMENT))) {
       return NextResponse.json(
         { error: "Forbidden - Insufficient permissions" },
         { status: 403 }

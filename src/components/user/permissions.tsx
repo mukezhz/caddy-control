@@ -23,7 +23,7 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { RESOURCES, ResourceAction, generatePermissionName, getPermissionDescription } from "@/config/resources";
+import { RESOURCES, ResourceAction, Resources, generatePermissionName, getPermissionDescription } from "@/config/resources";
 import { Badge } from "../ui/badge";
 import {
   Accordion,
@@ -40,10 +40,10 @@ export default function PermissionsManagement() {
   const { user } = useAuthStore();
 
   // Check if user has view permissions
-  const canView = user?.isAdmin || hasPermission('user_management:manage') || hasPermission('user_management:view');
+  const canView = user?.isAdmin || hasPermission(Resources.WithManage(Resources.USER_MANAGEMENT)) || hasPermission(Resources.WithView(Resources.USER_MANAGEMENT));
 
   // Check if user can modify settings
-  const canModify = user?.isAdmin || hasPermission('user_management:manage');
+  const canModify = user?.isAdmin || hasPermission(Resources.WithManage(Resources.USER_MANAGEMENT));
 
   const { mutate: createPermission, isPending } = useCreatePermission();
 
