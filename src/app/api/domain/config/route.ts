@@ -24,8 +24,8 @@ export async function GET(request: NextRequest) {
       // Default view permission
       requiredPermission = 'proxy_management:view';
     }
-
-    if (!hasPermission(user, requiredPermission) && !user.isAdmin) {
+    // Fix the permission check - use OR logic instead of AND
+    if (!hasPermission(user, requiredPermission)) {
       return NextResponse.json(
         { error: "Forbidden - Insufficient permissions" },
         { status: 403 }
