@@ -27,7 +27,7 @@ const ProxyRecord = ({ record }: ProxyRecordProps) => {
   return (
     <div className="flex flex-col items-start gap-1">
       <div className="font-semibold flex items-center justify-start gap-2">
-        {record.incomingAddress}
+        <a href={`${record.enableHttps ? "https": "http"}://${record.incomingAddress}`} target="_blank" rel="noopener noreferrer">{record.incomingAddress}</a>
         {
           record.enableHttps && (
             <span><Badge variant={'outline'}>SSL Enabled</Badge></span>
