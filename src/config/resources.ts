@@ -1,5 +1,5 @@
 // Define the resource types available in the system
-export type ResourceAction = 'view' | 'modify' | 'manage';
+export type ResourceAction = 'view' | 'manage';
 
 export interface Resource {
   id: string;
@@ -11,46 +11,22 @@ export interface Resource {
 // Define the resources available in the system
 export const RESOURCES: Resource[] = [
   {
-    id: 'domains',
-    name: 'Domains',
-    description: 'Manage domain configurations',
-    availableActions: ['view', 'modify', 'manage'],
-  },
-  {
-    id: 'proxies',
-    name: 'Proxies',
-    description: 'Configure proxy settings',
-    availableActions: ['view', 'modify', 'manage'],
-  },
-  {
-    id: 'api_keys',
-    name: 'API Keys',
-    description: 'Manage API keys for system access',
-    availableActions: ['view', 'modify', 'manage'],
-  },
-  {
-    id: 'users',
-    name: 'Users',
-    description: 'Manage user accounts',
-    availableActions: ['view', 'modify', 'manage'],
-  },
-  {
-    id: 'roles',
-    name: 'Roles',
-    description: 'Configure user roles',
-    availableActions: ['view', 'modify', 'manage'],
-  },
-  {
-    id: 'system',
-    name: 'System',
-    description: 'Access and control system settings',
+    id: 'proxy_management',
+    name: 'Proxy Management',
+    description: 'Manage proxies and domain configurations',
     availableActions: ['view', 'manage'],
   },
   {
-    id: 'dashboard',
-    name: 'Dashboard',
-    description: 'Access the system dashboard',
-    availableActions: ['view'],
+    id: 'api_management',
+    name: 'API Management',
+    description: 'Manage API keys for system access',
+    availableActions: ['view', 'manage'],
+  },
+  {
+    id: 'user_management',
+    name: 'User Management',
+    description: 'Manage user accounts and permissions',
+    availableActions: ['view', 'manage'],
   },
 ];
 
@@ -66,7 +42,6 @@ export const getPermissionDescription = (resourceId: string, action: ResourceAct
   
   const actionDescriptions: Record<ResourceAction, string> = {
     view: `View ${resource.name.toLowerCase()}`,
-    modify: `Modify ${resource.name.toLowerCase()}`,
     manage: `Full management of ${resource.name.toLowerCase()}`
   };
   

@@ -19,7 +19,7 @@ const Keys = ({ keysData }: Props) => {
   const [visibleKeys, setVisibleKeys] = useState<{ [key: number]: boolean }>({});
   
   // Check if user has permission to delete API keys
-  const canDeleteKey = hasPermission('api_keys:manage') || hasPermission('api_keys:modify');
+  const canDeleteKey = hasPermission('api_management:manage');
 
   const handleDeleteCancel = () => {
     setOpenDelete(false);

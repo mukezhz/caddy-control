@@ -16,8 +16,8 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Allow both admins and users with system:manage permission
-    if (!user.isAdmin && !(hasPermission(user, "system:manage") || hasPermission(user, "system:view"))) {
+    // Allow both admins and users with user_management permission
+    if (!user.isAdmin && !(hasPermission(user, "user_management:manage") || hasPermission(user, "user_management:view"))) {
       return NextResponse.json(
         { error: "Forbidden - Insufficient permissions" },
         { status: 403 }
@@ -55,8 +55,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Allow both admins and users with system:manage permission
-    if (!user.isAdmin && !hasPermission(user, "system:manage")) {
+    // Allow both admins and users with user_management:manage permission
+    if (!user.isAdmin && !hasPermission(user, "user_management:manage")) {
       return NextResponse.json(
         { error: "Forbidden - Insufficient permissions" },
         { status: 403 }

@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import type { MainConfig } from "./template-types";
 import { getCaddyConfigTemplate, getRouteTemplate } from "./caddy-templates";
 import prisma from "../../../../lib/prisma";
@@ -19,7 +19,7 @@ export const getCaddyConfig = async (timeout = 0): Promise<MainConfig> => {
 export const loadCaddyConfig = async (
 	payload: MainConfig,
 ): Promise<MainConfig> => {
-	const caddyConfig = await axios.post(
+	const caddyConfig: AxiosResponse<MainConfig> = await axios.post(
 		`${caddyAdminURL}/load`,
 		payload,
 	);

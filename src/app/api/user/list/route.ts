@@ -13,8 +13,8 @@ export async function GET(request: NextRequest) {
       );
     }
     
-    // Check if user has permission to list users (requires admin or system:manage)
-    if (!user.isAdmin && !(hasPermission(user, "system:manage") || hasPermission(user, "system:view"))) {
+    // Check if user has permission to list users (requires admin or user_management:view/manage)
+    if (!user.isAdmin && !(hasPermission(user, "user_management:manage") || hasPermission(user, "user_management:view"))) {
       return NextResponse.json(
         { error: "Forbidden - Insufficient permissions" },
         { status: 403 }

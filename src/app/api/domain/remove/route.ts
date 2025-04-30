@@ -21,8 +21,8 @@ export async function DELETE(request: NextRequest) {
       );
     }
     
-    // Check if user has permission to delete domains (requires proxies:manage or proxies:modify)
-    if (!hasPermission(user, "proxies:manage") && !hasPermission(user, "proxies:modify")) {
+    // Check if user has permission to delete domains (requires proxy_management:manage)
+    if (!user.isAdmin && !hasPermission(user, "proxy_management:manage")) {
       return NextResponse.json(
         { error: "Forbidden - Insufficient permissions" },
         { status: 403 }

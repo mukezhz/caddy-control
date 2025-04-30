@@ -16,8 +16,8 @@ export async function POST(request: NextRequest) {
       );
     }
     
-    // Check if user has permission to create API keys (requires api_keys:manage or api_keys:modify)
-    if (!hasPermission(user, "api_keys:manage") && !hasPermission(user, "api_keys:modify")) {
+    // Check if user has permission to create API keys (requires api_management:manage)
+    if (!user.isAdmin && !hasPermission(user, "api_management:manage")) {
       return NextResponse.json(
         { error: "Forbidden - Insufficient permissions" },
         { status: 403 }
@@ -69,9 +69,9 @@ export async function GET(request: NextRequest) {
     }
     
     // Check if user has permission to view API keys
-    if (!hasPermission(user, "api_keys:view") && 
-        !hasPermission(user, "api_keys:manage") && 
-        !hasPermission(user, "api_keys:modify")) {
+    if (!user.isAdmin && 
+        !hasPermission(user, "api_management:view") && 
+        !hasPermission(user, "api_management:manage")) {
       return NextResponse.json(
         { error: "Forbidden - Insufficient permissions" },
         { status: 403 }
@@ -108,8 +108,8 @@ export async function DELETE(request: NextRequest) {
       );
     }
     
-    // Check if user has permission to delete API keys (requires api_keys:manage or api_keys:modify)
-    if (!hasPermission(user, "api_keys:manage") && !hasPermission(user, "api_keys:modify")) {
+    // Check if user has permission to delete API keys (requires api_management:manage)
+    if (!user.isAdmin && !hasPermission(user, "api_management:manage")) {
       return NextResponse.json(
         { error: "Forbidden - Insufficient permissions" },
         { status: 403 }

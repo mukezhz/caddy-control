@@ -16,8 +16,8 @@ export async function POST(request: NextRequest) {
       );
     }
     
-    // Check if user has permission to create users (requires admin or system:manage)
-    if (!user.isAdmin && !hasPermission(user, "system:manage")) {
+    // Check if user has permission to create users (requires admin or user_management:manage)
+    if (!user.isAdmin && !hasPermission(user, "user_management:manage")) {
       return NextResponse.json(
         { error: "Forbidden - Insufficient permissions" },
         { status: 403 }

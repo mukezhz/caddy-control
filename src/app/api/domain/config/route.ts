@@ -16,17 +16,13 @@ export async function GET(request: NextRequest) {
     
     const path = request.nextUrl.pathname;
     let requiredPermission;
-    if (path.includes('/')) {
-      requiredPermission = 'dashboard:view';
-    }else if (path.includes('/proxies')) {
-      requiredPermission = 'proxies:manage';
-    } else if (path.includes('/system')) {
-      requiredPermission = 'system:manage';
+    
+    // All paths will use proxy_management permissions
+    if (path.includes('/proxies')) {
+      requiredPermission = 'proxy_management:manage';
     } else {
-      return NextResponse.json(
-        { error: "Forbidden - Unknown path" },
-        { status: 403 }
-      );
+      // Default view permission
+      requiredPermission = 'proxy_management:view';
     }
 
     if (!hasPermission(user, requiredPermission) && !user.isAdmin) {

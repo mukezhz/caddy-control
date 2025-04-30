@@ -11,7 +11,7 @@ const KeyActions = () => {
     const isFetchingKeys = useIsFetching({ queryKey: ["api-keys"] });
     
     // Check if user has permissions to create API keys
-    const canModifyKeys = hasPermission('api_keys:manage') || hasPermission('api_keys:modify');
+    const canModifyKeys = hasPermission('api_management:manage');
 
     const refreshKeys = async () => {
         queryClient.invalidateQueries({
