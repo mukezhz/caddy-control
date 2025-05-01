@@ -1,4 +1,9 @@
-import { CreatePermissionData, CreateRoleData, UpdateRoleData, AssignRoleData } from "@/schemas/user/roles.schema";
+import {
+  CreatePermissionData,
+  CreateRoleData,
+  UpdateRoleData,
+  AssignRoleData,
+} from "@/schemas/user/roles.schema";
 import apiClient from "@/lib/api-client";
 import { handleServerError } from "@/lib/handle-server-error";
 import { Permission, Role } from "@/schemas/user/user.schema";
@@ -37,31 +42,33 @@ export const roleService = {
     const response = await apiClient.get("/api/permissions");
     return response?.data;
   },
-  
-  createPermission: async (payload: CreatePermissionData): Promise<PermissionResponse> => {
+
+  createPermission: async (
+    payload: CreatePermissionData
+  ): Promise<PermissionResponse> => {
     const response = await apiClient.post("/api/permissions", payload);
     return response?.data;
   },
-  
+
   // Role functions
   getRoles: async (): Promise<RolesResponse> => {
     const response = await apiClient.get("/api/roles");
     return response?.data;
   },
-  
+
   createRole: async (payload: CreateRoleData): Promise<RoleResponse> => {
     const response = await apiClient.post("/api/roles", payload);
     return response?.data;
   },
-  
+
   updateRole: async (payload: UpdateRoleData): Promise<RoleResponse> => {
     const response = await apiClient.put(`/api/roles/${payload.id}`, payload);
     return response?.data;
   },
-  
+
   assignRole: async (payload: AssignRoleData): Promise<void> => {
     await apiClient.post("/api/user/assign-role", payload);
-  }
+  },
 };
 
 // Permission hooks
@@ -77,7 +84,7 @@ export const useGetPermissions = (enabled = true) => {
 
 export const useCreatePermission = () => {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: roleService.createPermission,
     throwOnError: false,
@@ -105,7 +112,7 @@ export const useGetRoles = (enabled = true) => {
 
 export const useCreateRole = () => {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: roleService.createRole,
     throwOnError: false,
@@ -122,7 +129,7 @@ export const useCreateRole = () => {
 
 export const useUpdateRole = () => {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: roleService.updateRole,
     throwOnError: false,
@@ -139,7 +146,7 @@ export const useUpdateRole = () => {
 
 export const useAssignRole = () => {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: roleService.assignRole,
     throwOnError: false,

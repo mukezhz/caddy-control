@@ -3,7 +3,7 @@ import { verifyToken } from "./app/api/_services/token/token.service";
 import prisma from "./lib/prisma";
 import { JwtPayload } from "jsonwebtoken";
 
-const unauthenticatedRoutes = ["/api/user/login"]
+const unauthenticatedRoutes = ["/api/user/login"];
 
 export async function middleware(req: NextRequest) {
   if (unauthenticatedRoutes.includes(req.nextUrl.pathname)) {
@@ -65,12 +65,12 @@ export async function middleware(req: NextRequest) {
         include: {
           permissions: {
             include: {
-              permission: true
-            }
-          }
-        }
-      }
-    }
+              permission: true,
+            },
+          },
+        },
+      },
+    },
   });
   if (!user) {
     return NextResponse.json(

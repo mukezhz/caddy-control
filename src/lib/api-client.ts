@@ -1,10 +1,10 @@
-import { getAccessToken, resetAuth } from '@/store/authStore';
-import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from 'axios';
+import { getAccessToken, resetAuth } from "@/store/authStore";
+import axios, { AxiosError, AxiosInstance, AxiosRequestConfig } from "axios";
 
 // Configuration for the API client
 const API_CONFIG: AxiosRequestConfig = {
   headers: {
-    'Content-Type': 'application/json'
+    "Content-Type": "application/json",
   },
   // You could add baseURL here if needed
   // baseURL: process.env.NEXT_PUBLIC_API_URL,
@@ -15,7 +15,7 @@ const API_CONFIG: AxiosRequestConfig = {
  */
 const createApiClient = (): AxiosInstance => {
   const client = axios.create(API_CONFIG);
-  
+
   // Request interceptor to add authorization header
   client.interceptors.request.use(
     (config) => {
@@ -35,16 +35,18 @@ const createApiClient = (): AxiosInstance => {
       // Handle authentication errors
       if (error.response && [401, 403].includes(error.response.status)) {
         // Log auth failure - could be expanded with more detailed info
-        console.log(`Authentication error (${error.response.status}): ${error.response.statusText}`);
+        console.log(
+          `Authentication error (${error.response.status}): ${error.response.statusText}`
+        );
         // Reset auth state
         resetAuth();
-        
+
         // Only redirect in browser environment
-        if (typeof window !== 'undefined') {
-          window.location.href = '/login';
+        if (typeof window !== "undefined") {
+          window.location.href = "/login";
         }
       }
-      
+
       return Promise.reject(error);
     }
   );

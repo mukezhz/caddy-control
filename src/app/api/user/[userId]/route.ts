@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
-import { getUserFromHeader, hasPermission } from "../../_services/user/user-service";
+import {
+  getUserFromHeader,
+  hasPermission,
+} from "../../_services/user/user-service";
 import { Resources } from "@/config/resources";
 
 export async function DELETE(
@@ -11,14 +14,17 @@ export async function DELETE(
     const currentUser = await getUserFromHeader(request);
 
     if (!currentUser) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     // Check if user has permission to delete users (requires admin or user_management:manage)
-    if (!currentUser.isAdmin && !hasPermission(currentUser, Resources.WithManage(Resources.USER_MANAGEMENT))) {
+    if (
+      !currentUser.isAdmin &&
+      !hasPermission(
+        currentUser,
+        Resources.WithManage(Resources.USER_MANAGEMENT)
+      )
+    ) {
       return NextResponse.json(
         { error: "Forbidden - Insufficient permissions" },
         { status: 403 }
@@ -28,14 +34,11 @@ export async function DELETE(
     const { userId } = await params;
 
     const targetUser = await prisma.user.findUnique({
-      where: { id: userId }
+      where: { id: userId },
     });
 
     if (!targetUser) {
-      return NextResponse.json(
-        { error: "User not found." },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "User not found." }, { status: 404 });
     }
 
     if (userId === currentUser.id) {
@@ -46,7 +49,7 @@ export async function DELETE(
     }
 
     await prisma.user.delete({
-      where: { id: userId }
+      where: { id: userId },
     });
 
     return NextResponse.json(

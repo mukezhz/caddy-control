@@ -8,8 +8,8 @@ const prisma =
     log:
       process.env.NODE_ENV === "development"
         ? ["error", "warn"]
-        // ? ["query", "error", "warn"]
-        : ["error"],
+        : // ? ["query", "error", "warn"]
+          ["error"],
   });
 
 if (process.env.NODE_ENV !== "production") {

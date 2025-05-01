@@ -18,18 +18,18 @@ export async function POST(request: NextRequest) {
     const hashedPassword = await bcrypt.hash(confirmPassword, 10);
     await prisma.user.update({
       where: {
-        id: user.id
+        id: user.id,
       },
       data: {
         hashedPassword,
-        forcePasswordChange: false
-      }
-    })
+        forcePasswordChange: false,
+      },
+    });
 
     return NextResponse.json(
       {
         data: {
-          message: "Password updated!"
+          message: "Password updated!",
         },
       },
       { status: 201 }

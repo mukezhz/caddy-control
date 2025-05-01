@@ -7,7 +7,10 @@ import {
 } from "../../_services/caddy/caddy-service";
 import prisma from "../../../../lib/prisma";
 import { Prisma } from "@prisma/client";
-import { getUserFromHeader, hasPermission } from "../../_services/user/user-service";
+import {
+  getUserFromHeader,
+  hasPermission,
+} from "../../_services/user/user-service";
 import { Resources } from "@/config/resources";
 
 export async function DELETE(request: NextRequest) {
@@ -16,14 +19,14 @@ export async function DELETE(request: NextRequest) {
     const user = await getUserFromHeader(request);
 
     if (!user) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     // Check if user has permission to delete domains (requires proxy_management:manage)
-    if (!user.isAdmin && !hasPermission(user, Resources.WithManage(Resources.PROXY_MANAGEMENT))) {
+    if (
+      !user.isAdmin &&
+      !hasPermission(user, Resources.WithManage(Resources.PROXY_MANAGEMENT))
+    ) {
       return NextResponse.json(
         { error: "Forbidden - Insufficient permissions" },
         { status: 403 }

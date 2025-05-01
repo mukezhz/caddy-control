@@ -1,5 +1,8 @@
 import { MainConfig } from "@/app/api/_services/caddy/template-types";
-import { AddDomainValues, DeleteDomainValues } from "@/app/api/domain/domain-schema";
+import {
+  AddDomainValues,
+  DeleteDomainValues,
+} from "@/app/api/domain/domain-schema";
 import { DomainWithCheckResults } from "@/app/api/domain/domain-types";
 import apiClient from "@/lib/api-client";
 import { handleServerError } from "@/lib/handle-server-error";
@@ -38,19 +41,29 @@ export const domainService = {
     return response?.data;
   },
 
-  deleteDomain: async (payload: DeleteDomainValues): Promise<DomainResponse> => {
+  deleteDomain: async (
+    payload: DeleteDomainValues
+  ): Promise<DomainResponse> => {
     const response = await apiClient.delete("/api/domain/remove", {
-      data: payload
+      data: payload,
     });
     return response?.data;
-  }
+  },
 };
 
 // Helper to invalidate common domain queries
-const invalidateDomainQueries = async (queryClient: ReturnType<typeof useQueryClient>) => {
+const invalidateDomainQueries = async (
+  queryClient: ReturnType<typeof useQueryClient>
+) => {
   await Promise.all([
-    queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.DOMAINS], exact: false }),
-    queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.CONFIG], exact: false })
+    queryClient.invalidateQueries({
+      queryKey: [QUERY_KEYS.DOMAINS],
+      exact: false,
+    }),
+    queryClient.invalidateQueries({
+      queryKey: [QUERY_KEYS.CONFIG],
+      exact: false,
+    }),
   ]);
 };
 
@@ -77,7 +90,7 @@ export const useGetRawConfig = (enabled = true) => {
 
 export const useAddDomain = () => {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: domainService.addDomain,
     throwOnError: false,
@@ -91,7 +104,7 @@ export const useAddDomain = () => {
 
 export const useDeleteDomain = () => {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: domainService.deleteDomain,
     throwOnError: false,

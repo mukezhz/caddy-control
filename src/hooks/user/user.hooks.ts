@@ -1,5 +1,10 @@
 import { handleServerError } from "@/lib/handle-server-error";
-import { AdminPasswordResetData, CreateUserData, LoginFormData, PasswordChangeData } from "@/schemas/user/auth.schema";
+import {
+  AdminPasswordResetData,
+  CreateUserData,
+  LoginFormData,
+  PasswordChangeData,
+} from "@/schemas/user/auth.schema";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import apiClient from "@/lib/api-client";
 import { useAuthStore } from "@/store/authStore";
@@ -51,7 +56,9 @@ export const userService = {
     return res.data;
   },
 
-  changePassword: async (payload: PasswordChangeData): Promise<AuthResponse> => {
+  changePassword: async (
+    payload: PasswordChangeData
+  ): Promise<AuthResponse> => {
     const res = await apiClient.post("/api/user/change-password", payload);
     return res.data;
   },
@@ -61,7 +68,9 @@ export const userService = {
     return res.data;
   },
 
-  adminResetPassword: async (payload: AdminPasswordResetData): Promise<MessageResponse> => {
+  adminResetPassword: async (
+    payload: AdminPasswordResetData
+  ): Promise<MessageResponse> => {
     const res = await apiClient.post(`/api/user/admin-reset-password`, payload);
     return res.data;
   },
@@ -69,7 +78,7 @@ export const userService = {
   deleteUser: async (userId: string): Promise<MessageResponse> => {
     const res = await apiClient.delete(`/api/user/${userId}`);
     return res.data;
-  }
+  },
 };
 
 // React Query hooks
@@ -119,7 +128,7 @@ export const useGetProfile = (enabled = true) => {
 
 export const useChangePassword = () => {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: userService.changePassword,
     throwOnError: false,
@@ -128,7 +137,7 @@ export const useChangePassword = () => {
       toast("Password changed!");
       await queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.PROFILE],
-        exact: false
+        exact: false,
       });
     },
   });
@@ -136,7 +145,7 @@ export const useChangePassword = () => {
 
 export const useCreateUser = () => {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: userService.createUser,
     throwOnError: false,
@@ -174,7 +183,7 @@ export const useLogin = () => {
 export const useLogout = () => {
   const { resetAuthStore } = useAuthStore();
   const router = useRouter();
-  
+
   return () => {
     resetAuthStore();
     router.replace("/login");
@@ -194,7 +203,7 @@ export const useAdminResetPassword = () => {
 
 export const useDeleteUser = () => {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: userService.deleteUser,
     throwOnError: false,

@@ -1,147 +1,158 @@
-import type { HandlerConfig, MainConfig, RouteConfig, RouteHandlerConfig, TransportVersion } from "./template-types";
+import type {
+  HandlerConfig,
+  MainConfig,
+  RouteConfig,
+  RouteHandlerConfig,
+  TransportVersion,
+} from "./template-types";
 
 export const getCaddyConfigTemplate = (configuredRoutes: RouteConfig[]) => {
-	const caddyConfig: MainConfig = {
-		admin: {
-			listen: "0.0.0.0:2019",
-		},
-		apps: {
-			http: {
-				servers: {
-					main: {
-						listen: [":80", ":443"],
-						automatic_https: {
-							disable: false,
-						},
-						routes: configuredRoutes,
-					},
-				},
-			},
-		},
-	};
-	return caddyConfig;
+  const caddyConfig: MainConfig = {
+    admin: {
+      listen: "0.0.0.0:2019",
+    },
+    apps: {
+      http: {
+        servers: {
+          main: {
+            listen: [":80", ":443"],
+            automatic_https: {
+              disable: false,
+            },
+            routes: configuredRoutes,
+          },
+        },
+      },
+    },
+  };
+  return caddyConfig;
 };
 
 export const getRouteTemplate = (
-	incomingAddress: string,
-	targetAddress: string,
-	upstreamPort = 443,
-	enableHttps = true,
-	versions?: TransportVersion[],
+  incomingAddress: string,
+  targetAddress: string,
+  upstreamPort = 443,
+  enableHttps = true,
+  versions?: TransportVersion[]
 ): RouteConfig => {
-	const handler = getHandlerTemplate(targetAddress, upstreamPort, enableHttps, versions);
-	const routeConfig: RouteConfig = {
-		match: [
-			{
-				host: [incomingAddress],
-			},
-		],
-		handle: [handler],
-	};
+  const handler = getHandlerTemplate(
+    targetAddress,
+    upstreamPort,
+    enableHttps,
+    versions
+  );
+  const routeConfig: RouteConfig = {
+    match: [
+      {
+        host: [incomingAddress],
+      },
+    ],
+    handle: [handler],
+  };
 
-	return routeConfig;
+  return routeConfig;
 };
 
 export const getHandlerTemplate = (
-	targetAddress: string,
-	upstreamPort = 443,
-	enableHttps = true,
-	versions?: TransportVersion[],
+  targetAddress: string,
+  upstreamPort = 443,
+  enableHttps = true,
+  versions?: TransportVersion[]
 ): HandlerConfig => {
-	const handlerConfig: HandlerConfig = {
-		handler: "reverse_proxy",
-		upstreams: [{ dial: `${targetAddress}:${upstreamPort}` }],
-		headers: {
-			request: {
-				set: {
-					Host: ["{http.reverse_proxy.upstream.hostport}"],
-					"X-Origin-Host": ["{http.reverse_proxy.upstream.host}"],
-					"X-Origin-IP": ["{http.reverse-proxy.upstream.address}"],
-				},
-			},
-		},
-		transport: {
-			protocol: "http",
-		},
-	};
-	if (versions?.length && handlerConfig.transport) {
-		handlerConfig.transport.versions = versions;
-	}
+  const handlerConfig: HandlerConfig = {
+    handler: "reverse_proxy",
+    upstreams: [{ dial: `${targetAddress}:${upstreamPort}` }],
+    headers: {
+      request: {
+        set: {
+          Host: ["{http.reverse_proxy.upstream.hostport}"],
+          "X-Origin-Host": ["{http.reverse_proxy.upstream.host}"],
+          "X-Origin-IP": ["{http.reverse-proxy.upstream.address}"],
+        },
+      },
+    },
+    transport: {
+      protocol: "http",
+    },
+  };
+  if (versions?.length && handlerConfig.transport) {
+    handlerConfig.transport.versions = versions;
+  }
 
-	if (!enableHttps) {
-		delete handlerConfig?.transport?.tls;
-	}
+  if (!enableHttps) {
+    delete handlerConfig?.transport?.tls;
+  }
 
-	return handlerConfig;
+  return handlerConfig;
 };
 
 export const getRouteHandlerTemplate = (
-	targetAddress: string,
-	upstreamPort = 443,
-	enableHttps = true,
+  targetAddress: string,
+  upstreamPort = 443,
+  enableHttps = true
 ): RouteHandlerConfig => {
-	const handlerConfig: HandlerConfig = {
-		handler: "reverse_proxy",
-		upstreams: [{ dial: `${targetAddress}:${upstreamPort}` }],
-		headers: {
-			request: {
-				set: {
-					Host: ["{http.reverse_proxy.upstream.hostport}"],
-					"X-Origin-Host": ["{http.reverse_proxy.upstream.host}"],
-					"X-Origin-IP": ["{http.reverse-proxy.upstream.address}"],
-				},
-			},
-		},
-		transport: {
-			protocol: "http",
-		},
-	};
+  const handlerConfig: HandlerConfig = {
+    handler: "reverse_proxy",
+    upstreams: [{ dial: `${targetAddress}:${upstreamPort}` }],
+    headers: {
+      request: {
+        set: {
+          Host: ["{http.reverse_proxy.upstream.hostport}"],
+          "X-Origin-Host": ["{http.reverse_proxy.upstream.host}"],
+          "X-Origin-IP": ["{http.reverse-proxy.upstream.address}"],
+        },
+      },
+    },
+    transport: {
+      protocol: "http",
+    },
+  };
 
-	if (!enableHttps) {
-		delete handlerConfig?.transport?.tls;
-	}
+  if (!enableHttps) {
+    delete handlerConfig?.transport?.tls;
+  }
 
-	return {
-		handler: "subroute",
-		routes: [
-			{
-				handle: [handlerConfig],
-			},
-		]
-	};
+  return {
+    handler: "subroute",
+    routes: [
+      {
+        handle: [handlerConfig],
+      },
+    ],
+  };
 };
 
 export const getRedirectTemplate = (
-	fromDomain: string,
-	toDomain: string,
-	enableHttps = true,
+  fromDomain: string,
+  toDomain: string,
+  enableHttps = true
 ): RouteConfig => {
-	const protocol = enableHttps ? "https" : "http";
-	const routeConfig: RouteConfig = {
-		match: [
-			{
-				host: [fromDomain],
-			},
-		],
-		handle: [
-			{
-				handler: "subroute",
-				routes: [
-					{
-						handle: [
-							{
-								handler: "static_response",
-								headers: {
-									Location: [`${protocol}://${toDomain}{http.request.uri}`],
-								},
-								status_code: 301,
-							},
-						],
-					},
-				],
-			},
-		],
-	};
+  const protocol = enableHttps ? "https" : "http";
+  const routeConfig: RouteConfig = {
+    match: [
+      {
+        host: [fromDomain],
+      },
+    ],
+    handle: [
+      {
+        handler: "subroute",
+        routes: [
+          {
+            handle: [
+              {
+                handler: "static_response",
+                headers: {
+                  Location: [`${protocol}://${toDomain}{http.request.uri}`],
+                },
+                status_code: 301,
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  };
 
-	return routeConfig;
+  return routeConfig;
 };

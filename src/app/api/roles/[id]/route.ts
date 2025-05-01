@@ -2,12 +2,16 @@ import { NextRequest, NextResponse } from "next/server";
 import { UpdateRoleSchema } from "@/schemas/user/roles.schema";
 import prisma from "@/lib/prisma";
 import { z } from "zod";
-import { getUserFromHeader, hasPermission } from "../../_services/user/user-service";
+import {
+  getUserFromHeader,
+  hasPermission,
+} from "../../_services/user/user-service";
 import { Resources } from "@/config/resources";
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }) {
+  { params }: { params: Promise<{ id: string }> }
+) {
   try {
     const { id: roleId } = await params;
 
@@ -15,14 +19,14 @@ export async function PUT(
     const user = await getUserFromHeader(request);
 
     if (!user) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     // Check if user has permission to update roles (requires admin or user_management:manage)
-    if (!user.isAdmin && !hasPermission(user, Resources.WithManage(Resources.USER_MANAGEMENT))) {
+    if (
+      !user.isAdmin &&
+      !hasPermission(user, Resources.WithManage(Resources.USER_MANAGEMENT))
+    ) {
       return NextResponse.json(
         { error: "Forbidden - Insufficient permissions" },
         { status: 403 }
@@ -35,10 +39,7 @@ export async function PUT(
     });
 
     if (!existingRole) {
-      return NextResponse.json(
-        { error: "Role not found." },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "Role not found." }, { status: 404 });
     }
 
     // Validate request body
@@ -64,9 +65,9 @@ export async function PUT(
 
       // Then add new permissions
       if (permissions.length > 0) {
-        const permissionConnections = permissions.map(permissionId => ({
+        const permissionConnections = permissions.map((permissionId) => ({
           permissionId,
-          roleId
+          roleId,
         }));
 
         await prisma.rolePermission.createMany({
@@ -108,14 +109,14 @@ export async function DELETE(
     const user = await getUserFromHeader(request);
 
     if (!user) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     // Check if user has permission to delete roles (requires admin or user_management:manage)
-    if (!user.isAdmin && !hasPermission(user, Resources.WithManage(Resources.USER_MANAGEMENT))) {
+    if (
+      !user.isAdmin &&
+      !hasPermission(user, Resources.WithManage(Resources.USER_MANAGEMENT))
+    ) {
       return NextResponse.json(
         { error: "Forbidden - Insufficient permissions" },
         { status: 403 }
@@ -128,10 +129,7 @@ export async function DELETE(
     });
 
     if (!existingRole) {
-      return NextResponse.json(
-        { error: "Role not found." },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "Role not found." }, { status: 404 });
     }
 
     // Check if role is assigned to any users

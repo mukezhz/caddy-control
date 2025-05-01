@@ -2,24 +2,27 @@ import { NextRequest, NextResponse } from "next/server";
 import { CreateRoleSchema } from "@/schemas/user/roles.schema";
 import prisma from "@/lib/prisma";
 import { z } from "zod";
-import { getUserFromHeader, hasPermission } from "../_services/user/user-service";
+import {
+  getUserFromHeader,
+  hasPermission,
+} from "../_services/user/user-service";
 import { Resources } from "@/config/resources";
 
 // Get all roles
 export async function GET(request: NextRequest) {
   try {
     const user = await getUserFromHeader(request);
-    
+
     if (!user) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-    
+
     // Check if user has permission to view roles
     // Note: Having user_management:manage permission automatically includes user_management:view access
-    if (!user.isAdmin && !hasPermission(user, Resources.WithView(Resources.USER_MANAGEMENT))) {
+    if (
+      !user.isAdmin &&
+      !hasPermission(user, Resources.WithView(Resources.USER_MANAGEMENT))
+    ) {
       return NextResponse.json(
         { error: "Forbidden - Insufficient permissions" },
         { status: 403 }
@@ -30,9 +33,9 @@ export async function GET(request: NextRequest) {
       include: {
         permissions: {
           include: {
-            permission: true
-          }
-        }
+            permission: true,
+          },
+        },
       },
       orderBy: {
         createdAt: "desc",
@@ -40,9 +43,9 @@ export async function GET(request: NextRequest) {
     });
 
     // Transform roles to match expected format
-    const transformedRoles = roles.map(role => ({
+    const transformedRoles = roles.map((role) => ({
       ...role,
-      permissions: role.permissions.map(rp => rp.permission)
+      permissions: role.permissions.map((rp) => rp.permission),
     }));
 
     return NextResponse.json({
@@ -62,16 +65,16 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const user = await getUserFromHeader(request);
-    
+
     if (!user) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-    
+
     // Check if user has permission to create roles (requires admin or user_management:manage)
-    if (!user.isAdmin && !hasPermission(user, Resources.WithManage(Resources.USER_MANAGEMENT))) {
+    if (
+      !user.isAdmin &&
+      !hasPermission(user, Resources.WithManage(Resources.USER_MANAGEMENT))
+    ) {
       return NextResponse.json(
         { error: "Forbidden - Insufficient permissions" },
         { status: 403 }
@@ -92,9 +95,9 @@ export async function POST(request: NextRequest) {
 
     // Add permissions if provided
     if (permissions && permissions.length > 0) {
-      const permissionConnections = permissions.map(permissionId => ({
+      const permissionConnections = permissions.map((permissionId) => ({
         permissionId,
-        roleId: role.id
+        roleId: role.id,
       }));
 
       await prisma.rolePermission.createMany({

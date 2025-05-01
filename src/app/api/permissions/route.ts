@@ -2,7 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { CreatePermissionSchema } from "@/schemas/user/roles.schema";
 import prisma from "@/lib/prisma";
 import { z } from "zod";
-import { getUserFromHeader, hasPermission } from "../_services/user/user-service";
+import {
+  getUserFromHeader,
+  hasPermission,
+} from "../_services/user/user-service";
 import { Resources } from "@/config/resources";
 
 // Get all permissions
@@ -11,13 +14,13 @@ export async function GET(request: NextRequest) {
     const user = await getUserFromHeader(request);
 
     if (!user) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    if (!user.isAdmin && !hasPermission(user, Resources.WithView(Resources.USER_MANAGEMENT))) {
+    if (
+      !user.isAdmin &&
+      !hasPermission(user, Resources.WithView(Resources.USER_MANAGEMENT))
+    ) {
       return NextResponse.json(
         { error: "Forbidden - Insufficient permissions" },
         { status: 403 }
@@ -49,14 +52,14 @@ export async function POST(request: NextRequest) {
     const user = await getUserFromHeader(request);
 
     if (!user) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     // Allow both admins and users with user_management:manage permission
-    if (!user.isAdmin && !hasPermission(user, Resources.WithManage(Resources.USER_MANAGEMENT))) {
+    if (
+      !user.isAdmin &&
+      !hasPermission(user, Resources.WithManage(Resources.USER_MANAGEMENT))
+    ) {
       return NextResponse.json(
         { error: "Forbidden - Insufficient permissions" },
         { status: 403 }
@@ -69,7 +72,7 @@ export async function POST(request: NextRequest) {
 
     // Check if permission with same name already exists
     const existingPermission = await prisma.permission.findUnique({
-      where: { name }
+      where: { name },
     });
 
     if (existingPermission) {

@@ -1,4 +1,4 @@
-import jwt, { JwtPayload, SignOptions } from 'jsonwebtoken';
+import jwt, { JwtPayload, SignOptions } from "jsonwebtoken";
 
 const secretKey: string = process.env.JWT_SECRET;
 
@@ -8,7 +8,10 @@ const secretKey: string = process.env.JWT_SECRET;
  * @param expiresIn Expiry time for the token (default: 1 day)
  * @returns The generated JWT token
  */
-const generateToken = (payload: string | object | Buffer, expiresIn: number = 86400000): string => {
+const generateToken = (
+  payload: string | object | Buffer,
+  expiresIn: number = 86400000
+): string => {
   const options: SignOptions = { expiresIn };
   return jwt.sign(payload, secretKey, options);
 };
@@ -22,7 +25,7 @@ const verifyToken = (token: string): JwtPayload | string | boolean => {
   try {
     return jwt.verify(token, secretKey);
   } catch {
-    return false
+    return false;
   }
 };
 

@@ -2,23 +2,26 @@ import { NextRequest, NextResponse } from "next/server";
 import { AdminPasswordResetSchema } from "@/schemas/user/auth.schema";
 import prisma from "@/lib/prisma";
 import { z } from "zod";
-import { getUserFromHeader, hasPermission } from "../../_services/user/user-service";
+import {
+  getUserFromHeader,
+  hasPermission,
+} from "../../_services/user/user-service";
 import bcrypt from "bcryptjs";
 import { Resources } from "@/config/resources";
 
 export async function POST(request: NextRequest) {
   try {
     const user = await getUserFromHeader(request);
-    
+
     if (!user) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-    
+
     // Check if user has permission to reset passwords (requires admin or user_management:manage)
-    if (!user.isAdmin && !hasPermission(user, Resources.WithManage(Resources.USER_MANAGEMENT))) {
+    if (
+      !user.isAdmin &&
+      !hasPermission(user, Resources.WithManage(Resources.USER_MANAGEMENT))
+    ) {
       return NextResponse.json(
         { error: "Forbidden - Insufficient permissions" },
         { status: 403 }
@@ -30,24 +33,21 @@ export async function POST(request: NextRequest) {
     const { userId, newPassword, forcePasswordChange } = reqPayload;
 
     const targetUser = await prisma.user.findUnique({
-      where: { id: userId }
+      where: { id: userId },
     });
 
     if (!targetUser) {
-      return NextResponse.json(
-        { error: "User not found." },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "User not found." }, { status: 404 });
     }
 
     const hashedPassword = await bcrypt.hash(newPassword, 10);
 
     await prisma.user.update({
       where: { id: userId },
-      data: { 
+      data: {
         hashedPassword,
-        forcePasswordChange 
-      }
+        forcePasswordChange,
+      },
     });
 
     return NextResponse.json(

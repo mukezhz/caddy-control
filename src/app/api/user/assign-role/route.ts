@@ -2,22 +2,25 @@ import { NextRequest, NextResponse } from "next/server";
 import { AssignRoleSchema } from "@/schemas/user/roles.schema";
 import prisma from "@/lib/prisma";
 import { z } from "zod";
-import { getUserFromHeader, hasPermission } from "../../_services/user/user-service";
+import {
+  getUserFromHeader,
+  hasPermission,
+} from "../../_services/user/user-service";
 import { Resources } from "@/config/resources";
 
 export async function POST(request: NextRequest) {
   try {
     const user = await getUserFromHeader(request);
-    
+
     if (!user) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-    
+
     // Check if user has permission to assign roles (requires admin or user_management:manage)
-    if (!user.isAdmin && !hasPermission(user, Resources.WithManage(Resources.USER_MANAGEMENT))) {
+    if (
+      !user.isAdmin &&
+      !hasPermission(user, Resources.WithManage(Resources.USER_MANAGEMENT))
+    ) {
       return NextResponse.json(
         { error: "Forbidden - Insufficient permissions" },
         { status: 403 }
@@ -30,32 +33,26 @@ export async function POST(request: NextRequest) {
 
     // Check if user exists
     const targetUser = await prisma.user.findUnique({
-      where: { id: userId }
+      where: { id: userId },
     });
 
     if (!targetUser) {
-      return NextResponse.json(
-        { error: "User not found." },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "User not found." }, { status: 404 });
     }
 
     // Check if role exists
     const role = await prisma.role.findUnique({
-      where: { id: roleId }
+      where: { id: roleId },
     });
 
     if (!role) {
-      return NextResponse.json(
-        { error: "Role not found." },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "Role not found." }, { status: 404 });
     }
 
     // Update user's role
     await prisma.user.update({
       where: { id: userId },
-      data: { roleId }
+      data: { roleId },
     });
 
     return NextResponse.json(

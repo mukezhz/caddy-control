@@ -1,4 +1,8 @@
-import { AddKeyValues, DeleteKeyValues, GetKeysResponse } from "@/app/api/keys/keys-schema";
+import {
+  AddKeyValues,
+  DeleteKeyValues,
+  GetKeysResponse,
+} from "@/app/api/keys/keys-schema";
 import apiClient from "@/lib/api-client";
 import { handleServerError } from "@/lib/handle-server-error";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -32,10 +36,10 @@ export const keysService = {
 
   deleteKey: async (payload: DeleteKeyValues): Promise<KeyResponse> => {
     const response = await apiClient.delete("/api/keys", {
-      data: payload
+      data: payload,
     });
     return response?.data;
-  }
+  },
 };
 
 // React Query hooks
@@ -51,7 +55,7 @@ export const useGetKeys = (enabled = true) => {
 
 export const useAddKey = () => {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: keysService.addKey,
     throwOnError: false,
@@ -68,7 +72,7 @@ export const useAddKey = () => {
 
 export const useDeleteKey = () => {
   const queryClient = useQueryClient();
-  
+
   return useMutation({
     mutationFn: keysService.deleteKey,
     throwOnError: false,

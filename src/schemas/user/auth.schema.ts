@@ -37,14 +37,12 @@ export const CreateUserSchema = z.object({
       message: "Please enter a username",
     })
     .min(4, { message: "Username must be 4 characters or longer." }),
-  password: z
-    .string()
-    .min(7, {
-      message: "Password must be at least 7 characters long",
-    }),
+  password: z.string().min(7, {
+    message: "Password must be at least 7 characters long",
+  }),
   isAdmin: z.boolean().optional().default(false),
   roleId: z.string().optional(),
-  forcePasswordChange: z.boolean().optional().default(true)
+  forcePasswordChange: z.boolean().optional().default(true),
 });
 
 export type CreateUserData = z.infer<typeof CreateUserSchema>;
@@ -53,12 +51,10 @@ export const AdminPasswordResetSchema = z.object({
   userId: z.string({
     required_error: "User ID is required",
   }),
-  newPassword: z
-    .string()
-    .min(7, {
-      message: "Password must be at least 7 characters long",
-    }),
-  forcePasswordChange: z.boolean().default(true)
+  newPassword: z.string().min(7, {
+    message: "Password must be at least 7 characters long",
+  }),
+  forcePasswordChange: z.boolean().default(true),
 });
 
 export type AdminPasswordResetData = z.infer<typeof AdminPasswordResetSchema>;
