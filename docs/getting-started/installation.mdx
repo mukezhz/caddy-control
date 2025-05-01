@@ -1,22 +1,22 @@
 ---
 title: Installation
-description: A guide to install Caddy Control locally for development or in production using Docker
+description: How to set up Caddy Control on your computer or server
 date: 2025-04-18
 ---
 
 # Installation Guide
 
-Welcome to the installation guide for Caddy Control! This guide will walk you through setting up Caddy Control both for local development and production deployment using Docker.
+This guide will show you how to install Caddy Control on your own computer for testing, or on a server for real-world use.
 
-## Local Development Setup
+## Setting Up on Your Computer
 
 <Steps>
   <Step>
-    <StepTitle>Step 1: Clone the Repository</StepTitle>
+    <StepTitle>Step 1: Get the Code</StepTitle>
     <StepContent>
     <div>
       <div>
-        Clone the Caddy Control repository to your local machine:
+        Copy the Caddy Control files to your computer:
       </div>
       ```sh
       git clone https://github.com/avashForReal/caddy-control.git
@@ -27,100 +27,102 @@ Welcome to the installation guide for Caddy Control! This guide will walk you th
   </Step>
   
   <Step>
-    <StepTitle>Step 2: Set Up Caddy Server</StepTitle>
+    <StepTitle>Step 2: Set Up the Server Part</StepTitle>
     <StepContent>
     <div>
-      <p>For local development, we recommend using the included Docker Compose configuration to set up Caddy Server:</p>
+      <p>Start the Caddy Server using our ready-made setup:</p>
       
       ```sh
       pnpm dev:caddy
       ```
       
-      This command uses the `docker-compose.dev.yml` file to start a local instance of Caddy Server.
+      This starts a Caddy Server on your computer using Docker.
       
       <Note>
-        While using Docker is recommended, you can also install Caddy directly on your system by following the <a href="https://caddyserver.com/docs/install" target="_blank" rel="noopener noreferrer">official Caddy installation guide</a>.
+        You can also install Caddy directly if you prefer, by following the <a href="https://caddyserver.com/docs/install" target="_blank" rel="noopener noreferrer">Caddy installation instructions</a>.
       </Note>
       </div>
     </StepContent>
   </Step>
   
   <Step>
-    <StepTitle>Step 3: Configure Environment Variables</StepTitle>
+    <StepTitle>Step 3: Set Up Your Settings</StepTitle>
     <StepContent>
     <div>
-      Create a `.env` file in the root directory with the following configuration:
+      Create a file named `.env` in the main folder with these settings:
       
       ```
-      APP_HOST=<YOUR-APP_DOMAIN>
+      APP_HOST=localhost
       CADDY_SERVER_IP=localhost
       CADDY_ADMIN_URL=http://localhost:2019
-      JWT_SECRET="awesomesecret"
+      JWT_SECRET="mysecretkey"
       ```
-      
-      <strong>Environment Variable Descriptions:</strong>
+      <Note>
+        Make sure to change the `JWT_SECRET` to a strong password.
+      <strong>What these settings mean:</strong>
       <ul>
-        <li><strong>APP_HOST</strong>: Not critical for local development</li>
-        <li><strong>CADDY_SERVER_IP</strong>: IP of the Caddy server (use localhost for local development)</li>
-        <li><strong>CADDY_ADMIN_URL</strong>: URL of the Caddy admin API</li>
-        <li><strong>JWT_SECRET</strong>: Secret key used for JWT token generation</li>
+        <li><strong>APP_HOST</strong>: Where your app will run (use localhost for testing)</li>
+        <li><strong>CADDY_SERVER_IP</strong>: Where Caddy is running (use localhost for testing)</li>
+        <li><strong>CADDY_ADMIN_URL</strong>: How to connect to Caddy's control panel</li>
+        <li><strong>JWT_SECRET</strong>: A password for keeping your login secure</li>
       </ul>
+      </Note>
       </div>
     </StepContent>
   </Step>
   
   <Step>
-    <StepTitle>Step 4: Install Dependencies</StepTitle>
+    <StepTitle>Step 4: Install Required Software</StepTitle>
     <StepContent>
     <div>
-      Install the project dependencies:
+      Install the software that Caddy Control needs:
       
       ```sh
       pnpm install
       ```
       
       <Note>
-        While pnpm is recommended, you can also use npm or yarn.
+        You can also use npm install or yarn if you don't have pnpm.
       </Note>
       </div>
     </StepContent>
   </Step>
   
   <Step>
-    <StepTitle>Step 5: Start the Development Server</StepTitle>
+    <StepTitle>Step 5: Start Caddy Control</StepTitle>
     <StepContent>
     <div>
-      Start the development server:
+      Start the application:
       
       ```sh
       pnpm dev
       ```
       
-      The first time you run the application, an initial user will be created with:
+      The first time you run Caddy Control, it will create an admin account:
       <ul>
         <li><strong>Username:</strong> admin</li>
         <li><strong>Password:</strong> admin</li>
       </ul>
       
-      You will be prompted to change this password after your first login.
+      You'll need to change this password when you first log in.
       </div>
     </StepContent>
   </Step>
 </Steps>
 
-## Production Deployment with Docker
+## Setting Up on a Real Server
 
-For production environments, we recommend using Docker to deploy Caddy Control.
+For real-world use, we recommend using Docker to set up Caddy Control on your server.
 
 <Steps>
   <Step>
-    <StepTitle>Step 1: Server Requirements</StepTitle>
+    <StepTitle>Step 1: Make Sure Your Server is Ready</StepTitle>
     <StepContent>
     <div>
-      <p>Ensure your server meets these requirements:</p>
+      <p>Your server needs:</p>
       <ul>
-        <li>A server with a public IP address</li>
-        <li>Ports 80 and 443 exposed for incoming traffic</li>
+        <li>A public IP address so others can reach it</li>
+        <li>Open ports 80 and 443 for web traffic</li>
         <li>Docker and Docker Compose installed</li>
       </ul>
       </div>
@@ -128,10 +130,10 @@ For production environments, we recommend using Docker to deploy Caddy Control.
   </Step>
   
   <Step>
-    <StepTitle>Step 2: Run the Deployment Script</StepTitle>
+    <StepTitle>Step 2: Run Our Setup Script</StepTitle>
     <StepContent>
     <div>
-      <p>Run our automated deployment script:</p>
+      <p>Use this command to automatically set up everything:</p>
       
       ```sh
       bash -c "$(curl -sSL https://raw.githubusercontent.com/avashForReal/caddy-control/refs/heads/main/deploy.sh)"
@@ -141,22 +143,22 @@ For production environments, we recommend using Docker to deploy Caddy Control.
       
       You'll need to provide:
       <ul>
-        <li><strong>Server IP</strong>: The public IP address of your server</li>
-        <li><strong>App Host Domain</strong>: The domain you'll use to access Caddy Control (must have an A record pointing to your server IP)</li>
-        <li><strong>JWT Secret</strong>: A secret string for JWT token generation (or generate one automatically)</li>
+        <li><strong>Server IP</strong>: Your server's public IP address</li>
+        <li><strong>App Host Domain</strong>: The website address you'll use for Caddy Control</li>
+        <li><strong>Secret Key</strong>: A password to secure your logins (or let us create one)</li>
       </ul>
       </div>
     </StepContent>
   </Step>
   
   <Step>
-    <StepTitle>Step 3: DNS Configuration</StepTitle>
+    <StepTitle>Step 3: Set Up Your Domain</StepTitle>
     <StepContent>
     <div>
-      <p>Create an A record for your App Host Domain pointing to your Server IP.</p>
+      <p>You'll need to point your domain to your server's IP address.</p>
       
       <FolderTree className="overflow-hidden p-2">
-        <Folder element="DNS Records" defaultOpen={true}>
+        <Folder element="Domain Settings" defaultOpen={true}>
           <File>
             <p>yourdomain.com → Your Server IP</p>
           </File>
@@ -164,39 +166,39 @@ For production environments, we recommend using Docker to deploy Caddy Control.
       </FolderTree>
       
       <Note>
-        All domains that you'll manage with Caddy Control will also need A records pointing to your Server IP.
+        Any domains you manage with Caddy Control will also need to point to your server's IP.
       </Note>
       </div>
     </StepContent>
   </Step>
   
   <Step>
-    <StepTitle>Step 4: Access Caddy Control</StepTitle>
+    <StepTitle>Step 4: Log Into Caddy Control</StepTitle>
     <StepContent>
     <div>
-      <p>Once the deployment is complete, you can access Caddy Control at your specified App Host Domain.</p>
+      <p>Once setup is complete, visit your domain in a web browser.</p>
       
-      Login with:
+      Log in with:
       <ul>
         <li><strong>Username:</strong> admin</li>
         <li><strong>Password:</strong> admin</li>
       </ul>
       
-      You will be prompted to change this password after your first login.
+      You'll be asked to create a new password right away.
       </div>
     </StepContent>
   </Step>
 </Steps>
 
-## Verifying Your Installation
+## Making Sure It Works
 
-After installation, verify that Caddy Control is working correctly by:
+After installing, check that everything is working by:
 
 1. Logging into the dashboard
 2. Creating an API key
-3. Adding a test domain with proper DNS configuration
-4. Verifying that HTTPS is automatically configured for your domain
+3. Adding a test domain 
+4. Checking that HTTPS security is set up automatically
 
-## Next Steps
+## What's Next?
 
-Now that you have Caddy Control up and running, check out the [Quick Start Guide](/docs/getting-started/quick-start) to learn how to manage domains and API keys.
+Now that you have Caddy Control working, check out the [Quick Start Guide](/docs/getting-started/quick-start) to learn how to use it.

@@ -4,11 +4,11 @@ description: 'Learn how to authenticate with the Caddy Control API using API key
 date: 2025-04-18
 ---
 
-# API Authentication
+# API Authentication 🔐
 
 Caddy Control uses API keys for authenticating requests to the API. This page explains how to create, use, and manage API keys for secure access to the Caddy Control API.
 
-## API Key Authentication
+## API Key Authentication 🔑
 
 All API requests to Caddy Control require authentication via an API key. API keys provide a simple and secure way to authenticate with the API without using user credentials.
 
@@ -21,7 +21,7 @@ curl -X GET https://your-caddy-control-domain.com/api/domains \
   -H "x-api-key: your_api_key_here"
 ```
 
-### API Key Security
+### API Key Security 🛡️
 
 API keys have full access to your Caddy Control instance, so it's important to keep them secure:
 
@@ -30,7 +30,7 @@ API keys have full access to your Caddy Control instance, so it's important to k
 - Use different keys for different applications or services
 - Rotate keys regularly
 
-## Managing API Keys
+## Managing API Keys 📋
 
 ### Creating API Keys
 
@@ -72,7 +72,7 @@ Response:
 
 **Important:** The full API key is only returned once when it's created. Make sure to copy and securely store it, as you won't be able to retrieve it later.
 
-### Listing API Keys
+### Listing API Keys 📝
 
 You can view all your current API keys (without the full key value) through:
 
@@ -103,7 +103,7 @@ Response:
 }
 ```
 
-### Deleting API Keys
+### Deleting API Keys 🗑️
 
 If an API key is no longer needed or may have been compromised, you should delete it:
 
@@ -128,7 +128,7 @@ Response:
 }
 ```
 
-## Best Practices for API Key Management
+## Best Practices for API Key Management ✅
 
 1. **Use Descriptive Names**: Give each key a clear purpose in its name, like "Production Server" or "Development Testing"
 2. **Implement Key Rotation**: Regularly rotate your API keys, especially for production environments
@@ -138,7 +138,7 @@ Response:
 6. **Secure Storage**: Store API keys in environment variables or secure key management solutions
 7. **Never Commit Keys**: Always exclude API keys from version control
 
-## Troubleshooting Authentication Issues
+## Troubleshooting Authentication Issues ⚠️
 
 If you're experiencing authentication issues:
 

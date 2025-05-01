@@ -3,20 +3,20 @@ title: Quick Start Guide
 description: Learn how to quickly get started with Caddy Control - managing domains, creating API keys, and configuring your first proxy.
 ---
 
-# Quick Start Guide
+# Quick Start Guide 🚀
 
 This guide will help you get started with Caddy Control by walking you through the essential tasks: logging in, managing domains, and creating API keys.
 
-## Logging In
+## Logging In 🔐
 
 After installation, access your Caddy Control dashboard using the domain you configured during setup. The default credentials are:
 
 - Username: `admin`
 - Password: `admin`
 
-You'll be prompted to change your password after the first login.
+You'll be prompted to change your password after the first login for security purposes.
 
-## Dashboard Overview
+## Dashboard Overview 📊
 
 The Caddy Control dashboard is organized into several key sections:
 
@@ -25,7 +25,7 @@ The Caddy Control dashboard is organized into several key sections:
 - **API Keys**: Create and manage API keys for programmatic access
 - **Settings**: Configure system settings and user preferences
 
-## Managing Domains
+## Managing Domains 🌐
 
 <Steps>
   <Step>
@@ -46,7 +46,7 @@ The Caddy Control dashboard is organized into several key sections:
   </Step>
   
   <Step>
-    <StepTitle>Step 2: Configure DNS</StepTitle>
+    <StepTitle>Step 2: Configure DNS ⚙️</StepTitle>
     <StepContent>
       <div>
         <p>For your domain to work with Caddy Control:</p>
@@ -66,24 +66,24 @@ The Caddy Control dashboard is organized into several key sections:
         </FolderTree>
         
         <Note>
-          Caddy Control performs checks to verify that your domain's DNS is properly configured to point to your server.
+          Caddy Control performs validation checks to verify that your domain's DNS is properly configured to point to your server.
         </Note>
       </div>
     </StepContent>
   </Step>
   
   <Step>
-    <StepTitle>Step 3: Check Domain Status</StepTitle>
+    <StepTitle>Step 3: Check Domain Status ✅</StepTitle>
     <StepContent>
       <div>
         <p>Caddy Control performs automatic checks on your domains:</p>
         
         <ul>
           <li><strong>DNS Check</strong>: Verifies that the domain resolves to your proxy IP</li>
-          <li><strong>Proxy Reachability</strong>: Ensures requests reach the proxy</li>
+          <li><strong>Proxy Reachability</strong>: Ensures requests reach the proxy correctly</li>
         </ul>
         
-        <p>These checks help diagnose configuration issues and ensure your domain is properly set up.</p>
+        <p>These diagnostics help identify configuration issues and ensure proper domain setup.</p>
         
         <Note>
           Caddy automatically handles SSL/TLS certificate acquisition and renewal through Let's Encrypt once DNS is properly configured.
@@ -93,7 +93,7 @@ The Caddy Control dashboard is organized into several key sections:
   </Step>
 </Steps>
 
-## Managing API Keys
+## Managing API Keys 🔑
 
 API keys allow programmatic access to Caddy Control, which is essential for automating domain management in your applications.
 
@@ -133,7 +133,7 @@ API keys allow programmatic access to Caddy Control, which is essential for auto
   </Step>
 </Steps>
 
-## Using the API
+## Using the API 💻
 
 Caddy Control provides a comprehensive API for managing domains programmatically. Here's a quick example of adding a domain via the API:
 
@@ -151,14 +151,14 @@ curl -X POST https://your-caddy-control-domain.com/api/domain/add \
 
 For more detailed information about the available API endpoints, check out the [API Reference](/docs/api/overview) section.
 
-## Best Practices
+## Best Practices 🛡️
 
 1. **Regular Backups**: Periodically export your Caddy configuration
 2. **API Key Security**: Rotate API keys regularly and never share them publicly
 3. **DNS Configuration**: Ensure your DNS settings are correct before adding domains
 4. **Monitoring**: Regularly check domain status for any configuration issues
 
-## Next Steps
+## Next Steps 🔮
 
 Now that you've got the basics down, explore these topics:
 
