@@ -1,24 +1,24 @@
 ---
-title: 'API Commands'
-description: 'A complete list of the commands you can use with the Caddy Control API'
+title: 'API Endpoints'
+description: 'Detailed documentation of all Caddy Control API endpoints for domain management, caddy configuration, and API key management.'
 date: 2025-04-18
 ---
 
-# API Commands
+# API Endpoints 🚀
 
-This page shows all the commands you can use with the Caddy Control API. For each command, you'll see what information you need to provide and what you'll get back.
+This page documents all available endpoints in the Caddy Control API. Each endpoint includes information about the request format, required parameters, and response structure.
 
-## Domain Management
+## Domain Management 🌐
 
-### Get All Domains {"/get-domains"}
+### Get Registered Domains {"/get-domains"}
 
-Get a list of all your domains.
+Retrieves a list of all registered domains.
 
-**Address:** `/api/domains`  
+**Endpoint:** `/api/domains`  
 **Method:** `GET`  
 **Headers:** `{ "x-api-key": "your_api_key" }`
 
-**What you'll get back:**
+**Response:**
 
 ```json
 {
@@ -26,7 +26,7 @@ Get a list of all your domains.
     {
       "id": "cm8o9l9d50001sy2uorjt2wua",
       "incomingAddress": "example.com",
-      "destinationAddress": "your-server.com",
+      "destinationAddress": "destination-server.com",
       "port": 443,
       "isLocked": false,
       "enableHttps": true,
@@ -34,11 +34,11 @@ Get a list of all your domains.
       "checkResults": {
         "dnsCheck": {
           "result": true,
-          "description": "Domain points to your server correctly."
+          "description": "Domain resolves to proxy IP."
         },
         "proxyReachability": {
           "result": true,
-          "description": "Your server is reachable."
+          "description": "Requests reach the proxy successfully."
         }
       }
     }
@@ -47,21 +47,21 @@ Get a list of all your domains.
 }
 ```
 
-### Add a Domain {"/add-domain"}
+### Add Domain {"/add-domain"}
 
-Add a new domain to your system.
+Adds a new domain configuration.
 
-**Address:** `/api/domain/add`  
+**Endpoint:** `/api/domain/add`  
 **Method:** `POST`  
 **Headers:** `{ "x-api-key": "your_api_key" }`  
 **Content-Type:** `application/json`  
 
-**Information to provide:**
+**Request Body:**
 
 ```json
 {
   "domain": "example.com",
-  "destination": "your-server.com",
+  "destination": "destination-server.com",
   "port": "443",
   "enableHttps": true,
   "enableRedirection": false,
@@ -69,22 +69,22 @@ Add a new domain to your system.
 }
 ```
 
-**What these fields mean:**
-- `domain`: The website address visitors will use
-- `destination`: Where the traffic should go
-- `port`: The connection port (usually 443 for secure sites)
-- `enableHttps`: Whether to use secure connections (recommended)
-- `enableRedirection`: Set to true if you want to redirect instead of connecting
-- `redirectTo`: Where to redirect (only needed if enableRedirection is true)
+**Parameters:**
+- `domain` (required): The incoming domain address
+- `destination` (required): The destination address to proxy to
+- `port`: The port on the destination (default: 443)
+- `enableHttps`: Whether to enable HTTPS for this domain (default: true)
+- `enableRedirection`: Whether to enable URL redirection instead of proxying
+- `redirectTo`: Target URL for redirection (required if enableRedirection is true)
 
-**What you'll get back:**
+**Response:**
 
 ```json
 {
   "data": {
     "id": "cm8o9l9d50001sy2uorjt2wua",
     "incomingAddress": "example.com",
-    "destinationAddress": "your-server.com",
+    "destinationAddress": "destination-server.com",
     "port": 443,
     "isLocked": false,
     "enableHttps": true,
@@ -94,18 +94,18 @@ Add a new domain to your system.
 }
 ```
 
-### Delete a Domain {"/delete-domain"}
+### Delete Domain {"/delete-domain"}
 
-Remove a domain from your system.
+Deletes a domain configuration.
 
-**Address:** `/api/domain/{id}`  
+**Endpoint:** `/api/domain/{id}`  
 **Method:** `DELETE`  
 **Headers:** `{ "x-api-key": "your_api_key" }`  
 
 **Path Parameters:**
-- `id`: The ID of the domain you want to delete
+- `id` (required): The ID of the domain to delete
 
-**What you'll get back:**
+**Response:**
 
 ```json
 {
@@ -113,17 +113,17 @@ Remove a domain from your system.
 }
 ```
 
-## Server Configuration
+## Caddy Configuration ⚙️
 
-### View Current Configuration {"/get-caddy-config"}
+### Get Caddy Configuration {"/get-caddy-config"}
 
-See the current settings for your Caddy server.
+Retrieves the current Caddy server configuration.
 
-**Address:** `/api/caddy/config`  
+**Endpoint:** `/api/caddy/config`  
 **Method:** `GET`  
 **Headers:** `{ "x-api-key": "your_api_key" }`  
 
-**What you'll get back:**
+**Response:**
 
 ```json
 {
@@ -134,37 +134,37 @@ See the current settings for your Caddy server.
           "main": {
             "listen": [":443", ":80"],
             "routes": [
-              // Server routing settings
+              // Caddy routes configuration
             ]
           }
         }
       },
       "tls": {
-        // Security settings
+        // TLS configuration
       }
     }
   }
 }
 ```
 
-## API Key Management
+## API Key Management 🔑
 
-### See All API Keys {"/get-api-keys"}
+### List API Keys {"/get-api-keys"}
 
-Get a list of all your API keys.
+Retrieves a list of all API keys.
 
-**Address:** `/api/key`  
+**Endpoint:** `/api/key`  
 **Method:** `GET`  
 **Headers:** `{ "x-api-key": "your_api_key" }`  
 
-**What you'll get back:**
+**Response:**
 
 ```json
 {
   "data": [
     {
       "id": "clqr5l9d50001sy2uorjt2wua",
-      "name": "Website Connection",
+      "name": "Development Key",
       "keyId": "keyid_123456",
       "createdAt": "2025-04-18T08:59:25.481Z"
     }
@@ -173,33 +173,33 @@ Get a list of all your API keys.
 }
 ```
 
-### Create a New API Key {"/create-api-key"}
+### Create API Key {"/create-api-key"}
 
-Make a new API key.
+Creates a new API key.
 
-**Address:** `/api/key`  
+**Endpoint:** `/api/key`  
 **Method:** `POST`  
 **Headers:** `{ "x-api-key": "your_api_key" }`  
 **Content-Type:** `application/json`  
 
-**Information to provide:**
+**Request Body:**
 
 ```json
 {
-  "name": "Website Connection"
+  "name": "Development Key"
 }
 ```
 
-**What these fields mean:**
-- `name`: A name to help you remember what this key is for
+**Parameters:**
+- `name` (required): A descriptive name for the API key
 
-**What you'll get back:**
+**Response:**
 
 ```json
 {
   "data": {
     "id": "clqr5l9d50001sy2uorjt2wua",
-    "name": "Website Connection",
+    "name": "Development Key",
     "keyId": "keyid_123456",
     "key": "key_f7sd89f7s98df79s8df7s9d8f7",
     "createdAt": "2025-04-18T08:59:25.481Z"
@@ -208,18 +208,18 @@ Make a new API key.
 }
 ```
 
-### Delete an API Key {"/delete-api-key"}
+### Delete API Key {"/delete-api-key"}
 
-Remove an API key.
+Deletes an API key.
 
-**Address:** `/api/key/{id}`  
+**Endpoint:** `/api/key/{id}`  
 **Method:** `DELETE`  
 **Headers:** `{ "x-api-key": "your_api_key" }`  
 
 **Path Parameters:**
-- `id`: The ID of the API key you want to delete
+- `id` (required): The ID of the API key to delete
 
-**What you'll get back:**
+**Response:**
 
 ```json
 {
@@ -227,22 +227,22 @@ Remove an API key.
 }
 ```
 
-## Understanding Error Codes
+## Error Codes ⚠️
 
-When something goes wrong, you'll get an error code that helps explain the problem:
+Caddy Control API uses standard HTTP status codes to indicate the success or failure of an API request.
 
-| Code | What It Means |
+| Status Code | Description |
 |-------------|-------------|
-| 200 | Success - Everything worked |
-| 400 | Bad Request - Something was wrong with your request |
-| 401 | Unauthorized - Your API key is missing or wrong |
-| 403 | Forbidden - Your API key doesn't have permission |
-| 404 | Not Found - What you're looking for doesn't exist |
-| 409 | Conflict - Something is preventing the operation |
-| 429 | Too Many Requests - You're making too many requests too quickly |
-| 500 | Server Error - Something went wrong on our end |
+| 200 | Success - The request was successful |
+| 400 | Bad Request - The request was invalid or contains invalid parameters |
+| 401 | Unauthorized - API key is missing or invalid |
+| 403 | Forbidden - The API key doesn't have permission to perform the request |
+| 404 | Not Found - The requested resource was not found |
+| 409 | Conflict - The request couldn't be completed due to a conflict |
+| 429 | Too Many Requests - Rate limit exceeded |
+| 500 | Server Error - Something went wrong on the server |
 
-## Example Error Messages
+## Common Error Responses 🛑
 
 ```json
 {
@@ -258,12 +258,12 @@ When something goes wrong, you'll get an error code that helps explain the probl
 }
 ```
 
-## Working with Large Lists
+## Pagination 📄
 
-For commands that return lists of items, you can use these options to break them into smaller pages:
+For endpoints that return lists of resources, pagination is supported using the following query parameters:
 
-- `page`: Which page to show (starts at 1)
-- `limit`: How many items per page (default: 10, maximum: 100)
+- `page`: The page number (default: 1)
+- `limit`: The number of items per page (default: 10, max: 100)
 
 Example:
 
@@ -271,7 +271,7 @@ Example:
 GET /api/domains?page=2&limit=20
 ```
 
-You'll get back pagination details:
+Response includes pagination details:
 
 ```json
 {
