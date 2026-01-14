@@ -1,6 +1,6 @@
 #!/bin/sh
 echo "Running migrations..."
-pnpx prisma migrate deploy
+pnpx prisma@6.5.0 migrate deploy
 
 # check if migration was successful
 if [ $? -eq 0 ]; then

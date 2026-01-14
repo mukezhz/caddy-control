@@ -13,7 +13,7 @@ WORKDIR /app
 RUN apt-get update -y && apt-get install -y openssl
 COPY --from=dependencies /app/node_modules ./node_modules
 COPY . .
-RUN pnpx prisma generate
+RUN pnpx prisma@6.5.0 generate
 RUN pnpm run build:content
 RUN pnpm build
 
